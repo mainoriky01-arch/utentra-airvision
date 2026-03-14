@@ -12,12 +12,12 @@
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
         :root {
-            --bg-base:       #060A14;
-            --bg-surface:    #0A1020;
-            --bg-card:       rgba(255,255,255,0.04);
-            --bg-card-hover: rgba(255,255,255,0.07);
-            --bg-input:      rgba(0,0,0,0.3);
-            --border:        rgba(255,255,255,0.08);
+            --bg-base:       #F8FAFC;
+            --bg-surface:    #F0F4F8;
+            --bg-card:       #FFFFFF;
+            --bg-card-hover: #F8FAFC;
+            --bg-input:      #FFFFFF;
+            --border:        #E2E8F0;
             --border-focus:  #2563EB;
 
             /* Utentra blue palette */
@@ -35,9 +35,9 @@
             --green-400: #34D399;
             --green-500: #10B981;
 
-            --text-primary:   #F0F4FF;
-            --text-secondary: #8A9BBF;
-            --text-muted:     #4A5A7A;
+            --text-primary:   #1a365d;
+            --text-secondary: #4A5568;
+            --text-muted:     #718096;
 
             --radius-sm: 6px;
             --radius-md: 10px;
@@ -48,8 +48,7 @@
         body {
             font-family: 'Inter', -apple-system, sans-serif;
             background-color: var(--bg-base);
-            background-image:
-                radial-gradient(ellipse 80% 50% at 50% -20%, rgba(26,54,93,0.25) 0%, transparent 60%);
+            background-image: none;
             min-height: 100vh;
             color: var(--text-primary);
             line-height: 1.6;
@@ -57,13 +56,14 @@
 
         /* ─── Header ─── */
         .header {
-            background: rgba(6,10,20,0.90);
-            backdrop-filter: blur(12px);
-            border-bottom: 1px solid rgba(26,54,93,0.4);
+            background: #FFFFFF;
+            backdrop-filter: none;
+            border-bottom: 1px solid var(--border);
             padding: 0 24px;
             position: sticky;
             top: 0;
             z-index: 50;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.06);
         }
         .header-inner {
             max-width: 1400px;
@@ -99,7 +99,7 @@
             letter-spacing: -0.02em;
             color: var(--text-primary);
         }
-        .header-title .brand { color: #60A5FA; }
+        .header-title .brand { color: var(--utentra); }
         .header-title .product { color: var(--text-primary); }
 
         .header-badge {
@@ -107,9 +107,9 @@
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 0.08em;
-            color: var(--green-400);
-            background: rgba(16,185,129,0.1);
-            border: 1px solid rgba(52,211,153,0.3);
+            color: var(--utentra);
+            background: rgba(26,54,93,0.08);
+            border: 1px solid rgba(26,54,93,0.2);
             padding: 2px 8px;
             border-radius: 100px;
         }
@@ -135,13 +135,13 @@
         }
         .nav-tab:hover {
             color: var(--text-primary);
-            background: rgba(255,255,255,0.05);
+            background: rgba(26,54,93,0.05);
             border-color: var(--border);
         }
         .nav-tab.active {
-            color: var(--green-400);
-            background: rgba(16,185,129,0.08);
-            border-color: rgba(52,211,153,0.25);
+            color: var(--utentra);
+            background: rgba(26,54,93,0.08);
+            border-color: rgba(26,54,93,0.2);
         }
 
         /* ─── Main ─── */
@@ -198,7 +198,7 @@
         .input-row select { width: 110px; }
 
         input[type="number"], select {
-            background: var(--bg-input);
+            background: #FFFFFF;
             border: 1px solid var(--border);
             border-radius: var(--radius-md);
             color: var(--text-primary);
@@ -211,10 +211,10 @@
         input[type="number"]:focus, select:focus {
             outline: none;
             border-color: var(--border-focus);
-            box-shadow: 0 0 0 3px rgba(26,54,93,0.35);
+            box-shadow: 0 0 0 3px rgba(37,99,235,0.12);
         }
         input[type="number"]::placeholder { color: var(--text-muted); }
-        select option { background: #0A1020; }
+        select option { background: #FFFFFF; color: var(--text-primary); }
 
         /* ─── Filters ─── */
         .filters {
@@ -242,7 +242,7 @@
             display: flex;
             align-items: center;
             gap: 6px;
-            background: rgba(255,255,255,0.03);
+            background: #FFFFFF;
             border: 1px solid var(--border);
             border-radius: 100px;
             padding: 6px 12px;
@@ -254,13 +254,13 @@
             user-select: none;
         }
         .filter-chip:hover {
-            border-color: var(--blue-500);
-            color: var(--text-primary);
+            border-color: var(--utentra);
+            color: var(--utentra);
         }
         .filter-chip.active {
-            background: rgba(26,54,93,0.3);
-            border-color: rgba(37,99,235,0.4);
-            color: var(--blue-400);
+            background: rgba(26,54,93,0.08);
+            border-color: rgba(26,54,93,0.3);
+            color: var(--utentra);
         }
         .filter-chip input { display: none; }
 
@@ -326,14 +326,14 @@
             text-decoration: none;
         }
         .result-card:hover {
-            border-color: rgba(37,99,235,0.45);
-            background: rgba(26,54,93,0.1);
+            border-color: rgba(26,54,93,0.3);
+            background: rgba(26,54,93,0.04);
         }
         .result-model {
             font-family: 'Fira Code', monospace;
             font-size: 15px;
             font-weight: 600;
-            color: var(--text-primary);
+            color: var(--utentra);
         }
         .result-series {
             font-size: 12px;
@@ -345,7 +345,7 @@
             font-family: 'Fira Code', monospace;
             font-size: 14px;
             font-weight: 600;
-            color: var(--blue-400);
+            color: var(--utentra);
         }
         .result-stat-label {
             font-size: 10px;
@@ -354,14 +354,14 @@
             letter-spacing: 0.03em;
         }
         .result-match {
-            background: rgba(26,54,93,0.4);
-            color: var(--blue-400);
+            background: rgba(26,54,93,0.08);
+            color: var(--utentra);
             font-family: 'Fira Code', monospace;
             font-size: 12px;
             font-weight: 600;
             padding: 6px 12px;
             border-radius: 100px;
-            border: 1px solid rgba(37,99,235,0.3);
+            border: 1px solid rgba(26,54,93,0.2);
             white-space: nowrap;
         }
         .result-match.good {
@@ -374,7 +374,7 @@
         .empty-state {
             text-align: center;
             padding: 60px 20px;
-            color: var(--text-muted);
+            color: var(--text-secondary);
         }
         .empty-state svg {
             width: 48px; height: 48px;
@@ -439,7 +439,7 @@
         /* ─── Scrollbar ─── */
         ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.12); border-radius: 3px; }
+        ::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.15); border-radius: 3px; }
 
         /* ─── Accessibility ─── */
         :focus-visible {
@@ -750,20 +750,17 @@ async function init() {
         const chipsEl = document.getElementById('seriesChips');
         chipsEl.innerHTML = Object.keys(CURVES).sort().map(s => {
             const count = Object.keys(CURVES[s]).length;
-            const meta = SERIES_META[s];
-            const desc = meta ? ` — ${meta.desc}` : '';
-            return `<span class="chip"><strong>${s}</strong> · ${count} mod${desc}</span>`;
+            return `<span class="chip"><strong>${s}</strong> · ${count} mod</span>`;
         }).join('');
 
         // Populate series filter chips
         const seriesFilters = document.getElementById('seriesFilters');
         const seriesList = Object.keys(CURVES).sort();
         seriesFilters.innerHTML = seriesList.map(s => {
-            const count = Object.keys(CURVES[s]).length;
             return `
-                <label class="filter-chip active" data-series="${s}" title="${SERIES_META[s]?.desc || s}">
+                <label class="filter-chip active" data-series="${s}" title="${s}">
                     <input type="checkbox" checked aria-label="Filtra serie ${s}">
-                    ${s} <span style="opacity:0.6;font-size:11px;">(${count})</span>
+                    ${s}
                 </label>
             `;
         }).join('');
