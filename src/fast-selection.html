@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AirVision — Fast Selection</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* ─── Reset & Base ─── */
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --bg-base:       #060A14;
+            --bg-surface:    #0A1020;
+            --bg-card:       rgba(255,255,255,0.04);
+            --bg-card-hover: rgba(255,255,255,0.07);
+            --bg-input:      rgba(0,0,0,0.3);
+            --border:        rgba(255,255,255,0.08);
+            --border-focus:  #2563EB;
+
+            /* Utentra blue palette */
+            --blue-100: #DBEAFE;
+            --blue-300: #93C5FD;
+            --blue-400: #60A5FA;
+            --blue-500: #2563EB;
+            --blue-600: #1D4ED8;
+            --blue-700: #1a365d;
+            --utentra:  #1a365d;
+
+            --amber-400: #FBBF24;
+            --amber-500: #F59E0B;
+
+            --green-400: #34D399;
+            --green-500: #10B981;
+
+            --text-primary:   #F0F4FF;
+            --text-secondary: #8A9BBF;
+            --text-muted:     #4A5A7A;
+
+            --radius-sm: 6px;
+            --radius-md: 10px;
+            --radius-lg: 16px;
+            --transition: 200ms cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background-color: var(--bg-base);
+            background-image:
+                radial-gradient(ellipse 80% 50% at 50% -20%, rgba(26,54,93,0.25) 0%, transparent 60%);
+            min-height: 100vh;
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        /* ─── Header ─── */
+        .header {
+            background: rgba(6,10,20,0.90);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(26,54,93,0.4);
+            padding: 0 24px;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+        .header-inner {
+            max-width: 1400px;
+            margin: 0 auto;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        /* Utentra "U" logo mark */
+        .header-logo {
+            width: 34px; height: 34px; flex-shrink: 0;
+            background: var(--utentra);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid rgba(96,165,250,0.2);
+        }
+        .header-logo-text {
+            font-family: 'Inter', sans-serif;
+            font-size: 18px;
+            font-weight: 800;
+            color: #fff;
+            letter-spacing: -0.04em;
+            line-height: 1;
+        }
+
+        .header-title {
+            font-size: 18px;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            color: var(--text-primary);
+        }
+        .header-title .brand { color: #60A5FA; }
+        .header-title .product { color: var(--text-primary); }
+
+        .header-badge {
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--green-400);
+            background: rgba(16,185,129,0.1);
+            border: 1px solid rgba(52,211,153,0.3);
+            padding: 2px 8px;
+            border-radius: 100px;
+        }
+
+        /* ─── Nav Tabs ─── */
+        .nav-tabs {
+            margin-left: auto;
+            display: flex;
+            gap: 4px;
+        }
+        .nav-tab {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 14px;
+            border-radius: var(--radius-md);
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            text-decoration: none;
+            border: 1px solid transparent;
+            transition: all var(--transition);
+        }
+        .nav-tab:hover {
+            color: var(--text-primary);
+            background: rgba(255,255,255,0.05);
+            border-color: var(--border);
+        }
+        .nav-tab.active {
+            color: var(--green-400);
+            background: rgba(16,185,129,0.08);
+            border-color: rgba(52,211,153,0.25);
+        }
+
+        /* ─── Main ─── */
+        main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 24px 20px;
+        }
+
+        /* ─── Search Panel ─── */
+        .search-panel {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+        .search-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            color: var(--green-400);
+        }
+        .search-header h2 {
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        /* ─── Input Grid ─── */
+        .input-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        .input-group label {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .input-row {
+            display: flex;
+            gap: 8px;
+        }
+        .input-row input { flex: 1; }
+        .input-row select { width: 110px; }
+
+        input[type="number"], select {
+            background: var(--bg-input);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            color: var(--text-primary);
+            font-family: 'Fira Code', monospace;
+            font-size: 14px;
+            padding: 10px 14px;
+            transition: border-color var(--transition), box-shadow var(--transition);
+            -webkit-appearance: none;
+        }
+        input[type="number"]:focus, select:focus {
+            outline: none;
+            border-color: var(--border-focus);
+            box-shadow: 0 0 0 3px rgba(26,54,93,0.35);
+        }
+        input[type="number"]::placeholder { color: var(--text-muted); }
+        select option { background: #0A1020; }
+
+        /* ─── Filters ─── */
+        .filters {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 24px;
+            padding-top: 16px;
+            border-top: 1px solid var(--border);
+            margin-bottom: 20px;
+        }
+        .filter-group h4 {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 8px;
+        }
+        .filter-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .filter-chip {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid var(--border);
+            border-radius: 100px;
+            padding: 6px 12px;
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all var(--transition);
+            user-select: none;
+        }
+        .filter-chip:hover {
+            border-color: var(--blue-500);
+            color: var(--text-primary);
+        }
+        .filter-chip.active {
+            background: rgba(26,54,93,0.3);
+            border-color: rgba(37,99,235,0.4);
+            color: var(--blue-400);
+        }
+        .filter-chip input { display: none; }
+
+        /* ─── Search Button ─── */
+        .search-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #1a365d, #2563EB);
+            border: none;
+            border-radius: var(--radius-md);
+            color: white;
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            padding: 14px 24px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: transform 0.1s, box-shadow var(--transition), opacity var(--transition);
+            letter-spacing: 0.03em;
+        }
+        .search-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 20px rgba(26,54,93,0.5);
+            opacity: 0.95;
+        }
+        .search-btn:active { transform: translateY(0); }
+
+        /* ─── Results ─── */
+        .results-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+        }
+        .results-header h3 {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .results-count {
+            font-family: 'Fira Code', monospace;
+            font-size: 13px;
+            color: var(--green-400);
+        }
+
+        .results-grid { display: grid; gap: 10px; }
+
+        .result-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 16px 20px;
+            display: grid;
+            grid-template-columns: 1fr auto auto auto;
+            align-items: center;
+            gap: 20px;
+            cursor: pointer;
+            transition: border-color var(--transition), background var(--transition);
+            text-decoration: none;
+        }
+        .result-card:hover {
+            border-color: rgba(37,99,235,0.45);
+            background: rgba(26,54,93,0.1);
+        }
+        .result-model {
+            font-family: 'Fira Code', monospace;
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        .result-series {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+        .result-stat { text-align: center; }
+        .result-stat-value {
+            font-family: 'Fira Code', monospace;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--blue-400);
+        }
+        .result-stat-label {
+            font-size: 10px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+        }
+        .result-match {
+            background: rgba(26,54,93,0.4);
+            color: var(--blue-400);
+            font-family: 'Fira Code', monospace;
+            font-size: 12px;
+            font-weight: 600;
+            padding: 6px 12px;
+            border-radius: 100px;
+            border: 1px solid rgba(37,99,235,0.3);
+            white-space: nowrap;
+        }
+        .result-match.good {
+            background: rgba(16,185,129,0.12);
+            color: var(--green-400);
+            border-color: rgba(52,211,153,0.3);
+        }
+
+        /* ─── Empty / Error State ─── */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-muted);
+        }
+        .empty-state svg {
+            width: 48px; height: 48px;
+            margin-bottom: 16px;
+            opacity: 0.4;
+        }
+        .empty-state p { font-size: 14px; line-height: 1.6; }
+
+        /* ─── Info Footer ─── */
+        .info-footer {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 16px 20px;
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            flex-wrap: wrap;
+            margin-top: 24px;
+        }
+        .info-footer-content { flex: 1; min-width: 200px; }
+        .info-footer h3 {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+        .info-footer p { font-size: 13px; color: var(--text-secondary); line-height: 1.5; }
+        .info-footer .address {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+        .series-chips {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+        .chip {
+            font-family: 'Fira Code', monospace;
+            font-size: 11px;
+            background: rgba(26,54,93,0.3);
+            border: 1px solid rgba(37,99,235,0.25);
+            color: #60A5FA;
+            padding: 3px 10px;
+            border-radius: 100px;
+            white-space: nowrap;
+        }
+        .chip strong { color: #93C5FD; }
+
+        /* ─── Responsive ─── */
+        @media (max-width: 768px) {
+            .result-card {
+                grid-template-columns: 1fr auto;
+                gap: 12px;
+            }
+            .result-stat { display: none; }
+            .nav-tabs { display: none; }
+        }
+
+        /* ─── Scrollbar ─── */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.12); border-radius: 3px; }
+
+        /* ─── Accessibility ─── */
+        :focus-visible {
+            outline: 2px solid var(--blue-500);
+            outline-offset: 2px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ─── Header ─── -->
+    <header class="header" role="banner">
+        <div class="header-inner">
+            <div class="header-logo" aria-hidden="true">
+                <span class="header-logo-text">U</span>
+            </div>
+            <h1 class="header-title">
+                <span class="brand">Utentra</span>
+                <span style="color:var(--text-muted); font-weight:300; margin:0 4px;">·</span>
+                <span class="product">AirVision</span>
+            </h1>
+            <span class="header-badge">Fast Selection</span>
+
+            <!-- Nav Tabs -->
+            <nav class="nav-tabs" aria-label="Modalità applicazione">
+                <a href="index.html" class="nav-tab" aria-label="Fan Selector">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                        <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+                    </svg>
+                    Fan Selector
+                </a>
+                <a href="fast-selection.html" class="nav-tab active" aria-current="page" aria-label="Fast Selection">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                        <path d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                    </svg>
+                    Fast Selection
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- ─── Main ─── -->
+    <main role="main">
+
+        <!-- Search Panel -->
+        <section class="search-panel" aria-label="Pannello di ricerca rapida">
+            <div class="search-header">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                    <path d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                </svg>
+                <h2>Ricerca Rapida Ventilatori</h2>
+            </div>
+
+            <div class="input-grid">
+                <div class="input-group">
+                    <label for="targetFlow">Portata Richiesta</label>
+                    <div class="input-row">
+                        <input type="number" id="targetFlow" placeholder="es. 5000" step="1" min="0" aria-label="Portata richiesta">
+                        <select id="flowUnit" aria-label="Unità di portata">
+                            <option value="m3h">m³/h</option>
+                            <option value="m3min">m³/min</option>
+                            <option value="cfm">cfm</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label for="targetPressure">Pressione Richiesta</label>
+                    <div class="input-row">
+                        <input type="number" id="targetPressure" placeholder="es. 300" step="1" min="0" aria-label="Pressione richiesta">
+                        <select id="pressureUnit" aria-label="Unità di pressione">
+                            <option value="kgm2">kg/m²</option>
+                            <option value="pa">Pa</option>
+                            <option value="inwg">in wg</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="filters">
+                <div class="filter-group">
+                    <h4>Serie</h4>
+                    <div class="filter-options" id="seriesFilters" aria-label="Filtri per serie">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+            </div>
+
+            <button class="search-btn" id="searchBtn" aria-label="Avvia ricerca ventilatori">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                    <circle cx="11" cy="11" r="8"/>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                </svg>
+                CERCA VENTILATORI
+            </button>
+        </section>
+
+        <!-- Results -->
+        <section id="resultsSection" style="display:none;" aria-label="Risultati di ricerca">
+            <div class="results-header">
+                <h3>Ventilatori Compatibili</h3>
+                <span class="results-count" id="resultsCount" aria-live="polite">0 risultati</span>
+            </div>
+            <div class="results-grid" id="resultsGrid"></div>
+        </section>
+
+        <!-- Empty State -->
+        <div class="empty-state" id="emptyState" role="status" aria-live="polite">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                <circle cx="11" cy="11" r="8"/>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+            </svg>
+            <p>Inserisci portata e pressione per trovare i ventilatori compatibili.<br>
+               Clicca su un risultato per aprirlo nel Fan Selector.</p>
+        </div>
+
+        <!-- Info Footer -->
+        <footer class="info-footer" role="contentinfo">
+            <div style="width:28px;height:28px;background:var(--utentra);border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;border:1px solid rgba(96,165,250,0.15);">
+                <span style="font-family:'Inter',sans-serif;font-size:14px;font-weight:800;color:#fff;">U</span>
+            </div>
+            <div class="info-footer-content">
+                <h3>UTENTRA S.R.L. — AirVision Fast Selection</h3>
+                <p>Ricerca rapida per portata e pressione — <strong id="modelCount">…</strong> modelli disponibili</p>
+                <p class="address">Via Francesco Albani 9, 20149 Milano</p>
+                <div class="series-chips" id="seriesChips" aria-label="Serie disponibili"></div>
+            </div>
+        </footer>
+
+    </main>
+
+<script>
+/* ─── Series Metadata ─── */
+const SERIES_META = {
+    'U/AR':  { desc: 'Bassa pressione' },
+    'U/CB':  { desc: 'Bassa pressione rinforzati' },
+    'U/PB':  { desc: 'Media pressione' },
+    'U/PBM': { desc: 'Media pressione maggiorati' },
+    'U/TM':  { desc: 'Trasporto materiali' }
+};
+
+/* ─── Allowed series (Utentra only) ─── */
+const ALLOWED_SERIES = new Set(['U/AR', 'U/CB', 'U/PB', 'U/PBM', 'U/TM']);
+
+let CURVES = {};
+
+/* ─── Unit Conversions ─── */
+const flowConversions = {
+    m3h:   { factor: 1,        symbol: 'm³/h',   decimals: 0 },
+    m3min: { factor: 1/60,     symbol: 'm³/min', decimals: 2 },
+    cfm:   { factor: 0.58858,  symbol: 'cfm',    decimals: 0 }
+};
+const pressureConversions = {
+    kgm2: { factor: 1,        symbol: 'kg/m²', decimals: 2 },
+    pa:   { factor: 9.80665,  symbol: 'Pa',    decimals: 0 },
+    inwg: { factor: 0.03937,  symbol: 'in wg', decimals: 3 }
+};
+
+function toBaseFlow(value, unit) {
+    return value / flowConversions[unit].factor;
+}
+function toBasePressure(value, unit) {
+    return value / pressureConversions[unit].factor;
+}
+
+/* ─── Interpolate ─── */
+function interpolate(arr, x) {
+    for (let i = 0; i < arr.length - 1; i++) {
+        const [x1, y1] = arr[i];
+        const [x2, y2] = arr[i + 1];
+        if ((x >= x1 && x <= x2) || (x <= x1 && x >= x2)) {
+            const t = (x - x1) / (x2 - x1);
+            return y1 + t * (y2 - y1);
+        }
+    }
+    return null;
+}
+
+/* ─── Check model against operating point ─── */
+function checkModel(model, targetFlow, targetPressure) {
+    const points = model.total;
+    const flowMin = Math.min(points[0][0], points[points.length - 1][0]);
+    const flowMax = Math.max(points[0][0], points[points.length - 1][0]);
+
+    if (targetFlow < flowMin || targetFlow > flowMax) return null;
+
+    const totalP = interpolate(model.total, targetFlow);
+    const staticP = interpolate(model.static, targetFlow);
+    if (totalP === null) return null;
+    if (targetPressure > totalP) return null;
+
+    const margin = totalP - targetPressure;
+    const marginPercent = (margin / totalP) * 100;
+    const efficiency = Math.max(0, 100 - marginPercent);
+
+    return { totalPressure: totalP, staticPressure: staticP, margin, marginPercent, efficiency };
+}
+
+/* ─── Search ─── */
+function search() {
+    const flowInput  = parseFloat(document.getElementById('targetFlow').value);
+    const pressInput = parseFloat(document.getElementById('targetPressure').value);
+    const flowUnit     = document.getElementById('flowUnit').value;
+    const pressureUnit = document.getElementById('pressureUnit').value;
+
+    if (!flowInput || !pressInput) {
+        alert('Inserisci portata e pressione');
+        return;
+    }
+
+    const targetFlow     = toBaseFlow(flowInput, flowUnit);
+    const targetPressure = toBasePressure(pressInput, pressureUnit);
+
+    // Get active series from filter chips
+    const activeSeriesEls = document.querySelectorAll('#seriesFilters .filter-chip.active');
+    const activeSeries = new Set();
+    activeSeriesEls.forEach(el => activeSeries.add(el.dataset.series));
+
+    const results = [];
+
+    for (const [seriesName, models] of Object.entries(CURVES)) {
+        if (!ALLOWED_SERIES.has(seriesName)) continue;
+        if (activeSeries.size > 0 && !activeSeries.has(seriesName)) continue;
+
+        for (const [modelName, model] of Object.entries(models)) {
+            const match = checkModel(model, targetFlow, targetPressure);
+            if (match) {
+                results.push({ series: seriesName, model: modelName, ...match });
+            }
+        }
+    }
+
+    results.sort((a, b) => b.efficiency - a.efficiency);
+    displayResults(results, pressureUnit);
+}
+
+/* ─── Display Results ─── */
+function displayResults(results, pressureUnit) {
+    const resultsSection = document.getElementById('resultsSection');
+    const resultsGrid    = document.getElementById('resultsGrid');
+    const resultsCount   = document.getElementById('resultsCount');
+    const emptyState     = document.getElementById('emptyState');
+    const conv = pressureConversions[pressureUnit];
+
+    if (results.length === 0) {
+        resultsSection.style.display = 'none';
+        emptyState.innerHTML = `
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                <circle cx="12" cy="12" r="10"/>
+                <line x1="15" y1="9" x2="9" y2="15"/>
+                <line x1="9" y1="9" x2="15" y2="15"/>
+            </svg>
+            <p>Nessun ventilatore trovato per i parametri specificati.<br>
+               Prova ad allargare i filtri o modificare i valori.</p>
+        `;
+        emptyState.style.display = 'block';
+        return;
+    }
+
+    emptyState.style.display = 'none';
+    resultsSection.style.display = 'block';
+    resultsCount.textContent = `${results.length} risultat${results.length === 1 ? 'o' : 'i'}`;
+
+    resultsGrid.innerHTML = results.slice(0, 60).map(r => {
+        const ptDisplay = (r.totalPressure  * conv.factor).toFixed(conv.decimals);
+        const psDisplay = (r.staticPressure * conv.factor).toFixed(conv.decimals);
+        const isGood = r.efficiency >= 70;
+        const meta = SERIES_META[r.series];
+        const seriesDesc = meta ? meta.desc : r.series;
+
+        return `
+            <a class="result-card" href="index.html?series=${encodeURIComponent(r.series)}&model=${encodeURIComponent(r.model)}" aria-label="Apri ${r.series} ${r.model} nel Fan Selector">
+                <div>
+                    <div class="result-model">${r.series} ${r.model}</div>
+                    <div class="result-series">${seriesDesc}</div>
+                </div>
+                <div class="result-stat">
+                    <div class="result-stat-value">${ptDisplay}</div>
+                    <div class="result-stat-label">PT ${conv.symbol}</div>
+                </div>
+                <div class="result-stat">
+                    <div class="result-stat-value">${psDisplay}</div>
+                    <div class="result-stat-label">PS ${conv.symbol}</div>
+                </div>
+                <div class="result-match ${isGood ? 'good' : ''}">${r.efficiency.toFixed(0)}% match</div>
+            </a>
+        `;
+    }).join('');
+}
+
+/* ─── Init ─── */
+async function init() {
+    try {
+        const res = await fetch('curves.json');
+        const allCurves = await res.json();
+
+        // Filter to allowed series only
+        for (const [series, models] of Object.entries(allCurves)) {
+            if (ALLOWED_SERIES.has(series)) {
+                CURVES[series] = models;
+            }
+        }
+
+        // Total model count
+        const totalModels = Object.values(CURVES).reduce((a, s) => a + Object.keys(s).length, 0);
+        document.getElementById('modelCount').textContent = totalModels;
+
+        // Series chips in footer
+        const chipsEl = document.getElementById('seriesChips');
+        chipsEl.innerHTML = Object.keys(CURVES).sort().map(s => {
+            const count = Object.keys(CURVES[s]).length;
+            const meta = SERIES_META[s];
+            const desc = meta ? ` — ${meta.desc}` : '';
+            return `<span class="chip"><strong>${s}</strong> · ${count} mod${desc}</span>`;
+        }).join('');
+
+        // Populate series filter chips
+        const seriesFilters = document.getElementById('seriesFilters');
+        const seriesList = Object.keys(CURVES).sort();
+        seriesFilters.innerHTML = seriesList.map(s => {
+            const count = Object.keys(CURVES[s]).length;
+            return `
+                <label class="filter-chip active" data-series="${s}" title="${SERIES_META[s]?.desc || s}">
+                    <input type="checkbox" checked aria-label="Filtra serie ${s}">
+                    ${s} <span style="opacity:0.6;font-size:11px;">(${count})</span>
+                </label>
+            `;
+        }).join('');
+
+        // Click handlers for filter chips
+        document.querySelectorAll('.filter-chip').forEach(chip => {
+            chip.addEventListener('click', function(e) {
+                if (e.target.tagName !== 'INPUT') {
+                    const input = this.querySelector('input');
+                    if (input) input.checked = !input.checked;
+                }
+                this.classList.toggle('active');
+            });
+        });
+
+        // Search button
+        document.getElementById('searchBtn').addEventListener('click', search);
+
+        // Enter key on inputs
+        document.querySelectorAll('input[type="number"]').forEach(input => {
+            input.addEventListener('keypress', e => {
+                if (e.key === 'Enter') search();
+            });
+        });
+
+    } catch (err) {
+        console.error('Errore caricamento dati:', err);
+        document.getElementById('emptyState').innerHTML = `
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                <circle cx="12" cy="12" r="10"/>
+                <line x1="15" y1="9" x2="9" y2="15"/>
+                <line x1="9" y1="9" x2="15" y2="15"/>
+            </svg>
+            <p>Errore nel caricamento dei dati (curves.json).<br>Verifica la connessione o ricarica la pagina.</p>
+        `;
+    }
+}
+
+init();
+</script>
+</body>
+</html>
