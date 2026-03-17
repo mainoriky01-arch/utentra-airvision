@@ -867,6 +867,13 @@ function updateAllDisplays() {
 
         chart.options.scales.x.title.text = `Portata Q (${flowConv.symbol})`;
         chart.options.scales.y.title.text = `Pressione P (${pressConv.symbol})`;
+        
+        // Aggiorna limiti asse X per la nuova unità
+        if (currentModel.fMin !== null && currentModel.fMax !== null) {
+            chart.options.scales.x.suggestedMin = convertFlow(currentModel.fMin, units.flow);
+            chart.options.scales.x.suggestedMax = convertFlow(currentModel.fMax, units.flow);
+        }
+        
         chart.update();
     }
 }
