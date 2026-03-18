@@ -1960,19 +1960,21 @@ async function generateDatasheetPDF() {
         let chartAdded = false;
         try {
             const chartCanvas = document.getElementById('curveChart');
-            if (chartCanvas && chart && chartCanvas.width > 0 && chartCanvas.height > 0) {
+            if (chartCanvas && typeof chart !== 'undefined' && chart && chartCanvas.width > 0 && chartCanvas.height > 0) {
                 // Create high-resolution canvas for crisp PDF output
-                const scale = 3; // 3x resolution for crisp output
+                const scale = 2; // 2x resolution (reduced from 3x to avoid memory issues)
                 const hiResCanvas = document.createElement('canvas');
-                hiResCanvas.width = chartCanvas.width * scale;
-                hiResCanvas.height = chartCanvas.height * scale;
+                const maxSize = 4096; // Limit canvas size to avoid memory issues
+                hiResCanvas.width = Math.min(chartCanvas.width * scale, maxSize);
+                hiResCanvas.height = Math.min(chartCanvas.height * scale, maxSize);
                 const hiResCtx = hiResCanvas.getContext('2d');
                 
                 // Scale and draw the original canvas
-                hiResCtx.scale(scale, scale);
+                const actualScale = hiResCanvas.width / chartCanvas.width;
+                hiResCtx.scale(actualScale, actualScale);
                 hiResCtx.drawImage(chartCanvas, 0, 0);
                 
-                const chartDataUrl = hiResCanvas.toDataURL('image/png', 1.0);
+                const chartDataUrl = hiResCanvas.toDataURL('image/jpeg', 0.92); // JPEG for smaller size
                 
                 // Chart background frame
                 pdf.setFillColor(...colors.white);
@@ -1992,7 +1994,7 @@ async function generateDatasheetPDF() {
                 // Chart image
                 const chartWidth = contentWidth - 4;
                 const chartHeight = 76;
-                pdf.addImage(chartDataUrl, 'PNG', margin + 2, y + 2, chartWidth, chartHeight);
+                pdf.addImage(chartDataUrl, 'JPEG', margin + 2, y + 2, chartWidth, chartHeight);
                 
                 y += 85;
                 chartAdded = true;
@@ -2127,7 +2129,8 @@ async function generateDatasheetPDF() {
         
     } catch (error) {
         console.error('Errore generazione PDF:', error);
-        alert('Errore nella generazione del PDF. Riprova.');
+        console.error('Stack:', error.stack);
+        alert('Errore nella generazione del PDF: ' + error.message + '. Riprova.');
     } finally {
         btn.disabled = false;
         btn.innerHTML = originalText;
