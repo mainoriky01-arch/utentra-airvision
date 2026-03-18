@@ -719,6 +719,28 @@
         "flangia_aspirante_mm": 320,
         "flangia_premente_mm": "250x355",
         "peso_kg": 170
+      },
+      "282": {
+        "grandezza_motore": "80B2",
+        "poli": 2,
+        "kw": 1.1,
+        "hp": 1.5,
+        "rpm": 2760,
+        "dBA": 75,
+        "flangia_aspirante_mm": 210,
+        "flangia_premente_mm": "160x224",
+        "peso_kg": 35
+      },
+      "283": {
+        "grandezza_motore": "90S2",
+        "poli": 2,
+        "kw": 1.5,
+        "hp": 2.0,
+        "rpm": 2830,
+        "dBA": 76,
+        "flangia_aspirante_mm": 210,
+        "flangia_premente_mm": "160x224",
+        "peso_kg": 38
       }
     }
   },
@@ -850,6 +872,17 @@
         "flangia_aspirante_mm": 430,
         "flangia_premente_mm": "160x235",
         "peso_kg": 46
+      },
+      "404": {
+        "grandezza_motore": "112M2",
+        "poli": 2,
+        "kw": 4.0,
+        "hp": 5.5,
+        "rpm": 2860,
+        "dBA": 65,
+        "flangia_aspirante_mm": 500,
+        "flangia_premente_mm": "200x280",
+        "peso_kg": 60
       }
     }
   },
@@ -1542,6 +1575,17 @@
         "flangia_aspirante_mm": 715,
         "flangia_premente_mm": "560x800",
         "peso_kg": 965
+      },
+      "282": {
+        "grandezza_motore": "71B2",
+        "poli": 2,
+        "kw": 0.55,
+        "hp": 0.75,
+        "rpm": 2790,
+        "dBA": 69,
+        "flangia_aspirante_mm": 207,
+        "flangia_premente_mm": "160x224",
+        "peso_kg": 26
       }
     }
   },
@@ -1668,6 +1712,17 @@
         "flangia_aspirante_mm": 620,
         "flangia_premente_mm": "730x730",
         "peso_kg": 20
+      },
+      "252": {
+        "grandezza_motore": "MONO",
+        "poli": 4,
+        "kw": 0.03,
+        "hp": 0.04,
+        "rpm": 1300,
+        "dBA": 52,
+        "flangia_aspirante_mm": 252,
+        "flangia_premente_mm": "300x300",
+        "peso_kg": 3.4
       }
     }
   },
@@ -1909,6 +1964,17 @@
         "flangia_aspirante_mm": 285,
         "flangia_premente_mm": "112x160",
         "peso_kg": 208
+      },
+      "325": {
+        "grandezza_motore": "90L2",
+        "poli": 2,
+        "kw": 2.2,
+        "hp": 3.0,
+        "rpm": 2850,
+        "dBA": 76,
+        "flangia_aspirante_mm": 205,
+        "flangia_premente_mm": "71x100",
+        "peso_kg": 55
       }
     }
   },
@@ -2282,6 +2348,72 @@
         "flangia_aspirante_mm": 805,
         "flangia_premente_mm": "560x800",
         "peso_kg": 965
+      },
+      "282": {
+        "grandezza_motore": "80A2",
+        "poli": 2,
+        "kw": 0.75,
+        "hp": 1.0,
+        "rpm": 2760,
+        "dBA": 64,
+        "flangia_aspirante_mm": 230,
+        "flangia_premente_mm": "160x224",
+        "peso_kg": 32
+      },
+      "313": {
+        "grandezza_motore": "90S2",
+        "poli": 2,
+        "kw": 1.5,
+        "hp": 2.0,
+        "rpm": 2830,
+        "dBA": 68,
+        "flangia_aspirante_mm": 255,
+        "flangia_premente_mm": "180x250",
+        "peso_kg": 45
+      },
+      "353": {
+        "grandezza_motore": "100L2",
+        "poli": 2,
+        "kw": 3.0,
+        "hp": 4.0,
+        "rpm": 2900,
+        "dBA": 72,
+        "flangia_aspirante_mm": 285,
+        "flangia_premente_mm": "200x280",
+        "peso_kg": 62
+      },
+      "403": {
+        "grandezza_motore": "132S2A",
+        "poli": 2,
+        "kw": 5.5,
+        "hp": 7.5,
+        "rpm": 2910,
+        "dBA": 76,
+        "flangia_aspirante_mm": 320,
+        "flangia_premente_mm": "224x315",
+        "peso_kg": 95
+      },
+      "453": {
+        "grandezza_motore": "132S2B",
+        "poli": 2,
+        "kw": 7.5,
+        "hp": 10.0,
+        "rpm": 2920,
+        "dBA": 78,
+        "flangia_aspirante_mm": 360,
+        "flangia_premente_mm": "250x355",
+        "peso_kg": 135
+      },
+      "503": {
+        "grandezza_motore": "160M2A",
+        "poli": 2,
+        "kw": 11.0,
+        "hp": 15.0,
+        "rpm": 2930,
+        "dBA": 82,
+        "flangia_aspirante_mm": 405,
+        "flangia_premente_mm": "280x400",
+        "peso_kg": 180
       }
     }
   },
@@ -3231,6 +3363,61 @@
         "flangia_aspirante_mm": 1000,
         "flangia_premente_mm": "1043x1043",
         "peso_kg": 154
+      },
+      "452": {
+        "grandezza_motore": "71A4",
+        "poli": 4,
+        "kw": 0.25,
+        "hp": 0.35,
+        "rpm": 1380,
+        "dBA": 69,
+        "flangia_aspirante_mm": 450,
+        "flangia_premente_mm": "487x487",
+        "peso_kg": 14
+      },
+      "502": {
+        "grandezza_motore": "71B4",
+        "poli": 4,
+        "kw": 0.37,
+        "hp": 0.5,
+        "rpm": 1370,
+        "dBA": 71,
+        "flangia_aspirante_mm": 500,
+        "flangia_premente_mm": "541x541",
+        "peso_kg": 20
+      },
+      "562": {
+        "grandezza_motore": "80A4",
+        "poli": 4,
+        "kw": 0.55,
+        "hp": 0.75,
+        "rpm": 1380,
+        "dBA": 72,
+        "flangia_aspirante_mm": 560,
+        "flangia_premente_mm": "605x605",
+        "peso_kg": 23
+      },
+      "1004": {
+        "grandezza_motore": "160M4",
+        "poli": 4,
+        "kw": 11.0,
+        "hp": 15.0,
+        "rpm": 1460,
+        "dBA": 80,
+        "flangia_aspirante_mm": 1000,
+        "flangia_premente_mm": "1043x1043",
+        "peso_kg": 175
+      },
+      "1005": {
+        "grandezza_motore": "160L4",
+        "poli": 4,
+        "kw": 15.0,
+        "hp": 20.0,
+        "rpm": 1460,
+        "dBA": 81,
+        "flangia_aspirante_mm": 1000,
+        "flangia_premente_mm": "1043x1043",
+        "peso_kg": 195
       }
     }
   },
@@ -3505,6 +3692,467 @@
         "flangia_aspirante_mm": 640,
         "flangia_premente_mm": "N/A (scarico laterale)",
         "peso_kg": 107
+      }
+    }
+  },
+  "U/EIL": {
+    "tipo_fluido": "Aria pulita",
+    "modelli": {
+      "312": {
+        "grandezza_motore": "71B2",
+        "poli": 2,
+        "kw": 0.55,
+        "hp": 0.75,
+        "rpm": 2790,
+        "dBA": 75,
+        "flangia_aspirante_mm": 315,
+        "flangia_premente_mm": "356x356",
+        "peso_kg": 12
+      },
+      "352": {
+        "grandezza_motore": "80A2",
+        "poli": 2,
+        "kw": 0.75,
+        "hp": 1.0,
+        "rpm": 2780,
+        "dBA": 77,
+        "flangia_aspirante_mm": 355,
+        "flangia_premente_mm": "395x395",
+        "peso_kg": 12
+      },
+      "402": {
+        "grandezza_motore": "80B2",
+        "poli": 2,
+        "kw": 1.1,
+        "hp": 1.5,
+        "rpm": 2760,
+        "dBA": 80,
+        "flangia_aspirante_mm": 400,
+        "flangia_premente_mm": "438x438",
+        "peso_kg": 18
+      },
+      "314": {
+        "grandezza_motore": "63A4",
+        "poli": 4,
+        "kw": 0.12,
+        "hp": 0.17,
+        "rpm": 1380,
+        "dBA": 60,
+        "flangia_aspirante_mm": 315,
+        "flangia_premente_mm": "356x356",
+        "peso_kg": 8
+      },
+      "354": {
+        "grandezza_motore": "63A4",
+        "poli": 4,
+        "kw": 0.12,
+        "hp": 0.17,
+        "rpm": 1380,
+        "dBA": 62,
+        "flangia_aspirante_mm": 355,
+        "flangia_premente_mm": "395x395",
+        "peso_kg": 9
+      },
+      "404": {
+        "grandezza_motore": "63B4",
+        "poli": 4,
+        "kw": 0.18,
+        "hp": 0.25,
+        "rpm": 1380,
+        "dBA": 65,
+        "flangia_aspirante_mm": 400,
+        "flangia_premente_mm": "438x438",
+        "peso_kg": 12
+      },
+      "454": {
+        "grandezza_motore": "71A4",
+        "poli": 4,
+        "kw": 0.25,
+        "hp": 0.35,
+        "rpm": 1380,
+        "dBA": 70,
+        "flangia_aspirante_mm": 450,
+        "flangia_premente_mm": "487x487",
+        "peso_kg": 14
+      },
+      "504": {
+        "grandezza_motore": "80A4",
+        "poli": 4,
+        "kw": 0.55,
+        "hp": 0.75,
+        "rpm": 1380,
+        "dBA": 72,
+        "flangia_aspirante_mm": 500,
+        "flangia_premente_mm": "541x541",
+        "peso_kg": 22
+      },
+      "564": {
+        "grandezza_motore": "80B4",
+        "poli": 4,
+        "kw": 0.75,
+        "hp": 1.0,
+        "rpm": 1380,
+        "dBA": 73,
+        "flangia_aspirante_mm": 560,
+        "flangia_premente_mm": "605x605",
+        "peso_kg": 24
+      },
+      "634": {
+        "grandezza_motore": "90S4",
+        "poli": 4,
+        "kw": 1.1,
+        "hp": 1.5,
+        "rpm": 1405,
+        "dBA": 74,
+        "flangia_aspirante_mm": 630,
+        "flangia_premente_mm": "674x674",
+        "peso_kg": 37
+      },
+      "714": {
+        "grandezza_motore": "90L4",
+        "poli": 4,
+        "kw": 1.5,
+        "hp": 2.0,
+        "rpm": 1415,
+        "dBA": 75,
+        "flangia_aspirante_mm": 710,
+        "flangia_premente_mm": "751x751",
+        "peso_kg": 53
+      },
+      "715": {
+        "grandezza_motore": "100L4A",
+        "poli": 4,
+        "kw": 2.2,
+        "hp": 3.0,
+        "rpm": 1425,
+        "dBA": 76,
+        "flangia_aspirante_mm": 710,
+        "flangia_premente_mm": "751x751",
+        "peso_kg": 60
+      },
+      "804": {
+        "grandezza_motore": "100L4B",
+        "poli": 4,
+        "kw": 3.0,
+        "hp": 4.0,
+        "rpm": 1415,
+        "dBA": 77,
+        "flangia_aspirante_mm": 800,
+        "flangia_premente_mm": "837x837",
+        "peso_kg": 72
+      },
+      "805": {
+        "grandezza_motore": "112M4",
+        "poli": 4,
+        "kw": 4.0,
+        "hp": 5.5,
+        "rpm": 1435,
+        "dBA": 78,
+        "flangia_aspirante_mm": 800,
+        "flangia_premente_mm": "837x837",
+        "peso_kg": 79
+      },
+      "904": {
+        "grandezza_motore": "132S4",
+        "poli": 4,
+        "kw": 5.5,
+        "hp": 7.5,
+        "rpm": 1450,
+        "dBA": 81,
+        "flangia_aspirante_mm": 900,
+        "flangia_premente_mm": "944x944",
+        "peso_kg": 141
+      },
+      "905": {
+        "grandezza_motore": "132M4",
+        "poli": 4,
+        "kw": 7.5,
+        "hp": 10.0,
+        "rpm": 1450,
+        "dBA": 82,
+        "flangia_aspirante_mm": 900,
+        "flangia_premente_mm": "944x944",
+        "peso_kg": 152
+      },
+      "636": {
+        "grandezza_motore": "80A6",
+        "poli": 6,
+        "kw": 0.37,
+        "hp": 0.5,
+        "rpm": 920,
+        "dBA": 67,
+        "flangia_aspirante_mm": 630,
+        "flangia_premente_mm": "674x674",
+        "peso_kg": 25
+      },
+      "716": {
+        "grandezza_motore": "90S6",
+        "poli": 6,
+        "kw": 0.75,
+        "hp": 1.0,
+        "rpm": 915,
+        "dBA": 68,
+        "flangia_aspirante_mm": 710,
+        "flangia_premente_mm": "751x751",
+        "peso_kg": 49
+      },
+      "717": {
+        "grandezza_motore": "90L6",
+        "poli": 6,
+        "kw": 1.1,
+        "hp": 1.5,
+        "rpm": 920,
+        "dBA": 69,
+        "flangia_aspirante_mm": 710,
+        "flangia_premente_mm": "751x751",
+        "peso_kg": 51
+      },
+      "806": {
+        "grandezza_motore": "90L6",
+        "poli": 6,
+        "kw": 1.1,
+        "hp": 1.5,
+        "rpm": 920,
+        "dBA": 69,
+        "flangia_aspirante_mm": 800,
+        "flangia_premente_mm": "837x837",
+        "peso_kg": 55
+      },
+      "807": {
+        "grandezza_motore": "100L6",
+        "poli": 6,
+        "kw": 1.5,
+        "hp": 2.0,
+        "rpm": 945,
+        "dBA": 70,
+        "flangia_aspirante_mm": 800,
+        "flangia_premente_mm": "837x837",
+        "peso_kg": 63
+      },
+      "906": {
+        "grandezza_motore": "112M6",
+        "poli": 6,
+        "kw": 2.2,
+        "hp": 3.0,
+        "rpm": 960,
+        "dBA": 72,
+        "flangia_aspirante_mm": 900,
+        "flangia_premente_mm": "944x944",
+        "peso_kg": 95
+      },
+      "907": {
+        "grandezza_motore": "132S6",
+        "poli": 6,
+        "kw": 3.0,
+        "hp": 4.0,
+        "rpm": 950,
+        "dBA": 73,
+        "flangia_aspirante_mm": 900,
+        "flangia_premente_mm": "944x944",
+        "peso_kg": 116
+      },
+      "1006": {
+        "grandezza_motore": "132S6",
+        "poli": 6,
+        "kw": 3.0,
+        "hp": 4.0,
+        "rpm": 950,
+        "dBA": 74,
+        "flangia_aspirante_mm": 1000,
+        "flangia_premente_mm": "1043x1043",
+        "peso_kg": 136
+      },
+      "1007": {
+        "grandezza_motore": "132M6A",
+        "poli": 6,
+        "kw": 4.0,
+        "hp": 5.5,
+        "rpm": 950,
+        "dBA": 76,
+        "flangia_aspirante_mm": 1000,
+        "flangia_premente_mm": "1043x1043",
+        "peso_kg": 154
+      },
+      "452": {
+        "grandezza_motore": "71A4",
+        "poli": 4,
+        "kw": 0.25,
+        "hp": 0.35,
+        "rpm": 1380,
+        "dBA": 69,
+        "flangia_aspirante_mm": 450,
+        "flangia_premente_mm": "487x487",
+        "peso_kg": 14
+      },
+      "502": {
+        "grandezza_motore": "71B4",
+        "poli": 4,
+        "kw": 0.37,
+        "hp": 0.5,
+        "rpm": 1370,
+        "dBA": 71,
+        "flangia_aspirante_mm": 500,
+        "flangia_premente_mm": "541x541",
+        "peso_kg": 20
+      },
+      "562": {
+        "grandezza_motore": "80A4",
+        "poli": 4,
+        "kw": 0.55,
+        "hp": 0.75,
+        "rpm": 1380,
+        "dBA": 72,
+        "flangia_aspirante_mm": 560,
+        "flangia_premente_mm": "605x605",
+        "peso_kg": 23
+      },
+      "1004": {
+        "grandezza_motore": "160M4",
+        "poli": 4,
+        "kw": 11.0,
+        "hp": 15.0,
+        "rpm": 1460,
+        "dBA": 80,
+        "flangia_aspirante_mm": 1000,
+        "flangia_premente_mm": "1043x1043",
+        "peso_kg": 175
+      },
+      "1005": {
+        "grandezza_motore": "160L4",
+        "poli": 4,
+        "kw": 15.0,
+        "hp": 20.0,
+        "rpm": 1460,
+        "dBA": 81,
+        "flangia_aspirante_mm": 1000,
+        "flangia_premente_mm": "1043x1043",
+        "peso_kg": 195
+      }
+    }
+  },
+  "U/HPI": {
+    "tipo_fluido": "Aria pulita, Aria polverosa",
+    "modelli": {
+      "631": {
+        "grandezza_motore": "160M2B",
+        "poli": 2,
+        "kw": 15.0,
+        "hp": 20.0,
+        "rpm": 2920,
+        "dBA": 88,
+        "flangia_aspirante_mm": 366,
+        "flangia_premente_mm": "224x315",
+        "peso_kg": 250
+      },
+      "632": {
+        "grandezza_motore": "160L2",
+        "poli": 2,
+        "kw": 18.5,
+        "hp": 25.0,
+        "rpm": 2930,
+        "dBA": 89,
+        "flangia_aspirante_mm": 366,
+        "flangia_premente_mm": "224x315",
+        "peso_kg": 275
+      },
+      "633": {
+        "grandezza_motore": "180M2",
+        "poli": 2,
+        "kw": 22.0,
+        "hp": 30.0,
+        "rpm": 2920,
+        "dBA": 90,
+        "flangia_aspirante_mm": 366,
+        "flangia_premente_mm": "224x315",
+        "peso_kg": 310
+      },
+      "711": {
+        "grandezza_motore": "160M2B",
+        "poli": 2,
+        "kw": 15.0,
+        "hp": 20.0,
+        "rpm": 2920,
+        "dBA": 87,
+        "flangia_aspirante_mm": 285,
+        "flangia_premente_mm": "180x250",
+        "peso_kg": 270
+      },
+      "712": {
+        "grandezza_motore": "200L2A",
+        "poli": 2,
+        "kw": 30.0,
+        "hp": 40.0,
+        "rpm": 2960,
+        "dBA": 92,
+        "flangia_aspirante_mm": 405,
+        "flangia_premente_mm": "250x355",
+        "peso_kg": 450
+      },
+      "713": {
+        "grandezza_motore": "200L2B",
+        "poli": 2,
+        "kw": 37.0,
+        "hp": 50.0,
+        "rpm": 2960,
+        "dBA": 92,
+        "flangia_aspirante_mm": 405,
+        "flangia_premente_mm": "250x355",
+        "peso_kg": 470
+      },
+      "802": {
+        "grandezza_motore": "250M2",
+        "poli": 2,
+        "kw": 55.0,
+        "hp": 75.0,
+        "rpm": 2970,
+        "dBA": 94,
+        "flangia_aspirante_mm": 448,
+        "flangia_premente_mm": "280x400",
+        "peso_kg": 730
+      },
+      "803": {
+        "grandezza_motore": "280S2",
+        "poli": 2,
+        "kw": 75.0,
+        "hp": 100.0,
+        "rpm": 2980,
+        "dBA": 95,
+        "flangia_aspirante_mm": 448,
+        "flangia_premente_mm": "280x400",
+        "peso_kg": 850
+      },
+      "901": {
+        "grandezza_motore": "250M2",
+        "poli": 2,
+        "kw": 55.0,
+        "hp": 75.0,
+        "rpm": 2970,
+        "dBA": 91,
+        "flangia_aspirante_mm": 360,
+        "flangia_premente_mm": "224x315",
+        "peso_kg": 800
+      },
+      "902": {
+        "grandezza_motore": "280M2",
+        "poli": 2,
+        "kw": 90.0,
+        "hp": 125.0,
+        "rpm": 2970,
+        "dBA": 96,
+        "flangia_aspirante_mm": 505,
+        "flangia_premente_mm": "315x450",
+        "peso_kg": 980
+      },
+      "903": {
+        "grandezza_motore": "315S2",
+        "poli": 2,
+        "kw": 110.0,
+        "hp": 150.0,
+        "rpm": 2970,
+        "dBA": 97,
+        "flangia_aspirante_mm": 505,
+        "flangia_premente_mm": "315x450",
+        "peso_kg": 1100
       }
     }
   }
