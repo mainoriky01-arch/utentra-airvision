@@ -8,6 +8,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         /* ─── Reset & Base ─── */
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -561,6 +563,40 @@
             padding: 0; margin: -1px; overflow: hidden;
             clip: rect(0,0,0,0); white-space: nowrap; border: 0;
         }
+
+        /* ─── Download PDF Button ─── */
+        .download-pdf-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
+            margin-top: 16px;
+            padding: 12px 20px;
+            background: linear-gradient(135deg, var(--blue-600), var(--blue-700));
+            color: #fff;
+            border: none;
+            border-radius: var(--radius-md);
+            font-family: 'Inter', sans-serif;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--transition);
+            box-shadow: 0 2px 8px rgba(37, 99, 235, 0.3);
+        }
+        .download-pdf-btn:hover {
+            background: linear-gradient(135deg, var(--blue-500), var(--blue-600));
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4);
+        }
+        .download-pdf-btn:active {
+            transform: translateY(0);
+        }
+        .download-pdf-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
     </style>
 </head>
 <body>
@@ -791,6 +827,14 @@
                     <span class="spec-value" id="specFluido">—</span>
                 </div>
             </div>
+            <button id="downloadPdfBtn" class="download-pdf-btn" onclick="generateDatasheetPDF()">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                    <polyline points="7 10 12 15 17 10"/>
+                    <line x1="12" y1="15" x2="12" y2="3"/>
+                </svg>
+                Scarica Datasheet PDF
+            </button>
         </div>
 
         <!-- ─── Info Footer ─── -->
@@ -1702,6 +1746,194 @@ function updatePowerEfficiencyCurves(series, model) {
     status.textContent = `✓ Dati P/η disponibili`;
     status.style.color = 'var(--green-400)';
     chart.update();
+}
+
+/* ─── PDF Datasheet Generator ─── */
+async function generateDatasheetPDF() {
+    const { jsPDF } = window.jspdf;
+    
+    const seriesSelect = document.getElementById('seriesSelect');
+    const modelSelect = document.getElementById('modelSelect');
+    const seriesName = seriesSelect.value;
+    const modelName = modelSelect.value.replace(seriesName + ' ', '');
+    const fullModelName = `${seriesName} ${modelName}`;
+    
+    if (!seriesName || !modelName) {
+        alert('Seleziona un modello prima di scaricare il datasheet');
+        return;
+    }
+    
+    const btn = document.getElementById('downloadPdfBtn');
+    const originalText = btn.innerHTML;
+    btn.disabled = true;
+    btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="spin"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg> Generazione...';
+    
+    try {
+        // Create PDF (A4 portrait)
+        const pdf = new jsPDF({
+            orientation: 'portrait',
+            unit: 'mm',
+            format: 'a4'
+        });
+        
+        const pageWidth = 210;
+        const pageHeight = 297;
+        const margin = 15;
+        const contentWidth = pageWidth - (margin * 2);
+        let y = margin;
+        
+        // ─── Header ───
+        // Blue header bar
+        pdf.setFillColor(26, 54, 93); // --utentra
+        pdf.rect(0, 0, pageWidth, 35, 'F');
+        
+        // Logo "U"
+        pdf.setFillColor(255, 255, 255);
+        pdf.roundedRect(margin, 8, 18, 18, 3, 3, 'F');
+        pdf.setTextColor(26, 54, 93);
+        pdf.setFontSize(14);
+        pdf.setFont('helvetica', 'bold');
+        pdf.text('U', margin + 9, 20, { align: 'center' });
+        
+        // Title
+        pdf.setTextColor(255, 255, 255);
+        pdf.setFontSize(22);
+        pdf.setFont('helvetica', 'bold');
+        pdf.text(fullModelName, margin + 24, 15);
+        
+        pdf.setFontSize(11);
+        pdf.setFont('helvetica', 'normal');
+        pdf.text('Scheda Tecnica Ventilatore', margin + 24, 23);
+        
+        // Date
+        const today = new Date().toLocaleDateString('it-IT');
+        pdf.setFontSize(9);
+        pdf.text(today, pageWidth - margin, 28, { align: 'right' });
+        
+        y = 45;
+        
+        // ─── Curve Graph ───
+        const chartCanvas = document.getElementById('pressureChart');
+        if (chartCanvas) {
+            const chartImage = await html2canvas(chartCanvas, {
+                backgroundColor: '#ffffff',
+                scale: 2
+            });
+            const chartDataUrl = chartImage.toDataURL('image/png');
+            
+            // Section title
+            pdf.setTextColor(26, 54, 93);
+            pdf.setFontSize(12);
+            pdf.setFont('helvetica', 'bold');
+            pdf.text('Curve Caratteristiche', margin, y);
+            y += 6;
+            
+            // Chart image
+            const chartWidth = contentWidth;
+            const chartHeight = (chartImage.height / chartImage.width) * chartWidth;
+            pdf.addImage(chartDataUrl, 'PNG', margin, y, chartWidth, Math.min(chartHeight, 90));
+            y += Math.min(chartHeight, 90) + 10;
+        }
+        
+        // ─── Operating Range ───
+        pdf.setFillColor(248, 250, 252);
+        pdf.roundedRect(margin, y, contentWidth, 22, 2, 2, 'F');
+        
+        pdf.setTextColor(26, 54, 93);
+        pdf.setFontSize(10);
+        pdf.setFont('helvetica', 'bold');
+        
+        const col1 = margin + 5;
+        const col2 = margin + contentWidth/2;
+        
+        pdf.text('Range Portata', col1, y + 8);
+        pdf.text('Range Pressione', col2, y + 8);
+        
+        pdf.setFont('helvetica', 'normal');
+        pdf.setFontSize(11);
+        const flowMin = rawValues.flowMin || '—';
+        const flowMax = rawValues.flowMax || '—';
+        const pMin = rawValues.pressureMin || '—';
+        const pMax = rawValues.pressureMax || '—';
+        
+        pdf.text(`${flowMin} – ${flowMax} m³/h`, col1, y + 16);
+        pdf.text(`${pMin} – ${pMax} kg/m²`, col2, y + 16);
+        
+        y += 30;
+        
+        // ─── Technical Specifications ───
+        pdf.setTextColor(26, 54, 93);
+        pdf.setFontSize(12);
+        pdf.setFont('helvetica', 'bold');
+        pdf.text('Specifiche Tecniche', margin, y);
+        y += 8;
+        
+        // Get specs from page
+        const specs = [
+            ['Motore', document.getElementById('specMotore')?.textContent || '—'],
+            ['Potenza', document.getElementById('specPotenza')?.textContent || '—'],
+            ['RPM', document.getElementById('specRPM')?.textContent || '—'],
+            ['Rumorosità', document.getElementById('specDB')?.textContent || '—'],
+            ['Flangia Aspirante', document.getElementById('specFlangiaAsp')?.textContent || '—'],
+            ['Flangia Premente', document.getElementById('specFlangiaPrem')?.textContent || '—'],
+            ['Peso', document.getElementById('specPeso')?.textContent || '—'],
+            ['Tipo Fluido', document.getElementById('specFluido')?.textContent || '—']
+        ];
+        
+        // Draw specs table
+        const rowHeight = 9;
+        const labelWidth = 50;
+        
+        specs.forEach((spec, i) => {
+            const rowY = y + (i * rowHeight);
+            
+            // Alternate row background
+            if (i % 2 === 0) {
+                pdf.setFillColor(248, 250, 252);
+                pdf.rect(margin, rowY - 2, contentWidth, rowHeight, 'F');
+            }
+            
+            pdf.setTextColor(100, 116, 139);
+            pdf.setFontSize(10);
+            pdf.setFont('helvetica', 'normal');
+            pdf.text(spec[0], margin + 3, rowY + 4);
+            
+            pdf.setTextColor(26, 54, 93);
+            pdf.setFont('helvetica', 'bold');
+            pdf.text(spec[1], margin + labelWidth, rowY + 4);
+        });
+        
+        y += (specs.length * rowHeight) + 15;
+        
+        // ─── Footer ───
+        const footerY = pageHeight - 20;
+        
+        pdf.setDrawColor(226, 232, 240);
+        pdf.line(margin, footerY - 5, pageWidth - margin, footerY - 5);
+        
+        pdf.setTextColor(100, 116, 139);
+        pdf.setFontSize(9);
+        pdf.setFont('helvetica', 'normal');
+        pdf.text('UTENTRA S.R.L.', margin, footerY);
+        pdf.text('Via Francesco Albani 9, 20149 Milano', margin, footerY + 5);
+        
+        pdf.setTextColor(26, 54, 93);
+        pdf.setFont('helvetica', 'bold');
+        pdf.text('AirVision Fan Selector', pageWidth - margin, footerY, { align: 'right' });
+        pdf.setFont('helvetica', 'normal');
+        pdf.setTextColor(100, 116, 139);
+        pdf.text('utentra-air-vision.vercel.app', pageWidth - margin, footerY + 5, { align: 'right' });
+        
+        // Save PDF
+        pdf.save(`${fullModelName.replace(/\//g, '-')}_Datasheet.pdf`);
+        
+    } catch (error) {
+        console.error('Errore generazione PDF:', error);
+        alert('Errore nella generazione del PDF. Riprova.');
+    } finally {
+        btn.disabled = false;
+        btn.innerHTML = originalText;
+    }
 }
 </script>
 </body>
