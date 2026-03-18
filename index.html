@@ -1764,8 +1764,8 @@ async function generateDatasheetPDF() {
     
     const { jsPDF } = window.jspdf;
     
-    const seriesSelect = document.getElementById('seriesSelect');
-    const modelSelect = document.getElementById('modelSelect');
+    const seriesSelect = document.getElementById('series');
+    const modelSelect = document.getElementById('model');
     const seriesName = seriesSelect.value;
     const modelName = modelSelect.value.replace(seriesName + ' ', '');
     const fullModelName = `${seriesName} ${modelName}`;
