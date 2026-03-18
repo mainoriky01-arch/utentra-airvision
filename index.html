@@ -1750,390 +1750,342 @@ function updatePowerEfficiencyCurves(series, model) {
 
 /* ─── PDF Datasheet Generator ─── */
 async function generateDatasheetPDF() {
-    // Check if libraries are loaded
     if (typeof window.jspdf === 'undefined') {
         alert('Errore: libreria PDF non caricata. Ricarica la pagina.');
-        console.error('jsPDF not loaded');
         return;
     }
-    if (typeof html2canvas === 'undefined') {
-        alert('Errore: libreria html2canvas non caricata. Ricarica la pagina.');
-        console.error('html2canvas not loaded');
-        return;
-    }
-    
+
     const { jsPDF } = window.jspdf;
-    
+
     const seriesSelect = document.getElementById('series');
-    const modelSelect = document.getElementById('model');
-    const seriesName = seriesSelect.value;
-    const modelName = modelSelect.value.replace(seriesName + ' ', '');
-    const fullModelName = `${seriesName} ${modelName}`;
-    
-    if (!seriesName || !modelName) {
+    const modelSelect  = document.getElementById('model');
+    const seriesName   = seriesSelect.value;
+    const modelShort   = modelSelect.value.replace(seriesName + ' ', '');
+    const fullModel    = `${seriesName} ${modelShort}`;
+
+    if (!seriesName || !modelShort) {
         alert('Seleziona un modello prima di scaricare il datasheet');
         return;
     }
-    
-    const btn = document.getElementById('downloadPdfBtn');
+
+    const btn          = document.getElementById('downloadPdfBtn');
     const originalText = btn.innerHTML;
     btn.disabled = true;
     btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="spin"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg> Generazione...';
-    
+
     try {
-        // Create PDF (A4 portrait)
-        const pdf = new jsPDF({
-            orientation: 'portrait',
-            unit: 'mm',
-            format: 'a4'
-        });
-        
-        // ─── Design System ───
-        const pageWidth = 210;
-        const pageHeight = 297;
-        const margin = 15;
-        const contentWidth = pageWidth - (margin * 2);
-        
-        // Colors (industrial palette)
-        const colors = {
-            utentraBlue: [26, 54, 93],      // #1a365d
-            utentraBlueLight: [45, 80, 130], // #2d5082
-            darkText: [15, 23, 42],          // #0f172a
-            secondaryText: [71, 85, 105],    // #475569
-            lightText: [100, 116, 139],      // #64748b
-            borderColor: [203, 213, 225],    // #cbd5e1
-            bgLight: [241, 245, 249],        // #f1f5f9
-            bgLighter: [248, 250, 252],      // #f8fafc
-            white: [255, 255, 255]
+        // ── PDF setup ──────────────────────────────────────────────────────────
+        const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+
+        const PW = 210, PH = 297;   // page dimensions
+        const M  = 15, MR = 15;     // left / right margin
+        const CW = PW - M - MR;     // content width = 180 mm
+
+        // ── Color palette (RGB, no alpha) ──────────────────────────────────────
+        const C = {
+            blue:      [26,  54,  93],   // #1a365d  Utentra primary
+            blueMid:   [44,  88, 148],   // #2c5894  header accent
+            bluePale:  [197, 217, 241],  // #c5d9f1  pale blue text on dark bg
+            darkText:  [18,  24,  38],   // #121826  body text
+            bodyText:  [55,  65,  82],   // #374152  secondary text
+            muted:     [107, 122, 144],  // #6b7a90  labels / captions
+            border:    [214, 220, 230],  // #d6dce6  table/box borders
+            rowAlt:    [248, 250, 252],  // #f8fafc  zebra row bg
+            rowAlt2:   [240, 244, 250],  // #f0f4fa  slightly deeper alternate
+            bgBand:    [243, 246, 250],  // #f3f6fa  range box bg
+            white:     [255, 255, 255],
         };
-        
-        let y = margin;
-        
-        // ─── Helper Functions ───
-        const drawSectionTitle = (title, yPos) => {
-            pdf.setTextColor(...colors.utentraBlue);
-            pdf.setFontSize(11);
-            pdf.setFont('helvetica', 'bold');
-            pdf.text(title.toUpperCase(), margin, yPos);
-            
-            // Accent line
-            pdf.setDrawColor(...colors.utentraBlue);
-            pdf.setLineWidth(0.5);
-            pdf.line(margin, yPos + 2, margin + 25, yPos + 2);
+
+        // ── Tiny helpers ───────────────────────────────────────────────────────
+        const sf  = (...c) => pdf.setFillColor(...c);
+        const sd  = (...c) => pdf.setDrawColor(...c);
+        const st  = (...c) => pdf.setTextColor(...c);
+        const lw  = (w)    => pdf.setLineWidth(w);
+        const fr  = (x,y,w,h)            => pdf.rect(x, y, w, h, 'F');
+        const rr  = (x,y,w,h,rx,style)   => pdf.roundedRect(x, y, w, h, rx, rx, style);
+        const bold   = (sz) => { pdf.setFont('helvetica','bold');   pdf.setFontSize(sz); };
+        const normal = (sz) => { pdf.setFont('helvetica','normal'); pdf.setFontSize(sz); };
+        const italic = (sz) => { pdf.setFont('helvetica','italic'); pdf.setFontSize(sz); };
+
+        const sectionHeader = (title, y) => {
+            // 3 mm blue accent pill
+            sf(...C.blue); fr(M, y, 3, 5.5);
+            // Title
+            st(...C.blue); bold(8.5);
+            pdf.text(title, M + 5.5, y + 4);
+            // Thin rule to the right
+            const tw = pdf.getTextWidth(title);
+            sd(...C.border); lw(0.25);
+            pdf.line(M + 5.5 + tw + 3, y + 2.5, PW - MR, y + 2.5);
         };
-        
-        const drawDivider = (yPos) => {
-            pdf.setDrawColor(...colors.borderColor);
-            pdf.setLineWidth(0.3);
-            pdf.line(margin, yPos, pageWidth - margin, yPos);
-        };
-        
-        // ─── Header ───
-        // Header background gradient effect (simulated with rectangles)
-        pdf.setFillColor(...colors.utentraBlue);
-        pdf.rect(0, 0, pageWidth, 35, 'F');
-        
-        // Subtle gradient overlay
-        pdf.setFillColor(...colors.utentraBlueLight);
-        pdf.rect(pageWidth - 60, 0, 60, 35, 'F');
-        
-        // Logo container with white background
-        pdf.setFillColor(...colors.white);
-        pdf.roundedRect(margin - 2, 6, 40, 22, 2, 2, 'F');
-        
-        // Utentra Logo
+
+        // ── LEFT ACCENT BARS ───────────────────────────────────────────────────
+        sf(...C.blue);    fr(0,  0, 4,   PH);   // primary bar
+        sf(...C.blueMid); fr(4,  0, 1.2, PH);   // highlight stripe
+
+        // ══════════════════════════════════════════════════════════════════════
+        // HEADER  (y 0 – 44 mm)
+        // ══════════════════════════════════════════════════════════════════════
+        const HDR_H = 44;
+        sf(...C.blue); fr(5.2, 0, PW - 5.2, HDR_H);
+
+        // Decorative diagonal block (top-right corner)
+        sf(...C.blueMid);
+        pdf.triangle(PW - 55, 0, PW, 0, PW, 32, 'F');
+
+        // ── Logo pill (white box) ──
+        const LX = M + 1, LY = 9, LW = 44, LH = 24;
+        sf(...C.white); rr(LX, LY, LW, LH, 2, 'F');
+
         await new Promise((resolve) => {
-            try {
-                const img = new Image();
-                img.crossOrigin = 'anonymous';
-                img.onload = () => {
-                    try {
-                        const tmpCanvas = document.createElement('canvas');
-                        const targetW = 350;
-                        const scale = targetW / img.naturalWidth;
-                        tmpCanvas.width = targetW;
-                        tmpCanvas.height = Math.round(img.naturalHeight * scale);
-                        const tmpCtx = tmpCanvas.getContext('2d');
-                        tmpCtx.drawImage(img, 0, 0, tmpCanvas.width, tmpCanvas.height);
-                        const logoJpeg = tmpCanvas.toDataURL('image/jpeg', 0.9);
-                        pdf.addImage(logoJpeg, 'JPEG', margin + 2, 9, 32, 16);
-                    } catch(e) {
-                        pdf.setTextColor(...colors.utentraBlue);
-                        pdf.setFontSize(11);
-                        pdf.setFont('helvetica', 'bold');
-                        pdf.text('UTENTRA', margin + 17, 18, { align: 'center' });
-                    }
-                    resolve();
-                };
-                img.onerror = () => {
-                    pdf.setTextColor(...colors.utentraBlue);
-                    pdf.setFontSize(11);
-                    pdf.setFont('helvetica', 'bold');
-                    pdf.text('UTENTRA', margin + 17, 18, { align: 'center' });
-                    resolve();
-                };
-                img.src = 'logo.png';
-            } catch(e) {
+            const img = new Image();
+            img.crossOrigin = 'anonymous';
+            const fallback = () => {
+                st(...C.blue); bold(10);
+                pdf.text('UTENTRA', LX + LW / 2, LY + LH / 2 + 1.5, { align: 'center' });
                 resolve();
-            }
+            };
+            img.onload = () => {
+                try {
+                    const TW = 480;
+                    const tc = document.createElement('canvas');
+                    tc.width  = TW;
+                    tc.height = Math.round(img.naturalHeight * (TW / img.naturalWidth));
+                    const ctx = tc.getContext('2d');
+                    // white background so logo renders correctly on JPEG
+                    ctx.fillStyle = '#ffffff';
+                    ctx.fillRect(0, 0, tc.width, tc.height);
+                    ctx.drawImage(img, 0, 0, tc.width, tc.height);
+                    const dataUrl = tc.toDataURL('image/jpeg', 0.93);
+                    // Fit inside logo pill with 3 mm padding
+                    const pad = 3;
+                    const bW  = LW - pad * 2, bH = LH - pad * 2;
+                    const asp = tc.width / tc.height;
+                    let dW = bW, dH = dW / asp;
+                    if (dH > bH) { dH = bH; dW = dH * asp; }
+                    const oX = (bW - dW) / 2, oY = (bH - dH) / 2;
+                    pdf.addImage(dataUrl, 'JPEG', LX + pad + oX, LY + pad + oY, dW, dH);
+                } catch(e) { fallback(); return; }
+                resolve();
+            };
+            img.onerror = fallback;
+            img.src = 'logo.png';
         });
-        
-        // Model name - large and prominent
-        pdf.setTextColor(...colors.white);
-        pdf.setFontSize(18);
-        pdf.setFont('helvetica', 'bold');
-        pdf.text(fullModelName, margin + 45, 18);
-        
-        // Document type label
-        pdf.setFillColor(...colors.white);
-        // Alpha removed
-        pdf.roundedRect(margin + 45, 22, 55, 7, 1, 1, 'F');
-        // Alpha removed
-        
-        pdf.setFontSize(8);
-        pdf.setFont('helvetica', 'normal');
-        pdf.text('TECHNICAL DATASHEET', margin + 48, 26.5);
-        
-        // Date in header right
-        const today = new Date().toLocaleDateString('it-IT');
-        pdf.setTextColor(...colors.white);
-        pdf.setFontSize(9);
-        pdf.text(today, pageWidth - margin - 5, 20, { align: 'right' });
-        pdf.setFontSize(7);
-        pdf.setTextColor(...colors.lightText);
-        pdf.text('DATA EMISSIONE', pageWidth - margin - 5, 25, { align: 'right' });
-        
-        y = 45;
-        
-        // ─── Operating Range Box ───
-        drawSectionTitle('Range Operativo', y);
-        y += 10;
-        
-        // Range container with border
-        pdf.setDrawColor(...colors.borderColor);
-        pdf.setLineWidth(0.5);
-        pdf.setFillColor(...colors.bgLighter);
-        pdf.roundedRect(margin, y, contentWidth, 20, 2, 2, 'FD');
-        
-        // Vertical divider
-        pdf.line(margin + contentWidth/2, y + 4, margin + contentWidth/2, y + 16);
-        
-        // Flow range
-        pdf.setTextColor(...colors.secondaryText);
-        pdf.setFontSize(8);
-        pdf.setFont('helvetica', 'normal');
-        pdf.text('PORTATA', margin + 8, y + 8);
-        
-        pdf.setTextColor(...colors.darkText);
-        pdf.setFontSize(11);
-        pdf.setFont('helvetica', 'bold');
-        const flowMin = rawValues.flowMin || '—';
-        const flowMax = rawValues.flowMax || '—';
-        pdf.text(`${flowMin} – ${flowMax}`, margin + 8, y + 15);
-        pdf.setFontSize(8);
-        pdf.setFont('helvetica', 'normal');
-        pdf.setTextColor(...colors.lightText);
-        pdf.text('m³/h', margin + 45, y + 15);
-        
-        // Pressure range
-        pdf.setTextColor(...colors.secondaryText);
-        pdf.text('PRESSIONE', margin + contentWidth/2 + 8, y + 8);
-        
-        pdf.setTextColor(...colors.darkText);
-        pdf.setFontSize(11);
-        pdf.setFont('helvetica', 'bold');
-        const pMin = rawValues.pressureMin || '—';
-        const pMax = rawValues.pressureMax || '—';
-        pdf.text(`${pMin} – ${pMax}`, margin + contentWidth/2 + 8, y + 15);
-        pdf.setFontSize(8);
-        pdf.setFont('helvetica', 'normal');
-        pdf.setTextColor(...colors.lightText);
-        pdf.text('kg/m²', margin + contentWidth/2 + 45, y + 15);
-        
-        y += 28;
-        
-        // ─── Curve Graph ───
-        drawSectionTitle('Curve Caratteristiche', y);
-        y += 8;
-        
-        // Chart container with professional styling
+
+        // ── Model name ──
+        const nameX = LX + LW + 7;
+        st(...C.white); bold(22);
+        pdf.text(fullModel, nameX, 23);
+
+        // ── Subtitle tag ──
+        st(...C.bluePale); normal(7.5);
+        pdf.text('VENTILATORE INDUSTRIALE  ·  SCHEDA TECNICA', nameX, 30);
+
+        // ── Date block (top-right) ──
+        const today = new Date().toLocaleDateString('it-IT', { day:'2-digit', month:'2-digit', year:'numeric' });
+        st(...C.bluePale); normal(6.5);
+        pdf.text('DATA EMISSIONE', PW - MR - 2, 12, { align: 'right' });
+        st(...C.white); bold(9);
+        pdf.text(today, PW - MR - 2, 19, { align: 'right' });
+        st(...C.bluePale); normal(6.5);
+        pdf.text('REV. 1.0', PW - MR - 2, 26, { align: 'right' });
+
+        // ── Header bottom stripe ──
+        sf(...C.blueMid); fr(5.2, HDR_H,       PW - 5.2, 1.5);
+        sf(...C.bluePale); fr(5.2, HDR_H + 1.5, PW - 5.2, 0.5);
+
+        // ══════════════════════════════════════════════════════════════════════
+        // CONTENT  (starts at y = HDR_H + 7)
+        // ══════════════════════════════════════════════════════════════════════
+        let y = HDR_H + 8;
+
+        // ── RANGE OPERATIVO ────────────────────────────────────────────────────
+        sectionHeader('RANGE OPERATIVO', y);
+        y += 7;
+
+        const BOX_H  = 20;
+        const BOX_W  = (CW - 4) / 2;
+
+        const drawRangeBox = (bx, label, valStr, unit) => {
+            // Background
+            sf(...C.bgBand); sd(...C.border); lw(0.3);
+            rr(bx, y, BOX_W, BOX_H, 1.5, 'FD');
+            // Left colored strip (blue, 5 mm wide)
+            sf(...C.blue);
+            rr(bx, y, 5, BOX_H, 1.5, 'F');
+            // cover right corners of the strip
+            sf(...C.bgBand); fr(bx + 3, y, 2.5, BOX_H);
+
+            // Label
+            st(...C.muted); normal(6.5);
+            pdf.text(label, bx + 7, y + 6);
+            // Value
+            st(...C.darkText); bold(13);
+            pdf.text(valStr, bx + 7, y + 14);
+            // Unit
+            st(...C.muted); normal(7);
+            pdf.text(unit, bx + 7 + pdf.getTextWidth(valStr) + 1.5, y + 14);
+        };
+
+        const fMin = rawValues.flowMin     != null ? rawValues.flowMin.toFixed(0)     : '—';
+        const fMax = rawValues.flowMax     != null ? rawValues.flowMax.toFixed(0)     : '—';
+        const pMin = rawValues.pressureMin != null ? rawValues.pressureMin.toFixed(1) : '—';
+        const pMax = rawValues.pressureMax != null ? rawValues.pressureMax.toFixed(1) : '—';
+
+        drawRangeBox(M,           'PORTATA',    `${fMin} – ${fMax}`, 'm³/h');
+        drawRangeBox(M + BOX_W + 4, 'PRESSIONE', `${pMin} – ${pMax}`, 'kg/m²');
+
+        y += BOX_H + 8;
+
+        // ── CURVE CARATTERISTICHE ──────────────────────────────────────────────
+        sectionHeader('CURVE CARATTERISTICHE', y);
+        y += 7;
+
+        const CHART_H = 76;
         let chartAdded = false;
         try {
             const chartCanvas = document.getElementById('curveChart');
-            if (chartCanvas && typeof chart !== 'undefined' && chart && chartCanvas.width > 0 && chartCanvas.height > 0) {
-                // Create high-resolution canvas for crisp PDF output
-                const scale = 2; // 2x resolution (reduced from 3x to avoid memory issues)
-                const hiResCanvas = document.createElement('canvas');
-                const maxSize = 4096; // Limit canvas size to avoid memory issues
-                hiResCanvas.width = Math.min(chartCanvas.width * scale, maxSize);
-                hiResCanvas.height = Math.min(chartCanvas.height * scale, maxSize);
-                const hiResCtx = hiResCanvas.getContext('2d');
-                
-                // Scale and draw the original canvas
-                const actualScale = hiResCanvas.width / chartCanvas.width;
-                hiResCtx.scale(actualScale, actualScale);
-                hiResCtx.drawImage(chartCanvas, 0, 0);
-                
-                const chartDataUrl = hiResCanvas.toDataURL('image/jpeg', 0.92); // JPEG for smaller size
-                
-                // Chart background frame
-                pdf.setFillColor(...colors.white);
-                pdf.roundedRect(margin - 1, y - 1, contentWidth + 2, 82, 2, 2, 'F');
-                
-                // Chart border
-                pdf.setDrawColor(...colors.borderColor);
-                pdf.setLineWidth(0.3);
-                pdf.roundedRect(margin, y, contentWidth, 80, 1, 1, 'D');
-                
-                // Shadow effect (simulated with lighter gray rect)
-                pdf.setFillColor(220, 225, 230);
-                // Alpha removed
-                pdf.roundedRect(margin + 1, y + 1, contentWidth, 80, 1, 1, 'F');
-                // Alpha removed
-                
-                // Chart image
-                const chartWidth = contentWidth - 4;
-                const chartHeight = 76;
-                pdf.addImage(chartDataUrl, 'JPEG', margin + 2, y + 2, chartWidth, chartHeight);
-                
-                y += 85;
+            if (chartCanvas && typeof chart !== 'undefined' && chart &&
+                chartCanvas.width > 0 && chartCanvas.height > 0) {
+
+                const SC  = 2;
+                const hrc = document.createElement('canvas');
+                hrc.width  = chartCanvas.width  * SC;
+                hrc.height = chartCanvas.height * SC;
+                const ctx2 = hrc.getContext('2d');
+                ctx2.scale(SC, SC);
+                ctx2.drawImage(chartCanvas, 0, 0);
+                const chartUrl = hrc.toDataURL('image/jpeg', 0.93);
+
+                // Outer frame
+                sf(...C.white); sd(...C.border); lw(0.4);
+                rr(M, y, CW, CHART_H, 1.5, 'FD');
+                // Inset image with 2 mm padding
+                pdf.addImage(chartUrl, 'JPEG', M + 2, y + 2, CW - 4, CHART_H - 4);
+
                 chartAdded = true;
             }
-        } catch(chartErr) {
-            console.warn('Chart image failed:', chartErr);
-        }
-        
+        } catch(e) { console.warn('Chart capture error:', e); }
+
         if (!chartAdded) {
-            pdf.setDrawColor(...colors.borderColor);
-            pdf.setLineWidth(0.5);
-            pdf.setFillColor(...colors.bgLighter);
-            pdf.roundedRect(margin, y, contentWidth, 50, 2, 2, 'FD');
-            pdf.setTextColor(...colors.lightText);
-            pdf.setFontSize(10);
-            pdf.setFont('helvetica', 'italic');
-            pdf.text('Grafico curve caratteristiche non disponibile', margin + contentWidth/2, y + 25, { align: 'center' });
-            y += 60;
+            sf(...C.rowAlt); sd(...C.border); lw(0.3);
+            rr(M, y, CW, CHART_H, 1.5, 'FD');
+            st(...C.muted); italic(9);
+            pdf.text('Grafico curve caratteristiche non disponibile',
+                     M + CW / 2, y + CHART_H / 2 + 2, { align: 'center' });
         }
-        
-        // ─── Technical Specifications ───
-        drawSectionTitle('Specifiche Tecniche', y);
-        y += 10;
-        
-        // Get specs from page
+
+        y += CHART_H + 8;
+
+        // ── SPECIFICHE TECNICHE ────────────────────────────────────────────────
+        sectionHeader('SPECIFICHE TECNICHE', y);
+        y += 7;
+
         const specs = [
-            ['Motore', document.getElementById('specMotore')?.textContent || '—'],
-            ['Potenza', document.getElementById('specPotenza')?.textContent || '—'],
-            ['Velocità (RPM)', document.getElementById('specRPM')?.textContent || '—'],
-            ['Rumorosità', document.getElementById('specDB')?.textContent || '—'],
-            ['Flangia Aspirante', document.getElementById('specFlangiaAsp')?.textContent || '—'],
-            ['Flangia Premente', document.getElementById('specFlangiaPrem')?.textContent || '—'],
-            ['Peso', document.getElementById('specPeso')?.textContent || '—'],
-            ['Tipo Fluido', document.getElementById('specFluido')?.textContent || '—']
+            ['Motore',            document.getElementById('specMotore')?.textContent    || '—'],
+            ['Potenza',           document.getElementById('specPotenza')?.textContent   || '—'],
+            ['Velocità',          document.getElementById('specRPM')?.textContent       || '—'],
+            ['Rumorosità',        document.getElementById('specDB')?.textContent        || '—'],
+            ['Flangia Aspirante', document.getElementById('specFlangiaAsp')?.textContent|| '—'],
+            ['Flangia Premente',  document.getElementById('specFlangiaPrem')?.textContent|| '—'],
+            ['Peso',              document.getElementById('specPeso')?.textContent      || '—'],
+            ['Tipo Fluido',       document.getElementById('specFluido')?.textContent    || '—'],
         ];
-        
-        // Professional two-column table layout
-        const rowHeight = 12;
-        const colWidth = (contentWidth - 5) / 2;
-        const labelWidth = 45;
-        
+
+        const ROW_H  = 7.5;
+        const COL1   = 62;   // label column width
+        const TBL_H  = ROW_H + specs.length * ROW_H;  // header + rows
+
+        // Table header row (blue bg, white text)
+        sf(...C.blue); fr(M, y, CW, ROW_H);
+        st(...C.white); bold(7.5);
+        pdf.text('PARAMETRO', M + 5,        y + ROW_H - 2.2);
+        pdf.text('VALORE',     M + COL1 + 5, y + ROW_H - 2.2);
+        y += ROW_H;
+
+        // Data rows
         specs.forEach((spec, i) => {
-            const col = i % 2;
-            const row = Math.floor(i / 2);
-            const rowY = y + (row * rowHeight);
-            const colX = margin + (col * (colWidth + 5));
-            
-            // Row background (alternating)
-            if (row % 2 === 0) {
-                pdf.setFillColor(...colors.bgLighter);
-                // Alpha removed
-                pdf.roundedRect(colX, rowY - 1, colWidth, rowHeight - 2, 1, 1, 'F');
-                // Alpha removed
-            }
-            
-            // Spec label
-            pdf.setTextColor(...colors.lightText);
-            pdf.setFontSize(8);
-            pdf.setFont('helvetica', 'normal');
-            pdf.text(spec[0].toUpperCase(), colX + 4, rowY + 4);
-            
-            // Spec value
-            pdf.setTextColor(...colors.darkText);
-            pdf.setFontSize(9);
-            pdf.setFont('helvetica', 'bold');
-            const value = spec[1];
-            if (value && value.length > 22) {
-                pdf.setFontSize(7);
-            }
-            pdf.text(value, colX + 4, rowY + 9);
+            const rowY = y + i * ROW_H;
+            // Zebra
+            if (i % 2 === 0) { sf(...C.rowAlt);  } else { sf(...C.white); }
+            fr(M, rowY, CW, ROW_H);
+            // Row bottom border
+            sd(...C.border); lw(0.2);
+            pdf.line(M, rowY + ROW_H, M + CW, rowY + ROW_H);
+            // Column divider
+            pdf.line(M + COL1, rowY, M + COL1, rowY + ROW_H);
+            // Label
+            st(...C.muted); normal(7.5);
+            pdf.text(spec[0], M + 5, rowY + ROW_H - 2.3);
+            // Value
+            st(...C.darkText); bold(7.5);
+            pdf.text(spec[1], M + COL1 + 5, rowY + ROW_H - 2.3);
         });
-        
-        y += (Math.ceil(specs.length / 2) * rowHeight) + 5;
-        
-        // ─── Quality Badge ───
-        const badgeY = y + 8;
-        pdf.setFillColor(...colors.bgLighter);
-        pdf.roundedRect(margin, badgeY, contentWidth, 18, 2, 2, 'F');
-        pdf.setDrawColor(...colors.utentraBlue);
-        pdf.setLineWidth(0.5);
-        pdf.roundedRect(margin, badgeY, contentWidth, 18, 2, 2, 'D');
-        
-        pdf.setTextColor(...colors.utentraBlue);
-        pdf.setFontSize(10);
-        pdf.setFont('helvetica', 'bold');
-        pdf.text('Made in Italy', margin + contentWidth/2, badgeY + 7, { align: 'center' });
-        
-        pdf.setTextColor(...colors.secondaryText);
-        pdf.setFontSize(8);
-        pdf.setFont('helvetica', 'normal');
-        pdf.text('Ventilatori industriali di qualità superiore', margin + contentWidth/2, badgeY + 13, { align: 'center' });
-        
-        // ─── Footer ───
-        const footerY = pageHeight - 25;
-        
-        // Footer separator line
-        pdf.setDrawColor(...colors.utentraBlue);
-        pdf.setLineWidth(1);
-        pdf.line(margin, footerY, pageWidth - margin, footerY);
-        
-        // Company info - left
-        pdf.setTextColor(...colors.utentraBlue);
-        pdf.setFontSize(10);
-        pdf.setFont('helvetica', 'bold');
-        pdf.text('UTENTRA S.R.L.', margin, footerY + 8);
-        
-        pdf.setTextColor(...colors.secondaryText);
-        pdf.setFontSize(8);
-        pdf.setFont('helvetica', 'normal');
-        pdf.text('Via Francesco Albani 9, 20149 Milano', margin, footerY + 13);
-        pdf.text('P.IVA 07008380963', margin, footerY + 17);
-        
-        // AirVision branding - right
-        pdf.setTextColor(...colors.utentraBlue);
-        pdf.setFontSize(9);
-        pdf.setFont('helvetica', 'bold');
-        pdf.text('AirVision™', pageWidth - margin, footerY + 8, { align: 'right' });
-        
-        pdf.setTextColor(...colors.lightText);
-        pdf.setFontSize(7);
-        pdf.setFont('helvetica', 'normal');
-        pdf.text('Fan Selector', pageWidth - margin, footerY + 13, { align: 'right' });
-        pdf.text('utentra-air-vision.vercel.app', pageWidth - margin, footerY + 17, { align: 'right' });
-        
-        // ─── Page decoration ───
-        // Left accent bar
-        pdf.setFillColor(...colors.utentraBlue);
-        pdf.rect(0, 0, 3, pageHeight, 'F');
-        
-        // Save PDF
-        pdf.save(`${fullModelName.replace(/\//g, '-')}_Datasheet.pdf`);
-        
-    } catch (error) {
-        console.error('Errore generazione PDF:', error);
-        console.error('Stack:', error.stack);
-        alert('Errore nella generazione del PDF: ' + error.message + '. Riprova.');
+
+        // Table outer border
+        sd(...C.border); lw(0.4);
+        pdf.rect(M, y - ROW_H, CW, TBL_H, 'D');
+
+        y += specs.length * ROW_H + 7;
+
+        // ── MADE IN ITALY BADGE ────────────────────────────────────────────────
+        const BADGE_H = 13;
+        sf(...C.rowAlt); sd(...C.blue); lw(0.45);
+        rr(M, y, CW, BADGE_H, 2, 'FD');
+
+        // Blue left strip
+        sf(...C.blue); rr(M, y, 5, BADGE_H, 2, 'F');
+        sf(...C.rowAlt); fr(M + 3, y, 2.5, BADGE_H);
+
+        // Mini Italian flag  (3 stripes × 3.5 mm × 6 mm)
+        const FX = M + 8, FY = y + (BADGE_H - 6) / 2;
+        const FS = 3.5;
+        sf(0,   140, 69);  fr(FX,          FY, FS, 6);   // green
+        sf(...C.white);    fr(FX + FS,     FY, FS, 6);   // white
+        sf(206, 43,  55);  fr(FX + FS * 2, FY, FS, 6);   // red
+        sd(...C.border); lw(0.2); pdf.rect(FX, FY, FS * 3, 6, 'D');
+
+        const badgeTxtX = FX + FS * 3 + 4;
+        st(...C.blue); bold(9);
+        pdf.text('Made in Italy', badgeTxtX, y + 5.5);
+        st(...C.muted); normal(6.5);
+        pdf.text('Ventilatori industriali di qualità superiore', badgeTxtX, y + 10.5);
+
+        // ══════════════════════════════════════════════════════════════════════
+        // FOOTER  (fixed at bottom)
+        // ══════════════════════════════════════════════════════════════════════
+        const FTR_Y = PH - 20;
+
+        // Blue footer bar
+        sf(...C.blue); fr(5.2, FTR_Y, PW - 5.2, 2);
+
+        // Company — left
+        st(...C.blue); bold(9);
+        pdf.text('UTENTRA S.R.L.', M, FTR_Y + 8);
+
+        st(...C.muted); normal(7);
+        pdf.text(
+            'Via Francesco Albani 9, 20149 Milano  ·  P.IVA 07008380963',
+            M, FTR_Y + 13.5
+        );
+
+        // AirVision — right
+        st(...C.blue); bold(10);
+        pdf.text('AirVision™', PW - MR, FTR_Y + 8, { align: 'right' });
+
+        st(...C.muted); normal(7);
+        pdf.text('utentra-air-vision.vercel.app', PW - MR, FTR_Y + 13.5, { align: 'right' });
+
+        // ── Save ──
+        const safeName = fullModel.replace(/[^a-zA-Z0-9 \-_]/g, '_');
+        pdf.save(`${safeName}_Datasheet.pdf`);
+
+    } catch (err) {
+        console.error('Errore generazione PDF:', err);
+        alert('Errore nella generazione del PDF: ' + err.message);
     } finally {
-        btn.disabled = false;
-        btn.innerHTML = originalText;
+        btn.disabled    = false;
+        btn.innerHTML   = originalText;
     }
 }
 </script>
