@@ -1886,9 +1886,9 @@ async function generateDatasheetPDF() {
         
         // Document type label
         pdf.setFillColor(...colors.white);
-        pdf.setFillAlpha(0.2);
+        // Alpha removed
         pdf.roundedRect(margin + 45, 22, 55, 7, 1, 1, 'F');
-        pdf.setFillAlpha(1);
+        // Alpha removed
         
         pdf.setFontSize(8);
         pdf.setFont('helvetica', 'normal');
@@ -1987,9 +1987,9 @@ async function generateDatasheetPDF() {
                 
                 // Shadow effect (simulated with lighter gray rect)
                 pdf.setFillColor(220, 225, 230);
-                pdf.setFillAlpha(0.3);
+                // Alpha removed
                 pdf.roundedRect(margin + 1, y + 1, contentWidth, 80, 1, 1, 'F');
-                pdf.setFillAlpha(1);
+                // Alpha removed
                 
                 // Chart image
                 const chartWidth = contentWidth - 4;
@@ -2045,9 +2045,9 @@ async function generateDatasheetPDF() {
             // Row background (alternating)
             if (row % 2 === 0) {
                 pdf.setFillColor(...colors.bgLighter);
-                pdf.setFillAlpha(0.5);
+                // Alpha removed
                 pdf.roundedRect(colX, rowY - 1, colWidth, rowHeight - 2, 1, 1, 'F');
-                pdf.setFillAlpha(1);
+                // Alpha removed
             }
             
             // Spec label
