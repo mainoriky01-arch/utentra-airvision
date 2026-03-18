@@ -2089,6 +2089,187 @@ async function generateDatasheetPDF() {
         st(...C.muted); normal(7);
         pdf.text('utentra-air-vision.vercel.app', PW - MR, FTR_Y + 13.5, { align: 'right' });
 
+        // ══════════════════════════════════════════════════════════════════════
+        // PAGE 2: DIMENSIONI + SCHEMI DIMENSIONALI
+        // ══════════════════════════════════════════════════════════════════════
+        const dimData   = (typeof SPECS !== 'undefined' && SPECS[seriesName]?.dimensioni) ? SPECS[seriesName].dimensioni : null;
+        const dimRow    = dimData?.tabella?.find(r => {
+            const rModel = r['Ventilatore/Fan'] || r['Ventilatore'] || '';
+            return rModel.trim() === fullModel.trim();
+        });
+        const dimSchemi = dimData?.schemi || null;
+        const hasDimContent = dimRow || dimSchemi;
+
+        if (hasDimContent) {
+            pdf.addPage();
+
+            // ── Left accent bars (same as page 1) ──
+            sf(...C.blue);    fr(0,  0, 4,   PH);
+            sf(...C.blueMid); fr(4,  0, 1.2, PH);
+
+            // ── Mini header bar ──
+            const MH_H = 22;
+            sf(...C.blue);    fr(5.2, 0,          PW - 5.2, MH_H);
+            sf(...C.blueMid); fr(5.2, MH_H,        PW - 5.2, 1.5);
+            sf(...C.bluePale);fr(5.2, MH_H + 1.5,  PW - 5.2, 0.5);
+
+            st(...C.white); bold(12);
+            pdf.text(fullModel, M, 11);
+            st(...C.bluePale); normal(7);
+            pdf.text('TAVOLA DIMENSIONALE  ·  SCHEMI', M, 18);
+            st(...C.bluePale); normal(6.5);
+            pdf.text('Pag. 2 / 2', PW - MR, 13, { align: 'right' });
+
+            let y2 = MH_H + 10;
+
+            // ── DIMENSIONI ────────────────────────────────────────────────────
+            sectionHeader('DIMENSIONI (mm)', y2);
+            y2 += 8;
+
+            if (dimRow) {
+                const entries = Object.entries(dimRow).filter(([k]) =>
+                    k !== 'Ventilatore/Fan' && k !== 'Ventilatore');
+
+                const COLS  = 4;
+                const COL_W = CW / COLS;
+                const KV_H  = 7;
+
+                // Header
+                sf(...C.blue); fr(M, y2, CW, KV_H);
+                for (let c = 0; c < COLS; c++) {
+                    const cx = M + c * COL_W;
+                    st(...C.white); bold(6.5);
+                    pdf.text('QUOTA', cx + 3,          y2 + KV_H - 2);
+                    pdf.text('VALORE', cx + COL_W/2 + 2, y2 + KV_H - 2);
+                    if (c > 0) {
+                        sd(...C.blueMid); lw(0.3);
+                        pdf.line(cx, y2, cx, y2 + KV_H);
+                    }
+                }
+                y2 += KV_H;
+
+                const rowsNeeded = Math.ceil(entries.length / COLS);
+                for (let row = 0; row < rowsNeeded; row++) {
+                    const rowY = y2 + row * KV_H;
+                    if (row % 2 === 0) { sf(...C.rowAlt); } else { sf(...C.white); }
+                    fr(M, rowY, CW, KV_H);
+                    sd(...C.border); lw(0.15);
+                    pdf.line(M, rowY + KV_H, M + CW, rowY + KV_H);
+
+                    for (let col = 0; col < COLS; col++) {
+                        const idx = row * COLS + col;
+                        if (idx >= entries.length) break;
+                        const [k, v] = entries[idx];
+                        const cx = M + col * COL_W;
+                        if (col > 0) {
+                            sd(...C.border); lw(0.2);
+                            pdf.line(cx, rowY, cx, rowY + KV_H);
+                        }
+                        st(...C.muted); normal(6);
+                        pdf.text(String(k), cx + 3, rowY + KV_H - 2);
+                        st(...C.darkText); bold(6.5);
+                        pdf.text(String(v), cx + COL_W / 2 + 2, rowY + KV_H - 2);
+                    }
+                }
+                // Outer border
+                sd(...C.border); lw(0.4);
+                pdf.rect(M, y2 - KV_H, CW, KV_H + rowsNeeded * KV_H, 'D');
+                y2 += rowsNeeded * KV_H + 10;
+            } else {
+                sf(...C.rowAlt); sd(...C.border); lw(0.3);
+                rr(M, y2, CW, 12, 1.5, 'FD');
+                st(...C.muted); italic(8);
+                pdf.text('Dati dimensionali non disponibili per questo modello.',
+                         M + CW / 2, y2 + 8, { align: 'center' });
+                y2 += 20;
+            }
+
+            // ── SCHEMI DIMENSIONALI ──────────────────────────────────────────
+            sectionHeader('SCHEMA DIMENSIONALE', y2);
+            y2 += 8;
+
+            const schemaKey    = seriesName.replace('/', '-');
+            const lateraleUrl  = `schemas/${schemaKey}_schema_laterale.png`;
+            const frontaleUrl  = `schemas/${schemaKey}_schema_frontale.png`;
+
+            const loadSchemaImg = (url) => new Promise((resolve) => {
+                const img = new Image();
+                img.onload  = () => resolve(img);
+                img.onerror = () => resolve(null);
+                img.src = url;
+            });
+
+            const [imgLat, imgFront] = await Promise.all([
+                loadSchemaImg(lateraleUrl),
+                loadSchemaImg(frontaleUrl),
+            ]);
+
+            const IMG_W = (CW - 5) / 2;
+            const IMG_H = 68;
+
+            const addSchemaImage = (img, x, label) => {
+                sf(...C.white); sd(...C.border); lw(0.3);
+                rr(x, y2, IMG_W, IMG_H, 1.5, 'FD');
+                if (img) {
+                    try {
+                        const sc  = 2;
+                        const tc  = document.createElement('canvas');
+                        const nat_w = img.naturalWidth  || 400;
+                        const nat_h = img.naturalHeight || 300;
+                        tc.width  = nat_w * sc;
+                        tc.height = nat_h * sc;
+                        const ctx = tc.getContext('2d');
+                        ctx.fillStyle = '#ffffff';
+                        ctx.fillRect(0, 0, tc.width, tc.height);
+                        ctx.scale(sc, sc);
+                        ctx.drawImage(img, 0, 0);
+                        const dataUrl = tc.toDataURL('image/jpeg', 0.92);
+
+                        // Fit inside box with padding
+                        const padH = 10, padV = 4;
+                        const bW   = IMG_W - padH * 2;
+                        const bH   = IMG_H - padV * 2 - 6;
+                        const asp  = nat_w / nat_h;
+                        let dW = bW, dH = dW / asp;
+                        if (dH > bH) { dH = bH; dW = dH * asp; }
+                        const oX = (bW - dW) / 2;
+                        pdf.addImage(dataUrl, 'JPEG',
+                            x + padH + oX, y2 + padV + 5,
+                            dW, dH);
+                    } catch(e) {
+                        st(...C.muted); italic(7);
+                        pdf.text('Errore caricamento immagine',
+                                 x + IMG_W / 2, y2 + IMG_H / 2, { align: 'center' });
+                    }
+                } else {
+                    st(...C.muted); italic(7);
+                    pdf.text('Schema non disponibile',
+                             x + IMG_W / 2, y2 + IMG_H / 2, { align: 'center' });
+                }
+                // Caption label
+                st(...C.muted); normal(6);
+                pdf.text(label, x + IMG_W / 2, y2 + 5, { align: 'center' });
+            };
+
+            addSchemaImage(imgLat,   M,                 'VISTA LATERALE');
+            addSchemaImage(imgFront, M + IMG_W + 5,     'VISTA FRONTALE');
+            y2 += IMG_H + 10;
+
+            // ── Page 2 footer ────────────────────────────────────────────────
+            const FTR2_Y = PH - 20;
+            sf(...C.blue); fr(5.2, FTR2_Y, PW - 5.2, 2);
+
+            st(...C.blue); bold(9);
+            pdf.text('UTENTRA S.R.L.', M, FTR2_Y + 8);
+            st(...C.muted); normal(7);
+            pdf.text('Via Francesco Albani 9, 20149 Milano  ·  P.IVA 07008380963',
+                     M, FTR2_Y + 13.5);
+            st(...C.blue); bold(10);
+            pdf.text('AirVision™', PW - MR, FTR2_Y + 8, { align: 'right' });
+            st(...C.muted); normal(7);
+            pdf.text('utentra-air-vision.vercel.app', PW - MR, FTR2_Y + 13.5, { align: 'right' });
+        }
+
         // ── Save ──
         const safeName = fullModel.replace(/[^a-zA-Z0-9 \-_]/g, '_');
         pdf.save(`${safeName}_Datasheet.pdf`);
