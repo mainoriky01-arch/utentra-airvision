@@ -1788,18 +1788,60 @@ async function generateDatasheetPDF() {
             format: 'a4'
         });
         
+        // ─── Design System ───
         const pageWidth = 210;
         const pageHeight = 297;
         const margin = 15;
         const contentWidth = pageWidth - (margin * 2);
+        
+        // Colors (industrial palette)
+        const colors = {
+            utentraBlue: [26, 54, 93],      // #1a365d
+            utentraBlueLight: [45, 80, 130], // #2d5082
+            darkText: [15, 23, 42],          // #0f172a
+            secondaryText: [71, 85, 105],    // #475569
+            lightText: [100, 116, 139],      // #64748b
+            borderColor: [203, 213, 225],    // #cbd5e1
+            bgLight: [241, 245, 249],        // #f1f5f9
+            bgLighter: [248, 250, 252],      // #f8fafc
+            white: [255, 255, 255]
+        };
+        
         let y = margin;
         
-        // ─── Header ───
-        // Blue header bar
-        pdf.setFillColor(26, 54, 93); // --utentra
-        pdf.rect(0, 0, pageWidth, 42, 'F');
+        // ─── Helper Functions ───
+        const drawSectionTitle = (title, yPos) => {
+            pdf.setTextColor(...colors.utentraBlue);
+            pdf.setFontSize(11);
+            pdf.setFont('helvetica', 'bold');
+            pdf.text(title.toUpperCase(), margin, yPos);
+            
+            // Accent line
+            pdf.setDrawColor(...colors.utentraBlue);
+            pdf.setLineWidth(0.5);
+            pdf.line(margin, yPos + 2, margin + 25, yPos + 2);
+        };
         
-        // Utentra Logo — load from server (works on localhost and Vercel)
+        const drawDivider = (yPos) => {
+            pdf.setDrawColor(...colors.borderColor);
+            pdf.setLineWidth(0.3);
+            pdf.line(margin, yPos, pageWidth - margin, yPos);
+        };
+        
+        // ─── Header ───
+        // Header background gradient effect (simulated with rectangles)
+        pdf.setFillColor(...colors.utentraBlue);
+        pdf.rect(0, 0, pageWidth, 35, 'F');
+        
+        // Subtle gradient overlay
+        pdf.setFillColor(...colors.utentraBlueLight);
+        pdf.rect(pageWidth - 60, 0, 60, 35, 'F');
+        
+        // Logo container with white background
+        pdf.setFillColor(...colors.white);
+        pdf.roundedRect(margin - 2, 6, 40, 22, 2, 2, 'F');
+        
+        // Utentra Logo
         await new Promise((resolve) => {
             try {
                 const img = new Image();
@@ -1807,133 +1849,168 @@ async function generateDatasheetPDF() {
                 img.onload = () => {
                     try {
                         const tmpCanvas = document.createElement('canvas');
-                        // Scale to reasonable resolution for PDF
                         const targetW = 350;
                         const scale = targetW / img.naturalWidth;
                         tmpCanvas.width = targetW;
                         tmpCanvas.height = Math.round(img.naturalHeight * scale);
                         const tmpCtx = tmpCanvas.getContext('2d');
                         tmpCtx.drawImage(img, 0, 0, tmpCanvas.width, tmpCanvas.height);
-                        const logoJpeg = tmpCanvas.toDataURL('image/jpeg', 0.85);
-                        pdf.addImage(logoJpeg, 'JPEG', margin, 8, 35, 12);
+                        const logoJpeg = tmpCanvas.toDataURL('image/jpeg', 0.9);
+                        pdf.addImage(logoJpeg, 'JPEG', margin + 2, 9, 32, 16);
                     } catch(e) {
-                        console.warn('Logo canvas render failed:', e);
-                        // Fallback to text
-                        pdf.setFillColor(255, 255, 255);
-                        pdf.roundedRect(margin, 8, 35, 12, 2, 2, 'F');
-                        pdf.setTextColor(26, 54, 93);
-                        pdf.setFontSize(10);
+                        pdf.setTextColor(...colors.utentraBlue);
+                        pdf.setFontSize(11);
                         pdf.setFont('helvetica', 'bold');
-                        pdf.text('UTENTRA', margin + 17.5, 16, { align: 'center' });
+                        pdf.text('UTENTRA', margin + 17, 18, { align: 'center' });
                     }
                     resolve();
                 };
                 img.onerror = () => {
-                    // Fallback to text
-                    pdf.setFillColor(255, 255, 255);
-                    pdf.roundedRect(margin, 8, 35, 12, 2, 2, 'F');
-                    pdf.setTextColor(26, 54, 93);
-                    pdf.setFontSize(10);
+                    pdf.setTextColor(...colors.utentraBlue);
+                    pdf.setFontSize(11);
                     pdf.setFont('helvetica', 'bold');
-                    pdf.text('UTENTRA', margin + 17.5, 16, { align: 'center' });
+                    pdf.text('UTENTRA', margin + 17, 18, { align: 'center' });
                     resolve();
                 };
                 img.src = 'logo.png';
             } catch(e) {
-                console.warn('Logo load failed:', e);
                 resolve();
             }
         });
         
-        // Model name (big)
-        pdf.setTextColor(255, 255, 255);
-        pdf.setFontSize(22);
+        // Model name - large and prominent
+        pdf.setTextColor(...colors.white);
+        pdf.setFontSize(18);
         pdf.setFont('helvetica', 'bold');
-        pdf.text(fullModelName, margin, 32);
+        pdf.text(fullModelName, margin + 45, 18);
         
-        // Subtitle
-        pdf.setFontSize(10);
+        // Document type label
+        pdf.setFillColor(...colors.white);
+        pdf.setFillAlpha(0.2);
+        pdf.roundedRect(margin + 45, 22, 55, 7, 1, 1, 'F');
+        pdf.setFillAlpha(1);
+        
+        pdf.setFontSize(8);
         pdf.setFont('helvetica', 'normal');
-        pdf.text('Scheda Tecnica Ventilatore', margin + 70, 32);
+        pdf.text('TECHNICAL DATASHEET', margin + 48, 26.5);
         
-        // Date
+        // Date in header right
         const today = new Date().toLocaleDateString('it-IT');
+        pdf.setTextColor(...colors.white);
         pdf.setFontSize(9);
-        pdf.text(today, pageWidth - margin, 32, { align: 'right' });
+        pdf.text(today, pageWidth - margin - 5, 20, { align: 'right' });
+        pdf.setFontSize(7);
+        pdf.setTextColor(...colors.lightText);
+        pdf.text('DATA EMISSIONE', pageWidth - margin - 5, 25, { align: 'right' });
         
-        y = 48;
+        y = 45;
+        
+        // ─── Operating Range Box ───
+        drawSectionTitle('Range Operativo', y);
+        y += 10;
+        
+        // Range container with border
+        pdf.setDrawColor(...colors.borderColor);
+        pdf.setLineWidth(0.5);
+        pdf.setFillColor(...colors.bgLighter);
+        pdf.roundedRect(margin, y, contentWidth, 20, 2, 2, 'FD');
+        
+        // Vertical divider
+        pdf.line(margin + contentWidth/2, y + 4, margin + contentWidth/2, y + 16);
+        
+        // Flow range
+        pdf.setTextColor(...colors.secondaryText);
+        pdf.setFontSize(8);
+        pdf.setFont('helvetica', 'normal');
+        pdf.text('PORTATA', margin + 8, y + 8);
+        
+        pdf.setTextColor(...colors.darkText);
+        pdf.setFontSize(11);
+        pdf.setFont('helvetica', 'bold');
+        const flowMin = rawValues.flowMin || '—';
+        const flowMax = rawValues.flowMax || '—';
+        pdf.text(`${flowMin} – ${flowMax}`, margin + 8, y + 15);
+        pdf.setFontSize(8);
+        pdf.setFont('helvetica', 'normal');
+        pdf.setTextColor(...colors.lightText);
+        pdf.text('m³/h', margin + 45, y + 15);
+        
+        // Pressure range
+        pdf.setTextColor(...colors.secondaryText);
+        pdf.text('PRESSIONE', margin + contentWidth/2 + 8, y + 8);
+        
+        pdf.setTextColor(...colors.darkText);
+        pdf.setFontSize(11);
+        pdf.setFont('helvetica', 'bold');
+        const pMin = rawValues.pressureMin || '—';
+        const pMax = rawValues.pressureMax || '—';
+        pdf.text(`${pMin} – ${pMax}`, margin + contentWidth/2 + 8, y + 15);
+        pdf.setFontSize(8);
+        pdf.setFont('helvetica', 'normal');
+        pdf.setTextColor(...colors.lightText);
+        pdf.text('kg/m²', margin + contentWidth/2 + 45, y + 15);
+        
+        y += 28;
         
         // ─── Curve Graph ───
+        drawSectionTitle('Curve Caratteristiche', y);
+        y += 8;
+        
+        // Chart container with professional styling
         let chartAdded = false;
         try {
             const chartCanvas = document.getElementById('curveChart');
             if (chartCanvas && chartCanvas.width > 0 && chartCanvas.height > 0) {
-                // Use canvas.toDataURL() directly — most reliable method
-                const chartDataUrl = chartCanvas.toDataURL('image/jpeg', 0.95);
+                const chartDataUrl = chartCanvas.toDataURL('image/png', 1.0);
                 
-                // Section title
-                pdf.setTextColor(26, 54, 93);
-                pdf.setFontSize(12);
-                pdf.setFont('helvetica', 'bold');
-                pdf.text('Curve Caratteristiche', margin, y);
-                y += 6;
+                // Chart background frame
+                pdf.setFillColor(...colors.white);
+                pdf.roundedRect(margin - 1, y - 1, contentWidth + 2, 82, 2, 2, 'F');
                 
-                // Add chart image
-                const chartWidth = contentWidth;
-                const chartHeight = 70; // Fixed height for chart
-                pdf.addImage(chartDataUrl, 'JPEG', margin, y, chartWidth, chartHeight);
-                y += chartHeight + 10;
+                // Chart border
+                pdf.setDrawColor(...colors.borderColor);
+                pdf.setLineWidth(0.3);
+                pdf.roundedRect(margin, y, contentWidth, 80, 1, 1, 'D');
+                
+                // Shadow effect (simulated with lighter gray rect)
+                pdf.setFillColor(220, 225, 230);
+                pdf.setFillAlpha(0.3);
+                pdf.roundedRect(margin + 1, y + 1, contentWidth, 80, 1, 1, 'F');
+                pdf.setFillAlpha(1);
+                
+                // Chart image
+                const chartWidth = contentWidth - 4;
+                const chartHeight = 76;
+                pdf.addImage(chartDataUrl, 'PNG', margin + 2, y + 2, chartWidth, chartHeight);
+                
+                y += 85;
                 chartAdded = true;
             }
         } catch(chartErr) {
             console.warn('Chart image failed:', chartErr);
         }
+        
         if (!chartAdded) {
-            // Fallback: add placeholder text
-            pdf.setTextColor(100, 100, 100);
+            pdf.setDrawColor(...colors.borderColor);
+            pdf.setLineWidth(0.5);
+            pdf.setFillColor(...colors.bgLighter);
+            pdf.roundedRect(margin, y, contentWidth, 50, 2, 2, 'FD');
+            pdf.setTextColor(...colors.lightText);
             pdf.setFontSize(10);
-            pdf.text('Grafico non disponibile', margin, y + 30);
-            y += 80;
+            pdf.setFont('helvetica', 'italic');
+            pdf.text('Grafico curve caratteristiche non disponibile', margin + contentWidth/2, y + 25, { align: 'center' });
+            y += 60;
         }
         
-        // ─── Operating Range ───
-        pdf.setFillColor(248, 250, 252);
-        pdf.roundedRect(margin, y, contentWidth, 22, 2, 2, 'F');
-        
-        pdf.setTextColor(26, 54, 93);
-        pdf.setFontSize(10);
-        pdf.setFont('helvetica', 'bold');
-        
-        const col1 = margin + 5;
-        const col2 = margin + contentWidth/2;
-        
-        pdf.text('Range Portata', col1, y + 8);
-        pdf.text('Range Pressione', col2, y + 8);
-        
-        pdf.setFont('helvetica', 'normal');
-        pdf.setFontSize(11);
-        const flowMin = rawValues.flowMin || '—';
-        const flowMax = rawValues.flowMax || '—';
-        const pMin = rawValues.pressureMin || '—';
-        const pMax = rawValues.pressureMax || '—';
-        
-        pdf.text(`${flowMin} – ${flowMax} m³/h`, col1, y + 16);
-        pdf.text(`${pMin} – ${pMax} kg/m²`, col2, y + 16);
-        
-        y += 30;
-        
         // ─── Technical Specifications ───
-        pdf.setTextColor(26, 54, 93);
-        pdf.setFontSize(12);
-        pdf.setFont('helvetica', 'bold');
-        pdf.text('Specifiche Tecniche', margin, y);
-        y += 8;
+        drawSectionTitle('Specifiche Tecniche', y);
+        y += 10;
         
         // Get specs from page
         const specs = [
             ['Motore', document.getElementById('specMotore')?.textContent || '—'],
             ['Potenza', document.getElementById('specPotenza')?.textContent || '—'],
-            ['RPM', document.getElementById('specRPM')?.textContent || '—'],
+            ['Velocità (RPM)', document.getElementById('specRPM')?.textContent || '—'],
             ['Rumorosità', document.getElementById('specDB')?.textContent || '—'],
             ['Flangia Aspirante', document.getElementById('specFlangiaAsp')?.textContent || '—'],
             ['Flangia Premente', document.getElementById('specFlangiaPrem')?.textContent || '—'],
@@ -1941,49 +2018,98 @@ async function generateDatasheetPDF() {
             ['Tipo Fluido', document.getElementById('specFluido')?.textContent || '—']
         ];
         
-        // Draw specs table
-        const rowHeight = 9;
-        const labelWidth = 50;
+        // Professional two-column table layout
+        const rowHeight = 12;
+        const colWidth = (contentWidth - 5) / 2;
+        const labelWidth = 45;
         
         specs.forEach((spec, i) => {
-            const rowY = y + (i * rowHeight);
+            const col = i % 2;
+            const row = Math.floor(i / 2);
+            const rowY = y + (row * rowHeight);
+            const colX = margin + (col * (colWidth + 5));
             
-            // Alternate row background
-            if (i % 2 === 0) {
-                pdf.setFillColor(248, 250, 252);
-                pdf.rect(margin, rowY - 2, contentWidth, rowHeight, 'F');
+            // Row background (alternating)
+            if (row % 2 === 0) {
+                pdf.setFillColor(...colors.bgLighter);
+                pdf.setFillAlpha(0.5);
+                pdf.roundedRect(colX, rowY - 1, colWidth, rowHeight - 2, 1, 1, 'F');
+                pdf.setFillAlpha(1);
             }
             
-            pdf.setTextColor(100, 116, 139);
-            pdf.setFontSize(10);
+            // Spec label
+            pdf.setTextColor(...colors.lightText);
+            pdf.setFontSize(8);
             pdf.setFont('helvetica', 'normal');
-            pdf.text(spec[0], margin + 3, rowY + 4);
+            pdf.text(spec[0].toUpperCase(), colX + 4, rowY + 4);
             
-            pdf.setTextColor(26, 54, 93);
+            // Spec value
+            pdf.setTextColor(...colors.darkText);
+            pdf.setFontSize(9);
             pdf.setFont('helvetica', 'bold');
-            pdf.text(spec[1], margin + labelWidth, rowY + 4);
+            const value = spec[1];
+            if (value && value.length > 22) {
+                pdf.setFontSize(7);
+            }
+            pdf.text(value, colX + 4, rowY + 9);
         });
         
-        y += (specs.length * rowHeight) + 15;
+        y += (Math.ceil(specs.length / 2) * rowHeight) + 5;
+        
+        // ─── Quality Badge ───
+        const badgeY = y + 8;
+        pdf.setFillColor(...colors.bgLighter);
+        pdf.roundedRect(margin, badgeY, contentWidth, 18, 2, 2, 'F');
+        pdf.setDrawColor(...colors.utentraBlue);
+        pdf.setLineWidth(0.5);
+        pdf.roundedRect(margin, badgeY, contentWidth, 18, 2, 2, 'D');
+        
+        pdf.setTextColor(...colors.utentraBlue);
+        pdf.setFontSize(10);
+        pdf.setFont('helvetica', 'bold');
+        pdf.text('Made in Italy', margin + contentWidth/2, badgeY + 7, { align: 'center' });
+        
+        pdf.setTextColor(...colors.secondaryText);
+        pdf.setFontSize(8);
+        pdf.setFont('helvetica', 'normal');
+        pdf.text('Ventilatori industriali di qualità superiore', margin + contentWidth/2, badgeY + 13, { align: 'center' });
         
         // ─── Footer ───
-        const footerY = pageHeight - 20;
+        const footerY = pageHeight - 25;
         
-        pdf.setDrawColor(226, 232, 240);
-        pdf.line(margin, footerY - 5, pageWidth - margin, footerY - 5);
+        // Footer separator line
+        pdf.setDrawColor(...colors.utentraBlue);
+        pdf.setLineWidth(1);
+        pdf.line(margin, footerY, pageWidth - margin, footerY);
         
-        pdf.setTextColor(100, 116, 139);
-        pdf.setFontSize(9);
-        pdf.setFont('helvetica', 'normal');
-        pdf.text('UTENTRA S.R.L.', margin, footerY);
-        pdf.text('Via Francesco Albani 9, 20149 Milano', margin, footerY + 5);
-        
-        pdf.setTextColor(26, 54, 93);
+        // Company info - left
+        pdf.setTextColor(...colors.utentraBlue);
+        pdf.setFontSize(10);
         pdf.setFont('helvetica', 'bold');
-        pdf.text('AirVision Fan Selector', pageWidth - margin, footerY, { align: 'right' });
+        pdf.text('UTENTRA S.R.L.', margin, footerY + 8);
+        
+        pdf.setTextColor(...colors.secondaryText);
+        pdf.setFontSize(8);
         pdf.setFont('helvetica', 'normal');
-        pdf.setTextColor(100, 116, 139);
-        pdf.text('utentra-air-vision.vercel.app', pageWidth - margin, footerY + 5, { align: 'right' });
+        pdf.text('Via Francesco Albani 9, 20149 Milano', margin, footerY + 13);
+        pdf.text('P.IVA 07008380963', margin, footerY + 17);
+        
+        // AirVision branding - right
+        pdf.setTextColor(...colors.utentraBlue);
+        pdf.setFontSize(9);
+        pdf.setFont('helvetica', 'bold');
+        pdf.text('AirVision™', pageWidth - margin, footerY + 8, { align: 'right' });
+        
+        pdf.setTextColor(...colors.lightText);
+        pdf.setFontSize(7);
+        pdf.setFont('helvetica', 'normal');
+        pdf.text('Fan Selector', pageWidth - margin, footerY + 13, { align: 'right' });
+        pdf.text('utentra-air-vision.vercel.app', pageWidth - margin, footerY + 17, { align: 'right' });
+        
+        // ─── Page decoration ───
+        // Left accent bar
+        pdf.setFillColor(...colors.utentraBlue);
+        pdf.rect(0, 0, 3, pageHeight, 'F');
         
         // Save PDF
         pdf.save(`${fullModelName.replace(/\//g, '-')}_Datasheet.pdf`);
