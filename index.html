@@ -1834,18 +1834,10 @@ async function generateDatasheetPDF() {
         y = 48;
         
         // ─── Curve Graph ───
-        const chartCanvas = document.getElementById('pressureChart');
-        if (chartCanvas && chart) {
-            // Force chart update before capture
+        if (chart) {
+            // Use Chart.js native method to get image
             chart.update('none');
-            
-            const chartImage = await html2canvas(chartCanvas, {
-                backgroundColor: '#ffffff',
-                scale: 2,
-                useCORS: true,
-                allowTaint: true
-            });
-            const chartDataUrl = chartImage.toDataURL('image/png');
+            const chartDataUrl = chart.toBase64Image('image/png', 1);
             
             // Section title
             pdf.setTextColor(26, 54, 93);
@@ -1854,11 +1846,17 @@ async function generateDatasheetPDF() {
             pdf.text('Curve Caratteristiche', margin, y);
             y += 6;
             
-            // Chart image
+            // Add chart image
             const chartWidth = contentWidth;
-            const chartHeight = (chartImage.height / chartImage.width) * chartWidth;
-            pdf.addImage(chartDataUrl, 'PNG', margin, y, chartWidth, Math.min(chartHeight, 90));
-            y += Math.min(chartHeight, 90) + 10;
+            const chartHeight = 70; // Fixed height for chart
+            pdf.addImage(chartDataUrl, 'PNG', margin, y, chartWidth, chartHeight);
+            y += chartHeight + 10;
+        } else {
+            // Fallback: add placeholder text
+            pdf.setTextColor(100, 100, 100);
+            pdf.setFontSize(10);
+            pdf.text('Grafico non disponibile', margin, y + 30);
+            y += 80;
         }
         
         // ─── Operating Range ───
