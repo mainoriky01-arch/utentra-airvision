@@ -148,7 +148,7 @@
     }
   },
   "U/AR": {
-    "tipo_fluido": "DA_CONFERMARE",
+    "tipo_fluido": "Aria pulita, Aria polverosa",
     "modelli": {
       "201": {
         "grandezza_motore": "80A2",
@@ -384,7 +384,7 @@
     }
   },
   "U/ARP": {
-    "tipo_fluido": "DA_CONFERMARE",
+    "tipo_fluido": "Aria pulita, Aria polverosa",
     "modelli": {
       "201": {
         "grandezza_motore": "80A2",
@@ -455,7 +455,7 @@
     }
   },
   "U/AP": {
-    "tipo_fluido": "DA_CONFERMARE",
+    "tipo_fluido": "Aria pulita, Aria polverosa",
     "modelli": {
       "152": {
         "grandezza_motore": "56A2",
@@ -559,7 +559,7 @@
     }
   },
   "U/RF": {
-    "tipo_fluido": "DA_CONFERMARE",
+    "tipo_fluido": "Aria pulita, Aria polverosa",
     "modelli": {
       "252": {
         "grandezza_motore": "71A2",
@@ -619,7 +619,7 @@
     }
   },
   "U/TM": {
-    "tipo_fluido": "DA_CONFERMARE",
+    "tipo_fluido": "Aria pulita, Aria polverosa",
     "modelli": {
       "252": {
         "grandezza_motore": "71B2",
@@ -723,7 +723,7 @@
     }
   },
   "U/DS": {
-    "tipo_fluido": "DA_CONFERMARE",
+    "tipo_fluido": "Aria pulita, Aria polverosa",
     "modelli": {
       "142": {
         "grandezza_motore": "63",
@@ -772,7 +772,7 @@
     }
   },
   "U/HF": {
-    "tipo_fluido": "DA_CONFERMARE",
+    "tipo_fluido": "Aria pulita, Aria polverosa",
     "modelli": {
       "132": {
         "grandezza_motore": "56B2",
@@ -854,7 +854,7 @@
     }
   },
   "U/CB": {
-    "tipo_fluido": "DA_CONFERMARE",
+    "tipo_fluido": "Aria pulita, Aria polverosa",
     "modelli": {
       "352": {
         "grandezza_motore": "90L2",
@@ -1310,7 +1310,7 @@
     }
   },
   "U/PB": {
-    "tipo_fluido": "DA_CONFERMARE",
+    "tipo_fluido": "Aria pulita, Aria polverosa",
     "modelli": {
       "252": {
         "grandezza_motore": "71A2",
@@ -1546,7 +1546,7 @@
     }
   },
   "U/EL": {
-    "tipo_fluido": "DA_CONFERMARE",
+    "tipo_fluido": "Aria pulita",
     "modelli": {
       "253": {
         "grandezza_motore": "MONO",
@@ -1672,7 +1672,7 @@
     }
   },
   "U/EP": {
-    "tipo_fluido": "DA_CONFERMARE",
+    "tipo_fluido": "Aria pulita",
     "modelli": {
       "404": {
         "grandezza_motore": "56B4",
@@ -1765,7 +1765,7 @@
     }
   },
   "U/APR": {
-    "tipo_fluido": "DA_CONFERMARE",
+    "tipo_fluido": "Aria pulita, Aria polverosa",
     "modelli": {
       "402": {
         "grandezza_motore": "80A2",
@@ -1913,7 +1913,7 @@
     }
   },
   "U/MPR": {
-    "tipo_fluido": "DA_CONFERMARE",
+    "tipo_fluido": "Aria pulita, Aria polverosa",
     "modelli": {
       "352": {
         "grandezza_motore": "80A2",
@@ -2083,7 +2083,7 @@
     }
   },
   "U/PBM": {
-    "tipo_fluido": "DA_CONFERMARE",
+    "tipo_fluido": "Aria pulita, Aria polverosa",
     "modelli": {
       "252": {
         "grandezza_motore": "71A2",
@@ -2286,7 +2286,7 @@
     }
   },
   "U/APE": {
-    "tipo_fluido": "DA_CONFERMARE",
+    "tipo_fluido": "Aria pulita, Aria polverosa",
     "modelli": {
       "351": {
         "grandezza_motore": "71A2",
@@ -2456,7 +2456,7 @@
     }
   },
   "U/APF": {
-    "tipo_fluido": "DA_CONFERMARE",
+    "tipo_fluido": "Aria pulita, Aria polverosa",
     "modelli": {
       "501": {
         "grandezza_motore": "90L2",
@@ -2637,7 +2637,7 @@
     }
   },
   "U/HPG": {
-    "tipo_fluido": "DA_CONFERMARE",
+    "tipo_fluido": "Aria pulita, Aria polverosa",
     "modelli": {
       "501": {
         "grandezza_motore": "100L2",
@@ -2818,7 +2818,7 @@
     }
   },
   "U/HPH": {
-    "tipo_fluido": "DA_CONFERMARE",
+    "tipo_fluido": "Aria pulita, Aria polverosa",
     "modelli": {
       "561": {
         "grandezza_motore": "132L2",
@@ -2955,7 +2955,7 @@
     }
   },
   "U/EI": {
-    "tipo_fluido": "DA_CONFERMARE",
+    "tipo_fluido": "Aria pulita",
     "modelli": {
       "312": {
         "grandezza_motore": "71B2",
@@ -3235,7 +3235,7 @@
     }
   },
   "U/ET": {
-    "tipo_fluido": "DA_CONFERMARE",
+    "tipo_fluido": "Aria pulita",
     "modelli": {
       "404": {
         "grandezza_motore": "63B4",
@@ -3372,7 +3372,7 @@
     }
   },
   "U/CT": {
-    "tipo_fluido": "DA_CONFERMARE",
+    "tipo_fluido": "Aria pulita",
     "modelli": {
       "304": {
         "grandezza_motore": "63B4",
