@@ -823,7 +823,7 @@
             <img src="logo.png" alt="Utentra" style="height: 40px; width: auto;">
             <h1 class="header-title">AirVision</h1>
 
-            <nav class="header-nav" aria-label="Navigazione sezioni">
+            <nav class="header-nav" aria-label="Navigazione sezioni" data-i18n-aria="ariaNavSections">
                 <button class="nav-btn active" id="navFanSelector" onclick="switchView('fanSelector')" aria-pressed="true" data-i18n="fanSelector">Fan Selector</button>
                 <button class="nav-btn" id="navFastSelection" onclick="switchView('fastSelection')" aria-pressed="false" data-i18n="fastSelection">Fast Selection</button>
             </nav>
@@ -844,7 +844,7 @@
         <main class="container" role="main">
 
             <!-- ─── Step Controls ─── -->
-            <div class="steps" role="group" aria-label="Passi di selezione ventilatore">
+            <div class="steps" role="group" aria-label="Passi di selezione ventilatore" data-i18n-aria="ariaFanSelectionSteps">
 
                 <!-- Step 1: Series -->
                 <div class="step active" id="step1">
@@ -852,8 +852,8 @@
                         <span class="step-num" aria-hidden="true">1</span>
                         <span class="step-label" data-i18n="selectSeries">Seleziona Serie</span>
                     </div>
-                    <label for="series" class="visually-hidden">Seleziona la serie</label>
-                    <select id="series" aria-label="Seleziona serie ventilatore">
+                    <label for="series" class="visually-hidden" data-i18n="selectSeriesSubtitle">Seleziona la serie</label>
+                    <select id="series" aria-label="Seleziona serie ventilatore" data-i18n-aria="ariaSelectFanSeries">
                         <option value="">Caricamento serie...</option>
                     </select>
                 </div>
@@ -864,8 +864,8 @@
                         <span class="step-num" aria-hidden="true">2</span>
                         <span class="step-label" data-i18n="selectModel">Seleziona Modello</span>
                     </div>
-                    <label for="model" class="visually-hidden">Seleziona il modello</label>
-                    <select id="model" disabled aria-label="Seleziona modello ventilatore" aria-disabled="true">
+                    <label for="model" class="visually-hidden" data-i18n="selectModelSubtitle">Seleziona il modello</label>
+                    <select id="model" disabled aria-label="Seleziona modello ventilatore" aria-disabled="true" data-i18n-aria="ariaSelectFanModel">
                         <option value="">Prima seleziona serie...</option>
                     </select>
                 </div>
@@ -884,6 +884,7 @@
                         step="1"
                         min="0"
                         aria-label="Inserisci portata in m³/h"
+                        data-i18n-aria="ariaEnterFlowRate"
                         aria-disabled="true"
                     >
                     <div id="result" class="result-display empty" style="margin-top:8px;" role="status" aria-live="polite" aria-atomic="true">
@@ -893,13 +894,13 @@
             </div>
 
             <!-- ─── Chart ─── -->
-            <section class="chart-section" aria-label="Grafico curve caratteristiche">
+            <section class="chart-section" aria-label="Grafico curve caratteristiche" data-i18n-aria="ariaCharCurvesChart">
                 <div class="chart-header">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" style="color:var(--text-secondary)">
                         <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
                     </svg>
                     <span class="chart-title" data-i18n="characteristicCurves">Curve Caratteristiche</span>
-                    <div class="chart-legend" aria-label="Legenda grafico">
+                    <div class="chart-legend" aria-label="Legenda grafico" data-i18n-aria="ariaChartLegend">
                         <span class="legend-item">
                             <span class="legend-dot" style="background:#2563EB;" aria-hidden="true"></span>
                             <span data-i18n="totalPressure">Pressione Totale</span>
@@ -915,14 +916,14 @@
                     </div>
                 </div>
                 <div class="chart-wrapper">
-                    <div class="chart-empty" id="chartEmpty" aria-label="Grafico vuoto - seleziona un modello">
+                    <div class="chart-empty" id="chartEmpty" aria-label="Grafico vuoto - seleziona un modello" data-i18n-aria="ariaEmptyChart">
                         <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true" style="color:var(--text-secondary)">
                             <path d="M3 3v18h18"/>
                             <path d="M7 16l4-4 4 4 5-5"/>
                         </svg>
                         <p data-i18n="selectSeriesModel">Seleziona serie e modello per visualizzare le curve</p>
                     </div>
-                    <canvas id="curveChart" aria-label="Grafico scatter curve pressione-portata" role="img"></canvas>
+                    <canvas id="curveChart" aria-label="Grafico scatter curve pressione-portata" role="img" data-i18n-aria="ariaScatterChart"></canvas>
                 </div>
             </section>
 
@@ -951,17 +952,17 @@
             <div class="curve-toggles" style="display:flex; gap:16px; margin-bottom:16px; padding:12px 16px; background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-md); box-shadow:0 1px 3px rgba(0,0,0,0.04);">
                 <label style="display:flex; align-items:center; gap:8px; cursor:pointer; font-size:13px; color:var(--text-secondary);">
                     <input type="checkbox" id="showPower" style="accent-color:#EF4444; width:16px; height:16px;">
-                    <span style="color:#EF4444;">●</span> Potenza (kW)
+                    <span style="color:#EF4444;">●</span> <span data-i18n="powerKW">Potenza (kW)</span>
                 </label>
                 <label style="display:flex; align-items:center; gap:8px; cursor:pointer; font-size:13px; color:var(--text-secondary);">
                     <input type="checkbox" id="showEfficiency" style="accent-color:#8B5CF6; width:16px; height:16px;">
-                    <span style="color:#8B5CF6;">●</span> Rendimento (%)
+                    <span style="color:#8B5CF6;">●</span> <span data-i18n="efficiencyPct">Rendimento (%)</span>
                 </label>
-                <span id="curveStatus" style="margin-left:auto; font-size:11px; color:var(--text-muted);">Seleziona un modello</span>
+                <span id="curveStatus" data-state="empty" style="margin-left:auto; font-size:11px; color:var(--text-muted);">Seleziona un modello</span>
             </div>
 
             <!-- ─── Data Cards ─── -->
-            <div class="data-grid" role="region" aria-label="Dati tecnici ventilatore">
+            <div class="data-grid" role="region" aria-label="Dati tecnici ventilatore" data-i18n-aria="ariaFanTechData">
 
                 <div class="data-card highlight" aria-label="Pressione Totale">
                     <div class="card-label">
@@ -1066,7 +1067,7 @@
                 </div>
                 <div class="info-footer-content">
                     <h3>UTENTRA S.R.L. — AirVision Fan Selector</h3>
-                    <p>Curve caratteristiche — <strong id="modelCount">…</strong> modelli disponibili</p>
+                    <p><span data-i18n="characteristicCurvesFooter">Curve caratteristiche</span> — <strong id="modelCount">…</strong> <span data-i18n="modelsAvailable">modelli disponibili</span></p>
                     <p class="address">Via Francesco Albani 9, 20149 Milano</p>
                     <div class="series-chips" id="seriesChips" aria-label="Serie disponibili"></div>
                 </div>
@@ -1082,7 +1083,7 @@
         <main class="container" role="main" style="max-width:1200px;">
 
             <!-- Search Panel -->
-            <section class="search-panel" aria-label="Pannello ricerca rapida">
+            <section class="search-panel" aria-label="Pannello ricerca rapida" data-i18n-aria="ariaQuickSearchPanel">
                 <div class="search-header">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                         <path d="M13 10V3L4 14h7v7l9-11h-7z"/>
@@ -1094,8 +1095,8 @@
                     <div class="input-group">
                         <label for="fsTargetFlow" data-i18n="targetFlow">Portata Richiesta</label>
                         <div class="input-row">
-                            <input type="number" id="fsTargetFlow" placeholder="es. 5000" step="1" aria-label="Portata richiesta">
-                            <select id="fsFlowUnit" aria-label="Unità portata">
+                            <input type="number" id="fsTargetFlow" placeholder="es. 5000" step="1" aria-label="Portata richiesta" data-i18n-aria="ariaRequiredFlow">
+                            <select id="fsFlowUnit" aria-label="Unità portata" data-i18n-aria="ariaFlowUnit">
                                 <option value="m3h">m³/h</option>
                                 <option value="m3min">m³/min</option>
                                 <option value="cfm">cfm</option>
@@ -1105,8 +1106,8 @@
                     <div class="input-group">
                         <label for="fsTargetPressure" data-i18n="targetPressure">Pressione Richiesta</label>
                         <div class="input-row">
-                            <input type="number" id="fsTargetPressure" placeholder="es. 300" step="1" aria-label="Pressione richiesta">
-                            <select id="fsPressureUnit" aria-label="Unità pressione">
+                            <input type="number" id="fsTargetPressure" placeholder="es. 300" step="1" aria-label="Pressione richiesta" data-i18n-aria="ariaRequiredPressure">
+                            <select id="fsPressureUnit" aria-label="Unità pressione" data-i18n-aria="ariaPressureUnit">
                                 <option value="kgm2">kg/m²</option>
                                 <option value="pa">Pa</option>
                                 <option value="inwg">in wg</option>
@@ -1118,13 +1119,13 @@
                 <div class="filters">
                     <div class="filter-group">
                         <h4 data-i18n="series">Serie</h4>
-                        <div class="filter-options" id="fsSeriesFilters" role="group" aria-label="Filtro serie">
+                        <div class="filter-options" id="fsSeriesFilters" role="group" aria-label="Filtro serie" data-i18n-aria="ariaSeriesFilter">
                             <!-- Populated by JS -->
                         </div>
                     </div>
                 </div>
 
-                <button class="search-btn" id="fsSearchBtn" onclick="fsSearch()" aria-label="Cerca ventilatori compatibili">
+                <button class="search-btn" id="fsSearchBtn" onclick="fsSearch()" aria-label="Cerca ventilatori compatibili" data-i18n-aria="ariaSearchFans">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                         <circle cx="11" cy="11" r="8"/>
                         <line x1="21" y1="21" x2="16.65" y2="16.65"/>
@@ -1134,7 +1135,7 @@
             </section>
 
             <!-- Results -->
-            <section id="fsResultsSection" style="display:none;" aria-label="Risultati ricerca">
+            <section id="fsResultsSection" style="display:none;" aria-label="Risultati ricerca" data-i18n-aria="ariaSearchResults">
                 <div class="results-header">
                     <h3 data-i18n="compatibleFans">Ventilatori Compatibili</h3>
                     <span class="results-count" id="fsResultsCount" aria-live="polite">0 risultati</span>
@@ -1157,7 +1158,7 @@
                 </div>
                 <div class="info-footer-content">
                     <h3>UTENTRA S.R.L. — AirVision Fast Selection</h3>
-                    <p>Ricerca rapida per portata e pressione — <strong id="fsModelCount">…</strong> modelli disponibili</p>
+                    <p><span data-i18n="fastSelectionFooter">Ricerca rapida per portata e pressione</span> — <strong id="fsModelCount">…</strong> <span data-i18n="modelsAvailable">modelli disponibili</span></p>
                     <p class="address">Via Francesco Albani 9, 20149 Milano</p>
                 </div>
             </footer>
@@ -1176,10 +1177,16 @@ const TRANSLATIONS = {
         fastSelection: 'Fast Selection',
         // Fan Selector steps
         selectSeries: 'Seleziona Serie',
+        selectSeriesSubtitle: 'Seleziona la serie',
         selectModel: 'Seleziona Modello',
+        selectModelSubtitle: 'Seleziona il modello',
         operatingPoint: 'Punto Operativo',
         flow: 'Portata',
         pressure: 'Pressione',
+        // Dropdown placeholders
+        selectSeriesPlaceholder: 'Seleziona serie...',
+        selectModelPlaceholder: 'Seleziona modello...',
+        selectModelFirstPlaceholder: 'Prima seleziona serie...',
         // Specs
         specifications: 'Specifiche Tecniche',
         motor: 'Motore',
@@ -1195,6 +1202,13 @@ const TRANSLATIONS = {
         totalPressure: 'Pressione Totale',
         staticPressure: 'Pressione Statica',
         dynamicPressure: 'Pressione Dinamica',
+        // Chart toggles
+        powerKW: 'Potenza (kW)',
+        efficiencyPct: 'Rendimento (%)',
+        selectModelFirst: 'Seleziona un modello',
+        // P/η status
+        dataAvailable: '✓ Dati P/η disponibili',
+        dataNotAvailableFor: 'Dati P/η non disponibili per',
         // Data cards
         flowRange: 'Range Portata',
         pressureRange: 'Range Pressione',
@@ -1223,7 +1237,29 @@ const TRANSLATIONS = {
         flowOutOfRange: '⚠ Portata fuori range',
         // Footer
         madeInItaly: 'Made in Italy',
-        industrialFans: 'Ventilatori industriali di qualità superiore'
+        industrialFans: 'Ventilatori industriali di qualità superiore',
+        characteristicCurvesFooter: 'Curve caratteristiche',
+        fastSelectionFooter: 'Ricerca rapida per portata e pressione',
+        modelsAvailable: 'modelli disponibili',
+        // Aria labels
+        ariaNavSections: 'Navigazione sezioni',
+        ariaFanSelectionSteps: 'Passi di selezione ventilatore',
+        ariaSelectFanSeries: 'Seleziona serie ventilatore',
+        ariaSelectFanModel: 'Seleziona modello ventilatore',
+        ariaEnterFlowRate: 'Inserisci portata in m³/h',
+        ariaCharCurvesChart: 'Grafico curve caratteristiche',
+        ariaChartLegend: 'Legenda grafico',
+        ariaEmptyChart: 'Grafico vuoto - seleziona un modello',
+        ariaScatterChart: 'Grafico scatter curve pressione-portata',
+        ariaFanTechData: 'Dati tecnici ventilatore',
+        ariaQuickSearchPanel: 'Pannello ricerca rapida',
+        ariaRequiredFlow: 'Portata richiesta',
+        ariaRequiredPressure: 'Pressione richiesta',
+        ariaFlowUnit: 'Unità portata',
+        ariaPressureUnit: 'Unità pressione',
+        ariaSearchFans: 'Cerca ventilatori compatibili',
+        ariaSeriesFilter: 'Filtro serie',
+        ariaSearchResults: 'Risultati ricerca'
     },
     en: {
         // Header nav
@@ -1231,10 +1267,16 @@ const TRANSLATIONS = {
         fastSelection: 'Fast Selection',
         // Fan Selector steps
         selectSeries: 'Select Series',
+        selectSeriesSubtitle: 'Select the series',
         selectModel: 'Select Model',
+        selectModelSubtitle: 'Select the model',
         operatingPoint: 'Operating Point',
         flow: 'Flow Rate',
         pressure: 'Pressure',
+        // Dropdown placeholders
+        selectSeriesPlaceholder: 'Select series...',
+        selectModelPlaceholder: 'Select model...',
+        selectModelFirstPlaceholder: 'Select series first...',
         // Specs
         specifications: 'Technical Specifications',
         motor: 'Motor',
@@ -1250,6 +1292,13 @@ const TRANSLATIONS = {
         totalPressure: 'Total Pressure',
         staticPressure: 'Static Pressure',
         dynamicPressure: 'Dynamic Pressure',
+        // Chart toggles
+        powerKW: 'Power (kW)',
+        efficiencyPct: 'Efficiency (%)',
+        selectModelFirst: 'Select a model',
+        // P/η status
+        dataAvailable: '✓ P/η data available',
+        dataNotAvailableFor: 'P/η data not available for',
         // Data cards
         flowRange: 'Flow Range',
         pressureRange: 'Pressure Range',
@@ -1278,7 +1327,29 @@ const TRANSLATIONS = {
         flowOutOfRange: '⚠ Flow rate out of range',
         // Footer
         madeInItaly: 'Made in Italy',
-        industrialFans: 'Superior quality industrial fans'
+        industrialFans: 'Superior quality industrial fans',
+        characteristicCurvesFooter: 'Characteristic curves',
+        fastSelectionFooter: 'Quick search by flow rate and pressure',
+        modelsAvailable: 'available models',
+        // Aria labels
+        ariaNavSections: 'Section navigation',
+        ariaFanSelectionSteps: 'Fan selection steps',
+        ariaSelectFanSeries: 'Select fan series',
+        ariaSelectFanModel: 'Select fan model',
+        ariaEnterFlowRate: 'Enter flow rate in m³/h',
+        ariaCharCurvesChart: 'Characteristic curves chart',
+        ariaChartLegend: 'Chart legend',
+        ariaEmptyChart: 'Empty chart - select a model',
+        ariaScatterChart: 'Pressure-flow scatter chart',
+        ariaFanTechData: 'Fan technical data',
+        ariaQuickSearchPanel: 'Quick search panel',
+        ariaRequiredFlow: 'Required flow rate',
+        ariaRequiredPressure: 'Required pressure',
+        ariaFlowUnit: 'Flow unit',
+        ariaPressureUnit: 'Pressure unit',
+        ariaSearchFans: 'Search compatible fans',
+        ariaSeriesFilter: 'Series filter',
+        ariaSearchResults: 'Search results'
     }
 };
 
@@ -1310,6 +1381,41 @@ function setLanguage(lang) {
         }
     });
 
+    // Update aria-labels
+    document.querySelectorAll('[data-i18n-aria]').forEach(el => {
+        const key = el.dataset.i18nAria;
+        if (TRANSLATIONS[lang][key]) {
+            el.setAttribute('aria-label', TRANSLATIONS[lang][key]);
+        }
+    });
+
+    // Update dropdown placeholders
+    const seriesSelect = document.getElementById('series');
+    if (seriesSelect && seriesSelect.options[0] && seriesSelect.options[0].value === '') {
+        seriesSelect.options[0].textContent = t('selectSeriesPlaceholder');
+    }
+    const modelSelect = document.getElementById('model');
+    if (modelSelect && modelSelect.options[0] && modelSelect.options[0].value === '') {
+        modelSelect.options[0].textContent = modelSelect.disabled
+            ? t('selectModelFirstPlaceholder')
+            : t('selectModelPlaceholder');
+    }
+
+    // Update curveStatus based on its current state
+    const curveStatusEl = document.getElementById('curveStatus');
+    if (curveStatusEl) {
+        const state = curveStatusEl.dataset.state;
+        if (state === 'empty') {
+            curveStatusEl.textContent = t('selectModelFirst');
+        } else if (state === 'available') {
+            curveStatusEl.textContent = t('dataAvailable');
+        } else if (state === 'unavailable') {
+            const s = curveStatusEl.dataset.series || '';
+            const m = curveStatusEl.dataset.model || '';
+            curveStatusEl.textContent = `${t('dataNotAvailableFor')} ${s} ${m}`;
+        }
+    }
+
     // Update chart axis labels if chart is available
     if (typeof chart !== 'undefined' && chart && typeof getCurrentUnits === 'function') {
         const units = getCurrentUnits();
@@ -1317,8 +1423,11 @@ function setLanguage(lang) {
         const pressConv = pressureConversions[units.pressure];
         chart.options.scales.x.title.text = `${t('flow')} Q (${flowConv.symbol})`;
         chart.options.scales.y.title.text = `${t('pressure')} P (${pressConv.symbol})`;
+        chart.options.scales.yPower.title.text = t('powerKW');
+        chart.options.scales.yEfficiency.title.text = t('efficiencyPct');
         chart.update('none');
     }
+
 }
 
 function t(key) {
@@ -1766,7 +1875,7 @@ function initChart() {
                     display: false,
                     title: {
                         display: true,
-                        text: 'Potenza (kW)',
+                        text: t('powerKW'),
                         color: '#EF4444',
                         font: { family: "'Fira Code', monospace", size: 11, weight: '500' }
                     },
@@ -1781,7 +1890,7 @@ function initChart() {
                     max: 100,
                     title: {
                         display: true,
-                        text: 'Rendimento (%)',
+                        text: t('efficiencyPct'),
                         color: '#8B5CF6',
                         font: { family: "'Fira Code', monospace", size: 11, weight: '500' }
                     },
@@ -1883,7 +1992,7 @@ async function loadData() {
 /* ─── Populate Series ─── */
 function populateSeries() {
     const sel = document.getElementById('series');
-    sel.innerHTML = '<option value="">Seleziona serie...</option>';
+    sel.innerHTML = `<option value="">${t('selectSeriesPlaceholder')}</option>`;
     Object.keys(CURVES).sort().forEach(s => {
         const opt = document.createElement('option');
         opt.value = s;
@@ -1985,7 +2094,13 @@ function updateSpecs(seriesName, modelName) {
         return;
     }
     const spec = SPECS[seriesName].modelli[modelName];
-    const tipoFluido = SPECS[seriesName].tipo_fluido || '—';
+    const fluidTypeMap = {
+        'Aria pulita': { it: 'Aria pulita', en: 'Clean air' },
+        'Aria polverosa': { it: 'Aria polverosa', en: 'Dusty air' },
+        'Aria pulita, Aria polverosa': { it: 'Aria pulita, Aria polverosa', en: 'Clean air, Dusty air' }
+    };
+    const rawFluido = SPECS[seriesName].tipo_fluido || '—';
+    const tipoFluido = (fluidTypeMap[rawFluido] && fluidTypeMap[rawFluido][currentLang]) || rawFluido;
     document.getElementById('specMotore').textContent = `${spec.grandezza_motore} (${spec.poli}P)`;
     document.getElementById('specPotenza').textContent = `${spec.kw} kW / ${spec.hp} Hp`;
     document.getElementById('specRPM').textContent = `${spec.rpm} rpm`;
@@ -2000,7 +2115,7 @@ function updateSpecs(seriesName, modelName) {
 /* ─── Fan Selector Event Listeners ─── */
 document.getElementById('series').addEventListener('change', function() {
     const ms = document.getElementById('model');
-    ms.innerHTML = '<option value="">Seleziona modello...</option>';
+    ms.innerHTML = `<option value="">${t('selectModelPlaceholder')}</option>`;
 
     const flowInput = document.getElementById('flowRate');
     flowInput.disabled = true;
@@ -2277,8 +2392,11 @@ function updatePowerEfficiencyCurves(series, model) {
     if (!data) {
         chart.data.datasets[3].data = [];
         chart.data.datasets[4].data = [];
-        status.textContent = `Dati P/η non disponibili per ${series} ${model}`;
+        status.textContent = `${t('dataNotAvailableFor')} ${series} ${model}`;
         status.style.color = 'var(--text-muted)';
+        status.dataset.state = 'unavailable';
+        status.dataset.series = series;
+        status.dataset.model = model;
         return;
     }
 
@@ -2294,8 +2412,9 @@ function updatePowerEfficiencyCurves(series, model) {
         chart.data.datasets[4].data = [];
     }
 
-    status.textContent = `✓ Dati P/η disponibili`;
+    status.textContent = t('dataAvailable');
     status.style.color = 'var(--green-400)';
+    status.dataset.state = 'available';
     chart.update();
 }
 
@@ -2411,7 +2530,7 @@ function fsDisplayResults(results, pressureUnit) {
             <div class="result-card" onclick="fsSelectFan('${r.series}', '${r.modelNum}')" role="listitem" tabindex="0" aria-label="${r.model}">
                 <div>
                     <div class="result-model">${r.model}</div>
-                    <div class="result-series">Serie ${r.series}</div>
+                    <div class="result-series">${t('series')} ${r.series}</div>
                 </div>
                 <div class="result-stat">
                     <div class="result-stat-value">${fMin}–${fMax}</div>
