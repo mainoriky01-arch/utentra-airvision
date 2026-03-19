@@ -543,9 +543,9 @@ function search() {
         for (const [modelNum, model] of Object.entries(models)) {
             const match = checkModel(model, targetFlow, targetPressure);
             if (match) {
-                // Get kW from specs
+                // Get kW from specs (field is lowercase 'kw')
                 const specData = SPECS[seriesName]?.modelli?.[modelNum];
-                const kW = specData?.kW || specData?.['kW'] || '—';
+                const kW = specData?.kw ?? specData?.kW ?? '—';
                 
                 results.push({
                     series:    seriesName,
