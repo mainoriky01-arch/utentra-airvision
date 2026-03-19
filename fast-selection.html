@@ -543,10 +543,15 @@ function search() {
         for (const [modelNum, model] of Object.entries(models)) {
             const match = checkModel(model, targetFlow, targetPressure);
             if (match) {
+                // Get kW from specs
+                const specData = SPECS[seriesName]?.modelli?.[modelNum];
+                const kW = specData?.kW || specData?.['kW'] || '—';
+                
                 results.push({
                     series:    seriesName,
                     model:     `${seriesName} ${modelNum}`,   // e.g. "U/AR 201"
                     modelNum:  modelNum,
+                    kW:        kW,
                     ...match
                 });
             }
@@ -601,6 +606,10 @@ function displayResults(results, pressureUnit) {
                     <div class="result-stat-value">${psDisplay}</div>
                     <div class="result-stat-label">PS ${conv.symbol}</div>
                 </div>
+                <div class="result-stat">
+                    <div class="result-stat-value">${r.kW}</div>
+                    <div class="result-stat-label">kW</div>
+                </div>
                 <div class="result-match">${r.efficiency.toFixed(0)}% match</div>
             </div>
         `;
@@ -613,10 +622,16 @@ function selectFan(series, modelNum) {
 }
 
 // Initialize
+let SPECS = {};
+
 async function init() {
     try {
-        const res = await fetch('curves.json');
-        CURVES = await res.json();
+        const [curvesRes, specsRes] = await Promise.all([
+            fetch('curves.json'),
+            fetch('specs.json')
+        ]);
+        CURVES = await curvesRes.json();
+        SPECS = await specsRes.json();
 
         // Populate series filters (only Utentra series from data)
         const seriesFilters = document.getElementById('seriesFilters');
