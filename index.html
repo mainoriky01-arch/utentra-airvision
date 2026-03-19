@@ -2035,6 +2035,13 @@ async function generateDatasheetPDF() {
 
         // ── MADE IN ITALY BADGE ────────────────────────────────────────────────
         const BADGE_H = 13;
+        const FTR_Y   = PH - 20;          // footer always at 277 mm
+        const TOLS_H  = 3.5 + 4;          // two lines: ~7.5 mm total
+        const TOLS_Y  = FTR_Y - 2 - TOLS_H; // fixed position just above footer (~267.5 mm)
+
+        // Clamp badge start: ensure it always ends before the tolerance block
+        y = Math.min(y, TOLS_Y - BADGE_H - 4);
+
         sf(...C.rowAlt); sd(...C.blue); lw(0.45);
         rr(M, y, CW, BADGE_H, 2, 'FD');
 
@@ -2056,19 +2063,17 @@ async function generateDatasheetPDF() {
         st(...C.muted); normal(6.5);
         pdf.text('Ventilatori industriali di qualità superiore', badgeTxtX, y + 10.5);
 
-        y += BADGE_H + 6;  // Move y past badge
-
         // ══════════════════════════════════════════════════════════════════════
-        // TOLERANCE NOTES (after Made in Italy badge)
+        // TOLERANCE NOTES — fixed position above footer (always on page 1)
         // ══════════════════════════════════════════════════════════════════════
         st(...C.muted); normal(6);
-        pdf.text('TOLLERANZA SULLA PORTATA ± 5%  |  TOLLERANZA SULLA RUMOROSITÀ + 3 dB(A)', M, y);
-        pdf.text('I dati indicati si riferiscono ad aria alla temperatura di 15°C ed alla pressione barometrica di 760 mmHg (peso specifico dell\'aria = 1,226 Kg/m³)', M, y + 3.5);
+        pdf.text('TOLLERANZA SULLA PORTATA ± 5%  |  TOLLERANZA SULLA RUMOROSITÀ + 3 dB(A)', M, TOLS_Y);
+        pdf.text('I dati indicati si riferiscono ad aria alla temperatura di 15°C ed alla pressione barometrica di 760 mmHg (peso specifico dell\'aria = 1,226 Kg/m³)', M, TOLS_Y + 3.5);
 
         // ══════════════════════════════════════════════════════════════════════
         // FOOTER  (fixed at bottom)
         // ══════════════════════════════════════════════════════════════════════
-        const FTR_Y = PH - 20;
+        // FTR_Y already defined above
 
         // Blue footer bar
         sf(...C.blue); fr(5.2, FTR_Y, PW - 5.2, 2);
