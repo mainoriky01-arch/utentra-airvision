@@ -589,8 +589,16 @@ function displayResults(results, pressureUnit) {
     const conv = pressureConversions[pressureUnit];
 
     resultsGrid.innerHTML = results.slice(0, 50).map(r => {
-        const ptDisplay = (r.totalPressure  * conv.factor).toFixed(conv.factor === 1 ? 1 : 0);
-        const psDisplay = (r.staticPressure * conv.factor).toFixed(conv.factor === 1 ? 1 : 0);
+        // Get flow and pressure ranges from curves
+        const modelData = CURVES[r.series]?.[r.modelNum] || {};
+        const fMin = modelData.fMin || 0;
+        const fMax = modelData.fMax || 0;
+        const pMin = modelData.pMin || 0;
+        const pMax = modelData.pMax || 0;
+        
+        // Convert pressure to selected unit
+        const pMinDisplay = (pMin * conv.factor).toFixed(conv.factor === 1 ? 0 : 0);
+        const pMaxDisplay = (pMax * conv.factor).toFixed(conv.factor === 1 ? 0 : 0);
 
         return `
             <div class="result-card" onclick="selectFan('${r.series}', '${r.modelNum}')">
@@ -599,12 +607,12 @@ function displayResults(results, pressureUnit) {
                     <div class="result-series">Serie ${r.series}</div>
                 </div>
                 <div class="result-stat">
-                    <div class="result-stat-value">${ptDisplay}</div>
-                    <div class="result-stat-label">PT ${conv.symbol}</div>
+                    <div class="result-stat-value">${fMin}–${fMax}</div>
+                    <div class="result-stat-label">m³/h</div>
                 </div>
                 <div class="result-stat">
-                    <div class="result-stat-value">${psDisplay}</div>
-                    <div class="result-stat-label">PS ${conv.symbol}</div>
+                    <div class="result-stat-value">${pMinDisplay}–${pMaxDisplay}</div>
+                    <div class="result-stat-label">${conv.symbol}</div>
                 </div>
                 <div class="result-stat">
                     <div class="result-stat-value">${r.kW}</div>
