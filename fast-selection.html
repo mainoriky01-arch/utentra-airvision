@@ -4,8 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AirVision — Fast Selection</title>
-    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
+        /* ─── Reset & Base ─── */
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
         :root {
             --bg-base:       #F8FAFC;
             --bg-surface:    #F0F4F8;
@@ -13,53 +18,110 @@
             --bg-card-hover: #F8FAFC;
             --border:        #E2E8F0;
             --border-focus:  #2563EB;
+
+            /* Utentra blue palette */
+            --blue-100: #DBEAFE;
+            --blue-300: #93C5FD;
+            --blue-400: #60A5FA;
+            --blue-500: #2563EB;
+            --blue-600: #1D4ED8;
+            --blue-700: #1a365d;
+            --utentra:  #1a365d;
+
+            --amber-400: #FBBF24;
+            --amber-500: #F59E0B;
+
+            --green-400: #34D399;
+            --green-500: #10B981;
+
             --text-primary:  #1a365d;
             --text-secondary:#4A5568;
             --text-muted:    #718096;
-            --blue-400:      #3B82F6;
-            --blue-500:      #2563EB;
-            --green-400:     #059669;
-            --green-500:     #047857;
+
             --radius-sm: 6px;
             --radius-md: 10px;
-            --radius-lg: 14px;
+            --radius-lg: 16px;
+
+            --transition: 200ms cubic-bezier(0.4, 0, 0.2, 1);
         }
-        * { box-sizing: border-box; margin: 0; padding: 0; }
+
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: var(--bg-base);
+            font-family: 'Inter', -apple-system, sans-serif;
+            background-color: var(--bg-base);
+            background-image: none;
             min-height: 100vh;
             color: var(--text-primary);
-            line-height: 1.5;
+            line-height: 1.6;
             display: flex;
             flex-direction: column;
         }
 
-        /* Header */
+        /* ─── Header ─── */
         .header {
             background: #FFFFFF;
+            backdrop-filter: none;
             border-bottom: 1px solid var(--border);
-            padding: 16px 24px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
+            padding: 0 24px;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.06);
         }
-        .header-left {
+        .header-inner {
+            max-width: 1400px;
+            margin: 0 auto;
+            height: 60px;
             display: flex;
             align-items: center;
             gap: 12px;
         }
+
+        /* Utentra "U" logo mark */
         .header-logo {
-            width: 32px;
-            height: 32px;
-            color: var(--blue-500);
+            width: 34px; height: 34px; flex-shrink: 0;
+            background: var(--utentra);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid rgba(96,165,250,0.2);
         }
-        .header h1 {
-            font-size: 20px;
-            font-weight: 600;
+        .header-logo-text {
+            font-family: 'Inter', sans-serif;
+            font-size: 18px;
+            font-weight: 800;
+            color: #fff;
+            letter-spacing: -0.04em;
+            line-height: 1;
+        }
+
+        .header-title {
+            font-size: 18px;
+            font-weight: 700;
+            letter-spacing: -0.02em;
             color: var(--text-primary);
         }
-        .header h1 span { color: var(--blue-500); }
+        .header-title .brand { color: var(--utentra); }
+        .header-title .product { color: var(--text-primary); }
+
+        .header-divider {
+            width: 1px;
+            height: 20px;
+            background: var(--border);
+            margin: 0 2px;
+        }
+
+        .header-badge {
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--utentra);
+            background: rgba(26,54,93,0.08);
+            border: 1px solid rgba(26,54,93,0.2);
+            padding: 2px 8px;
+            border-radius: 100px;
+        }
         .header-nav {
             display: flex;
             gap: 8px;
@@ -71,40 +133,115 @@
             font-size: 14px;
             font-weight: 500;
             text-decoration: none;
-            color: var(--text-secondary);
+            color: var(--text-muted);
             background: transparent;
             border: 1px solid var(--border);
             transition: all 0.2s;
         }
         .nav-btn:hover {
-            background: var(--blue-500);
+            background: var(--utentra);
             color: white;
-            border-color: var(--blue-500);
+            border-color: var(--utentra);
         }
         .nav-btn.active {
-            background: var(--blue-500);
+            background: var(--utentra);
             color: white;
-            border-color: var(--blue-500);
-        }
-        .badge {
-            background: rgba(37,99,235,0.10);
-            color: var(--blue-500);
-            font-size: 10px;
-            font-weight: 600;
-            padding: 4px 10px;
-            border-radius: 100px;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
+            border-color: var(--utentra);
         }
 
-        /* Main */
-        main {
+        /* ─── Nav Tabs ─── */
+        .nav-tabs {
+            display: flex;
+            gap: 4px;
+            margin-left: auto;
+        }
+        .nav-tab {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 14px;
+            border-radius: var(--radius-md);
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            text-decoration: none;
+            border: 1px solid transparent;
+            transition: all var(--transition);
+        }
+        .nav-tab:hover {
+            color: var(--text-primary);
+            background: rgba(26,54,93,0.05);
+            border-color: var(--border);
+        }
+        .nav-tab.active {
+            color: var(--utentra);
+            background: rgba(26,54,93,0.08);
+            border-color: rgba(26,54,93,0.2);
+        }
+        @media (max-width: 600px) {
+            .nav-tabs { display: none; }
+        }
+
+        /* ─── Main Layout ─── */
+        .container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 24px;
+            padding: 24px 20px;
             flex: 1;
             width: 100%;
         }
+
+        /* ─── Form Controls ─── */
+        select, input[type="number"], input[type="text"] {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            background: #FFFFFF;
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            transition: border-color var(--transition), box-shadow var(--transition);
+            -webkit-appearance: none;
+            cursor: pointer;
+        }
+        select:focus, input[type="number"]:focus, input[type="text"]:focus {
+            outline: none;
+            border-color: var(--blue-500);
+            box-shadow: 0 0 0 3px rgba(37,99,235,0.12);
+        }
+        select:disabled, input[type="number"]:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            background: var(--bg-surface);
+        }
+        input::placeholder { color: var(--text-muted); }
+        select option { background: #FFFFFF; color: var(--text-primary); }
+
+        /* ─── Accessibility ─── */
+        :focus-visible {
+            outline: 2px solid var(--blue-500);
+            outline-offset: 2px;
+        }
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+        }
+
+        /* ─── Scrollbar ─── */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.15); border-radius: 3px; }
+
+        /* ─── Visually hidden ─── */
+        .visually-hidden {
+            position: absolute; width: 1px; height: 1px;
+            padding: 0; margin: -1px; overflow: hidden;
+            clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+        }
+
+        /* ══════════════════════════════════════════════════
+           FAST SELECTION SPECIFIC STYLES
+        ══════════════════════════════════════════════════ */
 
         /* Search Panel */
         .search-panel {
@@ -120,7 +257,7 @@
             align-items: center;
             gap: 10px;
             margin-bottom: 20px;
-            color: var(--blue-500);
+            color: var(--utentra);
         }
         .search-header h2 {
             font-size: 16px;
@@ -142,10 +279,10 @@
         }
         .input-group label {
             font-size: 11px;
-            font-weight: 500;
+            font-weight: 600;
             color: var(--text-secondary);
             text-transform: uppercase;
-            letter-spacing: 0.05em;
+            letter-spacing: 0.08em;
         }
         .input-row {
             display: flex;
@@ -153,26 +290,16 @@
         }
         .input-row input {
             flex: 1;
+            font-family: 'Fira Code', monospace;
         }
         .input-row select {
-            width: 100px;
-        }
-        input, select {
-            background: var(--bg-base);
-            border: 1px solid var(--border);
-            border-radius: var(--radius-sm);
-            color: var(--text-primary);
+            width: 110px;
             font-family: 'Fira Code', monospace;
-            font-size: 14px;
-            padding: 10px 14px;
-            transition: border-color 0.2s;
-        }
-        input:focus, select:focus {
-            outline: none;
-            border-color: var(--border-focus);
-        }
-        input::placeholder {
-            color: var(--text-muted);
+            font-size: 13px;
+            padding: 10px 28px 10px 10px;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%234A5568' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 8px center;
         }
 
         /* Filters */
@@ -186,10 +313,10 @@
         }
         .filter-group h4 {
             font-size: 11px;
-            font-weight: 500;
+            font-weight: 600;
             color: var(--text-muted);
             text-transform: uppercase;
-            letter-spacing: 0.05em;
+            letter-spacing: 0.08em;
             margin-bottom: 8px;
         }
         .filter-options {
@@ -206,19 +333,20 @@
             border-radius: 100px;
             padding: 6px 12px;
             font-size: 12px;
+            font-family: 'Fira Code', monospace;
             color: var(--text-secondary);
             cursor: pointer;
-            transition: all 0.2s;
+            transition: all var(--transition);
             user-select: none;
         }
         .filter-chip:hover {
-            border-color: var(--blue-400);
+            border-color: var(--blue-500);
             color: var(--text-primary);
         }
         .filter-chip.active {
-            background: rgba(37,99,235,0.08);
-            border-color: var(--blue-500);
-            color: var(--blue-500);
+            background: rgba(26,54,93,0.08);
+            border-color: rgba(26,54,93,0.25);
+            color: var(--utentra);
             font-weight: 600;
         }
         .filter-chip input {
@@ -228,7 +356,7 @@
         /* Search Button */
         .search-btn {
             width: 100%;
-            background: linear-gradient(135deg, var(--blue-500), #1d4ed8);
+            background: linear-gradient(135deg, var(--blue-600), var(--blue-700));
             border: none;
             border-radius: var(--radius-md);
             color: white;
@@ -241,11 +369,14 @@
             align-items: center;
             justify-content: center;
             gap: 8px;
-            transition: transform 0.1s, box-shadow 0.2s;
+            transition: all var(--transition);
+            box-shadow: 0 2px 8px rgba(37, 99, 235, 0.3);
+            letter-spacing: 0.04em;
         }
         .search-btn:hover {
+            background: linear-gradient(135deg, var(--blue-500), var(--blue-600));
             transform: translateY(-1px);
-            box-shadow: 0 4px 20px rgba(37,99,235,0.25);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4);
         }
         .search-btn:active {
             transform: translateY(0);
@@ -259,20 +390,22 @@
             margin-bottom: 16px;
         }
         .results-header h3 {
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
             color: var(--text-secondary);
         }
         .results-count {
             font-family: 'Fira Code', monospace;
             font-size: 13px;
-            color: var(--green-400);
+            color: var(--green-500);
             font-weight: 600;
         }
 
         .results-grid {
             display: grid;
-            gap: 12px;
+            gap: 10px;
         }
         .result-card {
             background: var(--bg-card);
@@ -280,17 +413,17 @@
             border-radius: var(--radius-md);
             padding: 16px 20px;
             display: grid;
-            grid-template-columns: 1fr auto auto auto;
+            grid-template-columns: 1fr auto auto auto auto;
             align-items: center;
             gap: 20px;
             cursor: pointer;
-            transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
+            transition: border-color var(--transition), background var(--transition), box-shadow var(--transition);
             box-shadow: 0 1px 3px rgba(0,0,0,0.04);
         }
         .result-card:hover {
-            border-color: var(--blue-500);
+            border-color: rgba(26,54,93,0.35);
             background: var(--bg-card-hover);
-            box-shadow: 0 4px 12px rgba(37,99,235,0.08);
+            box-shadow: 0 4px 12px rgba(26,54,93,0.08);
         }
         .result-model {
             font-family: 'Fira Code', monospace;
@@ -310,23 +443,31 @@
             font-family: 'Fira Code', monospace;
             font-size: 14px;
             font-weight: 600;
-            color: var(--blue-500);
+            color: var(--utentra);
         }
         .result-stat-label {
             font-size: 10px;
+            font-weight: 600;
             color: var(--text-muted);
             text-transform: uppercase;
-            letter-spacing: 0.03em;
+            letter-spacing: 0.06em;
+            margin-top: 2px;
         }
         .result-match {
-            background: rgba(5,150,105,0.10);
-            color: var(--green-400);
+            background: rgba(26,54,93,0.07);
+            color: var(--utentra);
             font-family: 'Fira Code', monospace;
             font-size: 12px;
             font-weight: 600;
             padding: 6px 12px;
             border-radius: 100px;
-            border: 1px solid rgba(5,150,105,0.20);
+            border: 1px solid rgba(26,54,93,0.2);
+            white-space: nowrap;
+        }
+        .result-match.high {
+            background: rgba(16,185,129,0.08);
+            color: var(--green-500);
+            border-color: rgba(16,185,129,0.25);
         }
 
         /* Empty State */
@@ -334,47 +475,67 @@
             text-align: center;
             padding: 60px 20px;
             color: var(--text-muted);
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
         }
         .empty-state svg {
             width: 48px;
             height: 48px;
             margin-bottom: 16px;
-            opacity: 0.4;
+            opacity: 0.35;
         }
         .empty-state p {
             font-size: 14px;
+            color: var(--text-secondary);
         }
 
         /* Footer */
-        footer {
-            background: #FFFFFF;
-            border-top: 1px solid var(--border);
-            padding: 12px 24px;
-            text-align: center;
-            font-size: 11px;
+        .info-footer {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 16px 20px;
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            flex-wrap: wrap;
+            margin-top: 24px;
+        }
+        .info-footer-content { flex: 1; min-width: 200px; }
+        .info-footer h3 {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+        .info-footer p { font-size: 13px; color: var(--text-secondary); line-height: 1.5; }
+        .info-footer .address {
+            font-size: 12px;
             color: var(--text-muted);
-            letter-spacing: 0.05em;
-            text-transform: uppercase;
+            margin-top: 4px;
         }
 
         /* Responsive */
         @media (max-width: 768px) {
             .result-card {
-                grid-template-columns: 1fr;
+                grid-template-columns: 1fr 1fr;
                 gap: 12px;
             }
-            .result-stats {
-                display: flex;
-                gap: 16px;
-            }
+            .result-card > div:first-child { grid-column: 1 / -1; }
+        }
+        @media (max-width: 480px) {
+            .result-card { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 <body>
-    <header class="header">
-        <div class="header-left">
+
+    <!-- ─── Header ─── -->
+    <header class="header" role="banner">
+        <div class="header-inner">
             <img src="logo.png" alt="Utentra" style="height: 40px; width: auto;">
-            <h1>AirVision</h1>
+            <h1 class="header-title">AirVision</h1>
             <nav class="header-nav">
                 <a href="index.html" class="nav-btn">Fan Selector</a>
                 <a href="fast-selection.html" class="nav-btn active">Fast Selection</a>
@@ -382,11 +543,13 @@
         </div>
     </header>
 
-    <main>
+    <!-- ─── Main ─── -->
+    <main class="container" role="main">
+
         <!-- Search Panel -->
-        <section class="search-panel">
+        <section class="search-panel" aria-label="Pannello ricerca rapida">
             <div class="search-header">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                     <path d="M13 10V3L4 14h7v7l9-11h-7z"/>
                 </svg>
                 <h2>Ricerca Rapida Ventilatori</h2>
@@ -394,10 +557,10 @@
 
             <div class="input-grid">
                 <div class="input-group">
-                    <label>Portata Richiesta</label>
+                    <label for="targetFlow">Portata Richiesta</label>
                     <div class="input-row">
-                        <input type="number" id="targetFlow" placeholder="es. 5000" step="1">
-                        <select id="flowUnit">
+                        <input type="number" id="targetFlow" placeholder="es. 5000" step="1" aria-label="Portata richiesta">
+                        <select id="flowUnit" aria-label="Unità portata">
                             <option value="m3h">m³/h</option>
                             <option value="m3min">m³/min</option>
                             <option value="cfm">cfm</option>
@@ -405,10 +568,10 @@
                     </div>
                 </div>
                 <div class="input-group">
-                    <label>Pressione Richiesta</label>
+                    <label for="targetPressure">Pressione Richiesta</label>
                     <div class="input-row">
-                        <input type="number" id="targetPressure" placeholder="es. 300" step="1">
-                        <select id="pressureUnit">
+                        <input type="number" id="targetPressure" placeholder="es. 300" step="1" aria-label="Pressione richiesta">
+                        <select id="pressureUnit" aria-label="Unità pressione">
                             <option value="kgm2">kg/m²</option>
                             <option value="pa">Pa</option>
                             <option value="inwg">in wg</option>
@@ -420,14 +583,14 @@
             <div class="filters">
                 <div class="filter-group">
                     <h4>Serie</h4>
-                    <div class="filter-options" id="seriesFilters">
+                    <div class="filter-options" id="seriesFilters" role="group" aria-label="Filtro serie">
                         <!-- Populated by JS -->
                     </div>
                 </div>
             </div>
 
-            <button class="search-btn" id="searchBtn">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <button class="search-btn" id="searchBtn" aria-label="Cerca ventilatori compatibili">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                     <circle cx="11" cy="11" r="8"/>
                     <line x1="21" y1="21" x2="16.65" y2="16.65"/>
                 </svg>
@@ -436,41 +599,52 @@
         </section>
 
         <!-- Results -->
-        <section id="resultsSection" style="display:none;">
+        <section id="resultsSection" style="display:none;" aria-label="Risultati ricerca">
             <div class="results-header">
                 <h3>Ventilatori Compatibili</h3>
-                <span class="results-count" id="resultsCount">0 risultati</span>
+                <span class="results-count" id="resultsCount" aria-live="polite">0 risultati</span>
             </div>
-            <div class="results-grid" id="resultsGrid"></div>
+            <div class="results-grid" id="resultsGrid" role="list"></div>
         </section>
 
-        <div class="empty-state" id="emptyState">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <div class="empty-state" id="emptyState" role="status" aria-live="polite">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
                 <circle cx="11" cy="11" r="8"/>
                 <line x1="21" y1="21" x2="16.65" y2="16.65"/>
             </svg>
             <p>Inserisci portata e pressione per trovare i ventilatori compatibili</p>
         </div>
-    </main>
 
-    <footer>UTENTRA S.R.L.</footer>
+        <!-- ─── Info Footer ─── -->
+        <footer class="info-footer" role="contentinfo">
+            <div style="width:28px;height:28px;background:var(--utentra);border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;border:1px solid rgba(96,165,250,0.15);">
+                <span style="font-family:'Inter',sans-serif;font-size:14px;font-weight:800;color:#fff;">U</span>
+            </div>
+            <div class="info-footer-content">
+                <h3>UTENTRA S.R.L. — AirVision Fast Selection</h3>
+                <p>Ricerca rapida per portata e pressione — <strong id="modelCount">…</strong> modelli disponibili</p>
+                <p class="address">Via Francesco Albani 9, 20149 Milano</p>
+            </div>
+        </footer>
+
+    </main>
 
 <script>
 let CURVES = {};
+let SPECS  = {};
 
 // Unit conversions
 const flowConversions = {
-    m3h:   { factor: 1,          symbol: 'm³/h' },
-    m3min: { factor: 1/60,       symbol: 'm³/min' },
-    cfm:   { factor: 0.58858,    symbol: 'cfm' }
+    m3h:   { factor: 1,       symbol: 'm³/h' },
+    m3min: { factor: 1/60,    symbol: 'm³/min' },
+    cfm:   { factor: 0.58858, symbol: 'cfm' }
 };
 const pressureConversions = {
-    kgm2: { factor: 1,           symbol: 'kg/m²' },
-    pa:   { factor: 9.80665,     symbol: 'Pa' },
-    inwg: { factor: 0.03937,     symbol: 'in wg' }
+    kgm2: { factor: 1,        symbol: 'kg/m²' },
+    pa:   { factor: 9.80665,  symbol: 'Pa' },
+    inwg: { factor: 0.03937,  symbol: 'in wg' }
 };
 
-// Convert to base units
 function toBaseFlow(value, unit) {
     return value / flowConversions[unit].factor;
 }
@@ -478,7 +652,6 @@ function toBasePressure(value, unit) {
     return value / pressureConversions[unit].factor;
 }
 
-// Interpolate pressure at given flow
 function interpolate(arr, x) {
     for (let i = 0; i < arr.length - 1; i++) {
         const [x1, y1] = arr[i];
@@ -491,7 +664,6 @@ function interpolate(arr, x) {
     return null;
 }
 
-// Check if model covers the operating point
 function checkModel(model, targetFlow, targetPressure) {
     const flowMin = Math.min(model.total[0][0], model.total[model.total.length-1][0]);
     const flowMax = Math.max(model.total[0][0], model.total[model.total.length-1][0]);
@@ -516,7 +688,6 @@ function checkModel(model, targetFlow, targetPressure) {
     };
 }
 
-// Search for compatible fans
 function search() {
     const flowInput     = parseFloat(document.getElementById('targetFlow').value);
     const pressureInput = parseFloat(document.getElementById('targetPressure').value);
@@ -543,15 +714,14 @@ function search() {
         for (const [modelNum, model] of Object.entries(models)) {
             const match = checkModel(model, targetFlow, targetPressure);
             if (match) {
-                // Get kW from specs (field is lowercase 'kw')
                 const specData = SPECS[seriesName]?.modelli?.[modelNum];
                 const kW = specData?.kw ?? specData?.kW ?? '—';
-                
+
                 results.push({
-                    series:    seriesName,
-                    model:     `${seriesName} ${modelNum}`,   // e.g. "U/AR 201"
-                    modelNum:  modelNum,
-                    kW:        kW,
+                    series:   seriesName,
+                    model:    `${seriesName} ${modelNum}`,
+                    modelNum: modelNum,
+                    kW:       kW,
                     ...match
                 });
             }
@@ -571,7 +741,7 @@ function displayResults(results, pressureUnit) {
     if (results.length === 0) {
         resultsSection.style.display = 'none';
         emptyState.innerHTML = `
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
                 <circle cx="12" cy="12" r="10"/>
                 <line x1="15" y1="9" x2="9" y2="15"/>
                 <line x1="9" y1="9" x2="15" y2="15"/>
@@ -589,19 +759,17 @@ function displayResults(results, pressureUnit) {
     const conv = pressureConversions[pressureUnit];
 
     resultsGrid.innerHTML = results.slice(0, 50).map(r => {
-        // Get flow and pressure ranges from curves
-        const modelData = CURVES[r.series]?.[r.modelNum] || {};
+        const modelData  = CURVES[r.series]?.[r.modelNum] || {};
         const fMin = modelData.fMin || 0;
         const fMax = modelData.fMax || 0;
         const pMin = modelData.pMin || 0;
         const pMax = modelData.pMax || 0;
-        
-        // Convert pressure to selected unit
-        const pMinDisplay = (pMin * conv.factor).toFixed(conv.factor === 1 ? 0 : 0);
-        const pMaxDisplay = (pMax * conv.factor).toFixed(conv.factor === 1 ? 0 : 0);
+        const pMinDisplay = (pMin * conv.factor).toFixed(0);
+        const pMaxDisplay = (pMax * conv.factor).toFixed(0);
+        const isHighMatch = r.efficiency >= 80;
 
         return `
-            <div class="result-card" onclick="selectFan('${r.series}', '${r.modelNum}')">
+            <div class="result-card" onclick="selectFan('${r.series}', '${r.modelNum}')" role="listitem" tabindex="0" aria-label="${r.model}">
                 <div>
                     <div class="result-model">${r.model}</div>
                     <div class="result-series">Serie ${r.series}</div>
@@ -618,19 +786,23 @@ function displayResults(results, pressureUnit) {
                     <div class="result-stat-value">${r.kW}</div>
                     <div class="result-stat-label">kW</div>
                 </div>
-                <div class="result-match">${r.efficiency.toFixed(0)}% match</div>
+                <div class="result-match${isHighMatch ? ' high' : ''}">${r.efficiency.toFixed(0)}% match</div>
             </div>
         `;
     }).join('');
+
+    // Keyboard navigation for cards
+    resultsGrid.querySelectorAll('.result-card').forEach(card => {
+        card.addEventListener('keypress', e => {
+            if (e.key === 'Enter' || e.key === ' ') card.click();
+        });
+    });
 }
 
 function selectFan(series, modelNum) {
     const url = `index.html?series=${encodeURIComponent(series)}&model=${encodeURIComponent(modelNum)}`;
     window.location.href = url;
 }
-
-// Initialize
-let SPECS = {};
 
 async function init() {
     try {
@@ -639,9 +811,12 @@ async function init() {
             fetch('specs.json')
         ]);
         CURVES = await curvesRes.json();
-        SPECS = await specsRes.json();
+        SPECS  = await specsRes.json();
 
-        // Populate series filters (only Utentra series from data)
+        const totalModels = Object.values(CURVES).reduce((a, s) => a + Object.keys(s).length, 0);
+        document.getElementById('modelCount').textContent = totalModels;
+
+        // Populate series filters
         const seriesFilters = document.getElementById('seriesFilters');
         const series = Object.keys(CURVES).sort();
         seriesFilters.innerHTML = series.map(s => `
