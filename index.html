@@ -77,52 +77,13 @@
             gap: 12px;
         }
 
-        /* Utentra "U" logo mark */
-        .header-logo {
-            width: 34px; height: 34px; flex-shrink: 0;
-            background: var(--utentra);
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: 1px solid rgba(96,165,250,0.2);
-        }
-        .header-logo-text {
-            font-family: 'Inter', sans-serif;
-            font-size: 18px;
-            font-weight: 800;
-            color: #fff;
-            letter-spacing: -0.04em;
-            line-height: 1;
-        }
-
         .header-title {
             font-size: 18px;
             font-weight: 700;
             letter-spacing: -0.02em;
             color: var(--text-primary);
         }
-        .header-title .brand { color: var(--utentra); }
-        .header-title .product { color: var(--text-primary); }
 
-        .header-divider {
-            width: 1px;
-            height: 20px;
-            background: var(--border);
-            margin: 0 2px;
-        }
-
-        .header-badge {
-            font-size: 11px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.08em;
-            color: var(--utentra);
-            background: rgba(26,54,93,0.08);
-            border: 1px solid rgba(26,54,93,0.2);
-            padding: 2px 8px;
-            border-radius: 100px;
-        }
         .header-nav {
             display: flex;
             gap: 8px;
@@ -138,6 +99,8 @@
             background: transparent;
             border: 1px solid var(--border);
             transition: all 0.2s;
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
         }
         .nav-btn:hover {
             background: var(--utentra);
@@ -149,38 +112,6 @@
             color: white;
             border-color: var(--utentra);
         }
-        /* ─── Nav Tabs ─── */
-        .nav-tabs {
-            display: flex;
-            gap: 4px;
-            margin-left: auto;
-        }
-        .nav-tab {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            padding: 6px 14px;
-            border-radius: var(--radius-md);
-            font-size: 13px;
-            font-weight: 500;
-            color: var(--text-secondary);
-            text-decoration: none;
-            border: 1px solid transparent;
-            transition: all var(--transition);
-        }
-        .nav-tab:hover {
-            color: var(--text-primary);
-            background: rgba(26,54,93,0.05);
-            border-color: var(--border);
-        }
-        .nav-tab.active {
-            color: var(--utentra);
-            background: rgba(26,54,93,0.08);
-            border-color: rgba(26,54,93,0.2);
-        }
-        @media (max-width: 600px) {
-            .nav-tabs { display: none; }
-        }
 
         .header-model-info {
             font-size: 13px;
@@ -188,6 +119,7 @@
             display: flex;
             align-items: center;
             gap: 8px;
+            margin-left: auto;
         }
         .header-model-info strong {
             color: #60A5FA;
@@ -255,7 +187,7 @@
         .step.completed .step-label { color: var(--green-500); }
 
         /* ─── Form Controls ─── */
-        select, input[type="number"] {
+        select, input[type="number"], input[type="text"] {
             width: 100%;
             padding: 10px 12px;
             border: 1px solid var(--border);
@@ -268,7 +200,7 @@
             -webkit-appearance: none;
             cursor: pointer;
         }
-        select:focus, input[type="number"]:focus {
+        select:focus, input[type="number"]:focus, input[type="text"]:focus {
             outline: none;
             border-color: var(--blue-500);
             box-shadow: 0 0 0 3px rgba(37,99,235,0.12);
@@ -278,6 +210,7 @@
             cursor: not-allowed;
             background: var(--bg-surface);
         }
+        input::placeholder { color: var(--text-muted); }
         select option { background: #FFFFFF; color: var(--text-primary); }
 
         /* Result inline */
@@ -414,7 +347,7 @@
 
         /* ─── Specs Section ─── */
         .specs-section {
-            background: var(--card);
+            background: var(--bg-card);
             border: 1px solid var(--border);
             border-radius: 12px;
             padding: 16px;
@@ -438,7 +371,7 @@
             font-weight: 500;
         }
         .spec-value {
-            color: var(--text);
+            color: var(--text-primary);
             font-weight: 600;
             font-family: 'Fira Code', monospace;
         }
@@ -589,13 +522,268 @@
             transform: translateY(-1px);
             box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4);
         }
-        .download-pdf-btn:active {
-            transform: translateY(0);
-        }
+        .download-pdf-btn:active { transform: translateY(0); }
         .download-pdf-btn:disabled {
             opacity: 0.5;
             cursor: not-allowed;
             transform: none;
+        }
+
+        /* ══════════════════════════════════════════════════
+           FAST SELECTION SPECIFIC STYLES
+        ══════════════════════════════════════════════════ */
+
+        /* Search Panel */
+        .search-panel {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+        }
+        .search-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            color: var(--utentra);
+        }
+        .search-header h2 {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        /* Input Grid */
+        .input-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        .input-group label {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+        .input-row {
+            display: flex;
+            gap: 8px;
+        }
+        .input-row input {
+            flex: 1;
+            font-family: 'Fira Code', monospace;
+        }
+        .input-row select {
+            width: 110px;
+            font-family: 'Fira Code', monospace;
+            font-size: 13px;
+            padding: 10px 28px 10px 10px;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%234A5568' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 8px center;
+        }
+
+        /* Filters */
+        .filters {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 24px;
+            padding-top: 16px;
+            border-top: 1px solid var(--border);
+            margin-bottom: 20px;
+        }
+        .filter-group h4 {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-bottom: 8px;
+        }
+        .filter-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .filter-chip {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--bg-base);
+            border: 1px solid var(--border);
+            border-radius: 100px;
+            padding: 6px 12px;
+            font-size: 12px;
+            font-family: 'Fira Code', monospace;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all var(--transition);
+            user-select: none;
+        }
+        .filter-chip:hover {
+            border-color: var(--blue-500);
+            color: var(--text-primary);
+        }
+        .filter-chip.active {
+            background: rgba(26,54,93,0.08);
+            border-color: rgba(26,54,93,0.25);
+            color: var(--utentra);
+            font-weight: 600;
+        }
+        .filter-chip input { display: none; }
+
+        /* Search Button */
+        .search-btn {
+            width: 100%;
+            background: linear-gradient(135deg, var(--blue-600), var(--blue-700));
+            border: none;
+            border-radius: var(--radius-md);
+            color: white;
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            padding: 14px 24px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all var(--transition);
+            box-shadow: 0 2px 8px rgba(37, 99, 235, 0.3);
+            letter-spacing: 0.04em;
+        }
+        .search-btn:hover {
+            background: linear-gradient(135deg, var(--blue-500), var(--blue-600));
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4);
+        }
+        .search-btn:active { transform: translateY(0); }
+
+        /* Results */
+        .results-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+        }
+        .results-header h3 {
+            font-size: 13px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--text-secondary);
+        }
+        .results-count {
+            font-family: 'Fira Code', monospace;
+            font-size: 13px;
+            color: var(--green-500);
+            font-weight: 600;
+        }
+
+        .results-grid {
+            display: grid;
+            gap: 10px;
+        }
+        .result-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 16px 20px;
+            display: grid;
+            grid-template-columns: 1fr auto auto auto auto;
+            align-items: center;
+            gap: 20px;
+            cursor: pointer;
+            transition: border-color var(--transition), background var(--transition), box-shadow var(--transition);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+        }
+        .result-card:hover {
+            border-color: rgba(26,54,93,0.35);
+            background: var(--bg-card-hover);
+            box-shadow: 0 4px 12px rgba(26,54,93,0.08);
+        }
+        .result-model {
+            font-family: 'Fira Code', monospace;
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        .result-series {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+        .result-stat { text-align: center; }
+        .result-stat-value {
+            font-family: 'Fira Code', monospace;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--utentra);
+        }
+        .result-stat-label {
+            font-size: 10px;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            margin-top: 2px;
+        }
+        .result-match {
+            background: rgba(26,54,93,0.07);
+            color: var(--utentra);
+            font-family: 'Fira Code', monospace;
+            font-size: 12px;
+            font-weight: 600;
+            padding: 6px 12px;
+            border-radius: 100px;
+            border: 1px solid rgba(26,54,93,0.2);
+            white-space: nowrap;
+        }
+        .result-match.high {
+            background: rgba(16,185,129,0.08);
+            color: var(--green-500);
+            border-color: rgba(16,185,129,0.25);
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-muted);
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+        }
+        .empty-state svg {
+            width: 48px;
+            height: 48px;
+            margin-bottom: 16px;
+            opacity: 0.35;
+        }
+        .empty-state p {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .result-card {
+                grid-template-columns: 1fr 1fr;
+                gap: 12px;
+            }
+            .result-card > div:first-child { grid-column: 1 / -1; }
+        }
+        @media (max-width: 480px) {
+            .result-card { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -604,257 +792,350 @@
     <!-- ─── Header ─── -->
     <header class="header" role="banner">
         <div class="header-inner">
-            <!-- Utentra logo mark -->
             <img src="logo.png" alt="Utentra" style="height: 40px; width: auto;">
-
             <h1 class="header-title">AirVision</h1>
-            
-            <nav class="header-nav">
-                <a href="index.html" class="nav-btn active">Fan Selector</a>
-                <a href="fast-selection.html" class="nav-btn">Fast Selection</a>
+
+            <nav class="header-nav" aria-label="Navigazione sezioni">
+                <button class="nav-btn active" id="navFanSelector" onclick="switchView('fanSelector')" aria-pressed="true">Fan Selector</button>
+                <button class="nav-btn" id="navFastSelection" onclick="switchView('fastSelection')" aria-pressed="false">Fast Selection</button>
             </nav>
 
             <div class="header-model-info" id="headerModelInfo" aria-live="polite"></div>
         </div>
     </header>
 
-    <!-- ─── Main ─── -->
-    <main class="container" role="main">
+    <!-- ═══════════════════════════════════════════
+         FAN SELECTOR VIEW
+    ═══════════════════════════════════════════ -->
+    <div id="fanSelectorView">
+        <main class="container" role="main">
 
-        <!-- ─── Step Controls ─── -->
-        <div class="steps" role="group" aria-label="Passi di selezione ventilatore">
+            <!-- ─── Step Controls ─── -->
+            <div class="steps" role="group" aria-label="Passi di selezione ventilatore">
 
-            <!-- Step 1: Series -->
-            <div class="step active" id="step1">
-                <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
-                    <span class="step-num" aria-hidden="true">1</span>
-                    <span class="step-label">Serie Ventilatore</span>
+                <!-- Step 1: Series -->
+                <div class="step active" id="step1">
+                    <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+                        <span class="step-num" aria-hidden="true">1</span>
+                        <span class="step-label">Serie Ventilatore</span>
+                    </div>
+                    <label for="series" class="visually-hidden">Seleziona la serie</label>
+                    <select id="series" aria-label="Seleziona serie ventilatore">
+                        <option value="">Caricamento serie...</option>
+                    </select>
                 </div>
-                <label for="series" class="visually-hidden">Seleziona la serie</label>
-                <select id="series" aria-label="Seleziona serie ventilatore">
-                    <option value="">Caricamento serie...</option>
-                </select>
-            </div>
 
-            <!-- Step 2: Model -->
-            <div class="step" id="step2">
-                <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
-                    <span class="step-num" aria-hidden="true">2</span>
-                    <span class="step-label">Modello</span>
+                <!-- Step 2: Model -->
+                <div class="step" id="step2">
+                    <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+                        <span class="step-num" aria-hidden="true">2</span>
+                        <span class="step-label">Modello</span>
+                    </div>
+                    <label for="model" class="visually-hidden">Seleziona il modello</label>
+                    <select id="model" disabled aria-label="Seleziona modello ventilatore" aria-disabled="true">
+                        <option value="">Prima seleziona serie...</option>
+                    </select>
                 </div>
-                <label for="model" class="visually-hidden">Seleziona il modello</label>
-                <select id="model" disabled aria-label="Seleziona modello ventilatore" aria-disabled="true">
-                    <option value="">Prima seleziona serie...</option>
-                </select>
-            </div>
 
-            <!-- Step 3: Flow Rate -->
-            <div class="step" id="step3">
-                <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
-                    <span class="step-num" aria-hidden="true">3</span>
-                    <span class="step-label">Portata — m³/h</span>
-                </div>
-                <input
-                    type="number"
-                    id="flowRate"
-                    placeholder="es. 5000"
-                    disabled
-                    step="1"
-                    min="0"
-                    aria-label="Inserisci portata in m³/h"
-                    aria-disabled="true"
-                >
-                <div id="result" class="result-display empty" style="margin-top:8px;" role="status" aria-live="polite" aria-atomic="true">
-                    Inserisci una portata
-                </div>
-            </div>
-        </div>
-
-        <!-- ─── Chart ─── -->
-        <section class="chart-section" aria-label="Grafico curve caratteristiche">
-            <div class="chart-header">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" style="color:var(--text-secondary)">
-                    <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
-                </svg>
-                <span class="chart-title">Curve Caratteristiche</span>
-                <div class="chart-legend" aria-label="Legenda grafico">
-                    <span class="legend-item">
-                        <span class="legend-dot" style="background:#2563EB;" aria-hidden="true"></span>
-                        Pressione Totale
-                    </span>
-                    <span class="legend-item">
-                        <span class="legend-dot" style="background:#34D399;" aria-hidden="true"></span>
-                        Pressione Statica
-                    </span>
-                    <span class="legend-item">
-                        <span style="width:10px;height:10px;border-radius:50%;background:#F59E0B;display:inline-block;" aria-hidden="true"></span>
-                        Punto Operativo
-                    </span>
+                <!-- Step 3: Flow Rate -->
+                <div class="step" id="step3">
+                    <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+                        <span class="step-num" aria-hidden="true">3</span>
+                        <span class="step-label">Portata — m³/h</span>
+                    </div>
+                    <input
+                        type="number"
+                        id="flowRate"
+                        placeholder="es. 5000"
+                        disabled
+                        step="1"
+                        min="0"
+                        aria-label="Inserisci portata in m³/h"
+                        aria-disabled="true"
+                    >
+                    <div id="result" class="result-display empty" style="margin-top:8px;" role="status" aria-live="polite" aria-atomic="true">
+                        Inserisci una portata
+                    </div>
                 </div>
             </div>
-            <div class="chart-wrapper">
-                <div class="chart-empty" id="chartEmpty" aria-label="Grafico vuoto - seleziona un modello">
-                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true" style="color:var(--text-secondary)">
-                        <path d="M3 3v18h18"/>
-                        <path d="M7 16l4-4 4 4 5-5"/>
+
+            <!-- ─── Chart ─── -->
+            <section class="chart-section" aria-label="Grafico curve caratteristiche">
+                <div class="chart-header">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" style="color:var(--text-secondary)">
+                        <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
                     </svg>
-                    <p>Seleziona serie e modello per visualizzare le curve</p>
+                    <span class="chart-title">Curve Caratteristiche</span>
+                    <div class="chart-legend" aria-label="Legenda grafico">
+                        <span class="legend-item">
+                            <span class="legend-dot" style="background:#2563EB;" aria-hidden="true"></span>
+                            Pressione Totale
+                        </span>
+                        <span class="legend-item">
+                            <span class="legend-dot" style="background:#34D399;" aria-hidden="true"></span>
+                            Pressione Statica
+                        </span>
+                        <span class="legend-item">
+                            <span style="width:10px;height:10px;border-radius:50%;background:#F59E0B;display:inline-block;" aria-hidden="true"></span>
+                            Punto Operativo
+                        </span>
+                    </div>
                 </div>
-                <canvas id="curveChart" aria-label="Grafico scatter curve pressione-portata" role="img"></canvas>
-            </div>
-        </section>
-
-        <!-- ─── Unit Selectors ─── -->
-        <div class="unit-selectors">
-            <div class="unit-group">
-                <label for="flowUnit">Unità Portata</label>
-                <select id="flowUnit" aria-label="Seleziona unità di misura portata">
-                    <option value="m3h" selected>m³/h</option>
-                    <option value="m3min">m³/min</option>
-                    <option value="m3s">m³/s</option>
-                    <option value="cfm">cfm</option>
-                </select>
-            </div>
-            <div class="unit-group">
-                <label for="pressureUnit">Unità Pressione</label>
-                <select id="pressureUnit" aria-label="Seleziona unità di misura pressione">
-                    <option value="kgm2" selected>kg/m²</option>
-                    <option value="pa">Pa</option>
-                    <option value="inwg">in wg</option>
-                </select>
-            </div>
-        </div>
-
-        <!-- ─── Curve Toggles ─── -->
-        <div class="curve-toggles" style="display:flex; gap:16px; margin-bottom:16px; padding:12px 16px; background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-md); box-shadow:0 1px 3px rgba(0,0,0,0.04);">
-            <label style="display:flex; align-items:center; gap:8px; cursor:pointer; font-size:13px; color:var(--text-secondary);">
-                <input type="checkbox" id="showPower" style="accent-color:#EF4444; width:16px; height:16px;">
-                <span style="color:#EF4444;">●</span> Potenza (kW)
-            </label>
-            <label style="display:flex; align-items:center; gap:8px; cursor:pointer; font-size:13px; color:var(--text-secondary);">
-                <input type="checkbox" id="showEfficiency" style="accent-color:#8B5CF6; width:16px; height:16px;">
-                <span style="color:#8B5CF6;">●</span> Rendimento (%)
-            </label>
-            <span id="curveStatus" style="margin-left:auto; font-size:11px; color:var(--text-muted);">Seleziona un modello</span>
-        </div>
-
-        <!-- ─── Data Cards ─── -->
-        <div class="data-grid" role="region" aria-label="Dati tecnici ventilatore">
-
-            <div class="data-card highlight" aria-label="Pressione Totale">
-                <div class="card-label">
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-                    Pressione Totale
+                <div class="chart-wrapper">
+                    <div class="chart-empty" id="chartEmpty" aria-label="Grafico vuoto - seleziona un modello">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true" style="color:var(--text-secondary)">
+                            <path d="M3 3v18h18"/>
+                            <path d="M7 16l4-4 4 4 5-5"/>
+                        </svg>
+                        <p>Seleziona serie e modello per visualizzare le curve</p>
+                    </div>
+                    <canvas id="curveChart" aria-label="Grafico scatter curve pressione-portata" role="img"></canvas>
                 </div>
-                <div class="card-value" id="totalPressure">—</div>
-                <div class="card-unit pressure-unit">kg/m²</div>
+            </section>
+
+            <!-- ─── Unit Selectors ─── -->
+            <div class="unit-selectors">
+                <div class="unit-group">
+                    <label for="flowUnit">Unità Portata</label>
+                    <select id="flowUnit" aria-label="Seleziona unità di misura portata">
+                        <option value="m3h" selected>m³/h</option>
+                        <option value="m3min">m³/min</option>
+                        <option value="m3s">m³/s</option>
+                        <option value="cfm">cfm</option>
+                    </select>
+                </div>
+                <div class="unit-group">
+                    <label for="pressureUnit">Unità Pressione</label>
+                    <select id="pressureUnit" aria-label="Seleziona unità di misura pressione">
+                        <option value="kgm2" selected>kg/m²</option>
+                        <option value="pa">Pa</option>
+                        <option value="inwg">in wg</option>
+                    </select>
+                </div>
             </div>
 
-            <div class="data-card" aria-label="Pressione Statica">
-                <div class="card-label">
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-                    Pressione Statica
-                </div>
-                <div class="card-value" id="staticPressure">—</div>
-                <div class="card-unit pressure-unit">kg/m²</div>
+            <!-- ─── Curve Toggles ─── -->
+            <div class="curve-toggles" style="display:flex; gap:16px; margin-bottom:16px; padding:12px 16px; background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-md); box-shadow:0 1px 3px rgba(0,0,0,0.04);">
+                <label style="display:flex; align-items:center; gap:8px; cursor:pointer; font-size:13px; color:var(--text-secondary);">
+                    <input type="checkbox" id="showPower" style="accent-color:#EF4444; width:16px; height:16px;">
+                    <span style="color:#EF4444;">●</span> Potenza (kW)
+                </label>
+                <label style="display:flex; align-items:center; gap:8px; cursor:pointer; font-size:13px; color:var(--text-secondary);">
+                    <input type="checkbox" id="showEfficiency" style="accent-color:#8B5CF6; width:16px; height:16px;">
+                    <span style="color:#8B5CF6;">●</span> Rendimento (%)
+                </label>
+                <span id="curveStatus" style="margin-left:auto; font-size:11px; color:var(--text-muted);">Seleziona un modello</span>
             </div>
 
-            <div class="data-card amber" aria-label="Pressione Dinamica">
-                <div class="card-label">
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9.59 4.59A2 2 0 1 1 11 8H2m10.59 11.41A2 2 0 1 0 14 16H2m15.73-8.27A2.5 2.5 0 1 1 19.5 12H2"/></svg>
-                    Pressione Dinamica
+            <!-- ─── Data Cards ─── -->
+            <div class="data-grid" role="region" aria-label="Dati tecnici ventilatore">
+
+                <div class="data-card highlight" aria-label="Pressione Totale">
+                    <div class="card-label">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                        Pressione Totale
+                    </div>
+                    <div class="card-value" id="totalPressure">—</div>
+                    <div class="card-unit pressure-unit">kg/m²</div>
                 </div>
-                <div class="card-value" id="dynamicPressure">—</div>
-                <div class="card-unit pressure-unit">kg/m²</div>
+
+                <div class="data-card" aria-label="Pressione Statica">
+                    <div class="card-label">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                        Pressione Statica
+                    </div>
+                    <div class="card-value" id="staticPressure">—</div>
+                    <div class="card-unit pressure-unit">kg/m²</div>
+                </div>
+
+                <div class="data-card amber" aria-label="Pressione Dinamica">
+                    <div class="card-label">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9.59 4.59A2 2 0 1 1 11 8H2m10.59 11.41A2 2 0 1 0 14 16H2m15.73-8.27A2.5 2.5 0 1 1 19.5 12H2"/></svg>
+                        Pressione Dinamica
+                    </div>
+                    <div class="card-value" id="dynamicPressure">—</div>
+                    <div class="card-unit pressure-unit">kg/m²</div>
+                </div>
+
+                <div class="data-card" aria-label="Range Portata">
+                    <div class="card-label">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
+                        Range Portata
+                    </div>
+                    <div class="card-value" id="flowRange" style="font-size:16px;line-height:1.4;">—</div>
+                    <div class="card-unit flow-unit">m³/h</div>
+                </div>
+
+                <div class="data-card" aria-label="Range Pressione">
+                    <div class="card-label">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                        Range Pressione
+                    </div>
+                    <div class="card-value" id="pressureRange" style="font-size:16px;line-height:1.4;">—</div>
+                    <div class="card-unit pressure-unit">kg/m²</div>
+                </div>
             </div>
 
-            <div class="data-card" aria-label="Range Portata">
-                <div class="card-label">
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
-                    Range Portata
+            <!-- ─── Specifiche Tecniche ─── -->
+            <div id="specsSection" class="specs-section" style="display:none;">
+                <h4 style="font-size:13px;font-weight:600;color:var(--text-primary);margin-bottom:12px;display:flex;align-items:center;gap:6px;">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="9" y1="3" x2="9" y2="21"/></svg>
+                    Specifiche Tecniche
+                </h4>
+                <div class="specs-grid">
+                    <div class="spec-row">
+                        <span class="spec-label">Motore</span>
+                        <span class="spec-value" id="specMotore">—</span>
+                    </div>
+                    <div class="spec-row">
+                        <span class="spec-label">Potenza</span>
+                        <span class="spec-value" id="specPotenza">—</span>
+                    </div>
+                    <div class="spec-row">
+                        <span class="spec-label">RPM</span>
+                        <span class="spec-value" id="specRPM">—</span>
+                    </div>
+                    <div class="spec-row">
+                        <span class="spec-label">Rumorosità</span>
+                        <span class="spec-value" id="specDB">—</span>
+                    </div>
+                    <div class="spec-row">
+                        <span class="spec-label">Flangia Asp.</span>
+                        <span class="spec-value" id="specFlangiaAsp">—</span>
+                    </div>
+                    <div class="spec-row">
+                        <span class="spec-label">Flangia Prem.</span>
+                        <span class="spec-value" id="specFlangiaPrem">—</span>
+                    </div>
+                    <div class="spec-row">
+                        <span class="spec-label">Peso</span>
+                        <span class="spec-value" id="specPeso">—</span>
+                    </div>
+                    <div class="spec-row">
+                        <span class="spec-label">Tipo Fluido</span>
+                        <span class="spec-value" id="specFluido">—</span>
+                    </div>
                 </div>
-                <div class="card-value" id="flowRange" style="font-size:16px;line-height:1.4;">—</div>
-                <div class="card-unit flow-unit">m³/h</div>
+                <button id="downloadPdfBtn" class="download-pdf-btn" onclick="generateDatasheetPDF()">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                        <polyline points="7 10 12 15 17 10"/>
+                        <line x1="12" y1="15" x2="12" y2="3"/>
+                    </svg>
+                    Scarica Datasheet PDF
+                </button>
             </div>
 
-            <div class="data-card" aria-label="Range Pressione">
-                <div class="card-label">
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-                    Range Pressione
+            <!-- ─── Info Footer ─── -->
+            <footer class="info-footer" role="contentinfo" style="margin-top:24px;">
+                <div style="width:28px;height:28px;background:var(--utentra);border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;border:1px solid rgba(96,165,250,0.15);">
+                    <span style="font-family:'Inter',sans-serif;font-size:14px;font-weight:800;color:#fff;">U</span>
                 </div>
-                <div class="card-value" id="pressureRange" style="font-size:16px;line-height:1.4;">—</div>
-                <div class="card-unit pressure-unit">kg/m²</div>
-            </div>
-        </div>
+                <div class="info-footer-content">
+                    <h3>UTENTRA S.R.L. — AirVision Fan Selector</h3>
+                    <p>Curve caratteristiche — <strong id="modelCount">…</strong> modelli disponibili</p>
+                    <p class="address">Via Francesco Albani 9, 20149 Milano</p>
+                    <div class="series-chips" id="seriesChips" aria-label="Serie disponibili"></div>
+                </div>
+            </footer>
 
-        <!-- ─── Specifiche Tecniche ─── -->
-        <div id="specsSection" class="specs-section" style="display:none;">
-            <h4 style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:12px;display:flex;align-items:center;gap:6px;">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="9" y1="3" x2="9" y2="21"/></svg>
-                Specifiche Tecniche
-            </h4>
-            <div class="specs-grid">
-                <div class="spec-row">
-                    <span class="spec-label">Motore</span>
-                    <span class="spec-value" id="specMotore">—</span>
+        </main>
+    </div><!-- /fanSelectorView -->
+
+    <!-- ═══════════════════════════════════════════
+         FAST SELECTION VIEW
+    ═══════════════════════════════════════════ -->
+    <div id="fastSelectionView" style="display:none;">
+        <main class="container" role="main" style="max-width:1200px;">
+
+            <!-- Search Panel -->
+            <section class="search-panel" aria-label="Pannello ricerca rapida">
+                <div class="search-header">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                        <path d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                    </svg>
+                    <h2>Ricerca Rapida Ventilatori</h2>
                 </div>
-                <div class="spec-row">
-                    <span class="spec-label">Potenza</span>
-                    <span class="spec-value" id="specPotenza">—</span>
+
+                <div class="input-grid">
+                    <div class="input-group">
+                        <label for="fsTargetFlow">Portata Richiesta</label>
+                        <div class="input-row">
+                            <input type="number" id="fsTargetFlow" placeholder="es. 5000" step="1" aria-label="Portata richiesta">
+                            <select id="fsFlowUnit" aria-label="Unità portata">
+                                <option value="m3h">m³/h</option>
+                                <option value="m3min">m³/min</option>
+                                <option value="cfm">cfm</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <label for="fsTargetPressure">Pressione Richiesta</label>
+                        <div class="input-row">
+                            <input type="number" id="fsTargetPressure" placeholder="es. 300" step="1" aria-label="Pressione richiesta">
+                            <select id="fsPressureUnit" aria-label="Unità pressione">
+                                <option value="kgm2">kg/m²</option>
+                                <option value="pa">Pa</option>
+                                <option value="inwg">in wg</option>
+                            </select>
+                        </div>
+                    </div>
                 </div>
-                <div class="spec-row">
-                    <span class="spec-label">RPM</span>
-                    <span class="spec-value" id="specRPM">—</span>
+
+                <div class="filters">
+                    <div class="filter-group">
+                        <h4>Serie</h4>
+                        <div class="filter-options" id="fsSeriesFilters" role="group" aria-label="Filtro serie">
+                            <!-- Populated by JS -->
+                        </div>
+                    </div>
                 </div>
-                <div class="spec-row">
-                    <span class="spec-label">Rumorosità</span>
-                    <span class="spec-value" id="specDB">—</span>
+
+                <button class="search-btn" id="fsSearchBtn" onclick="fsSearch()" aria-label="Cerca ventilatori compatibili">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                        <circle cx="11" cy="11" r="8"/>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                    </svg>
+                    CERCA VENTILATORI
+                </button>
+            </section>
+
+            <!-- Results -->
+            <section id="fsResultsSection" style="display:none;" aria-label="Risultati ricerca">
+                <div class="results-header">
+                    <h3>Ventilatori Compatibili</h3>
+                    <span class="results-count" id="fsResultsCount" aria-live="polite">0 risultati</span>
                 </div>
-                <div class="spec-row">
-                    <span class="spec-label">Flangia Asp.</span>
-                    <span class="spec-value" id="specFlangiaAsp">—</span>
-                </div>
-                <div class="spec-row">
-                    <span class="spec-label">Flangia Prem.</span>
-                    <span class="spec-value" id="specFlangiaPrem">—</span>
-                </div>
-                <div class="spec-row">
-                    <span class="spec-label">Peso</span>
-                    <span class="spec-value" id="specPeso">—</span>
-                </div>
-                <div class="spec-row">
-                    <span class="spec-label">Tipo Fluido</span>
-                    <span class="spec-value" id="specFluido">—</span>
-                </div>
-            </div>
-            <button id="downloadPdfBtn" class="download-pdf-btn" onclick="generateDatasheetPDF()">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-                    <polyline points="7 10 12 15 17 10"/>
-                    <line x1="12" y1="15" x2="12" y2="3"/>
+                <div class="results-grid" id="fsResultsGrid" role="list"></div>
+            </section>
+
+            <div class="empty-state" id="fsEmptyState" role="status" aria-live="polite">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                    <circle cx="11" cy="11" r="8"/>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"/>
                 </svg>
-                Scarica Datasheet PDF
-            </button>
-        </div>
-
-        <!-- ─── Info Footer ─── -->
-        <footer class="info-footer" role="contentinfo">
-            <!-- Utentra logo mark small -->
-            <div style="width:28px;height:28px;background:var(--utentra);border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;border:1px solid rgba(96,165,250,0.15);">
-                <span style="font-family:'Inter',sans-serif;font-size:14px;font-weight:800;color:#fff;">U</span>
+                <p>Inserisci portata e pressione per trovare i ventilatori compatibili</p>
             </div>
-            <div class="info-footer-content">
-                <h3>UTENTRA S.R.L. — AirVision Fan Selector</h3>
-                <p>Curve caratteristiche — <strong id="modelCount">…</strong> modelli disponibili</p>
-                <p class="address">Via Francesco Albani 9, 20149 Milano</p>
-                <div class="series-chips" id="seriesChips" aria-label="Serie disponibili"></div>
-            </div>
-        </footer>
 
-    </main>
+            <!-- ─── Info Footer ─── -->
+            <footer class="info-footer" role="contentinfo" style="margin-top:24px;">
+                <div style="width:28px;height:28px;background:var(--utentra);border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;border:1px solid rgba(96,165,250,0.15);">
+                    <span style="font-family:'Inter',sans-serif;font-size:14px;font-weight:800;color:#fff;">U</span>
+                </div>
+                <div class="info-footer-content">
+                    <h3>UTENTRA S.R.L. — AirVision Fast Selection</h3>
+                    <p>Ricerca rapida per portata e pressione — <strong id="fsModelCount">…</strong> modelli disponibili</p>
+                    <p class="address">Via Francesco Albani 9, 20149 Milano</p>
+                </div>
+            </footer>
+
+        </main>
+    </div><!-- /fastSelectionView -->
 
 <script>
-/* ─── Series Metadata ─── */
+/* ═══════════════════════════════════════════
+   SHARED STATE & DATA
+═══════════════════════════════════════════ */
 const SERIES_META = {
     'U/AR':  { desc: 'Bassa pressione (ex BP)' },
     'U/CB':  { desc: 'Bassa pressione rinforzati (ex BPR)' },
@@ -863,27 +1144,11 @@ const SERIES_META = {
     'U/TM':  { desc: 'Trasporto materiali (ex TPA)' }
 };
 
-/* ─── State ─── */
 let CURVES = {};
 let POWER_EFF = {};
 let SPECS = {};
-let chart = null;
-let currentModel = null;
-let hasOperatingPoint = false;
 
-// Store raw values in base units (m³/h, kg/m²)
-let rawValues = {
-    totalPressure: null,
-    staticPressure: null,
-    dynamicPressure: null,
-    flowRate: null,
-    flowMin: null,
-    flowMax: null,
-    pressureMin: null,
-    pressureMax: null
-};
-
-/* ─── Unit Conversion ─── */
+/* ─── Unit Conversion (shared) ─── */
 const flowConversions = {
     m3h:   { factor: 1,        symbol: 'm³/h',   decimals: 0 },
     m3min: { factor: 1/60,     symbol: 'm³/min', decimals: 2 },
@@ -901,16 +1166,80 @@ function convertFlow(valueM3h, toUnit) {
     if (valueM3h === null || valueM3h === undefined) return null;
     return valueM3h * flowConversions[toUnit].factor;
 }
-
 function convertPressure(valueKgm2, toUnit) {
     if (valueKgm2 === null || valueKgm2 === undefined) return null;
     return valueKgm2 * pressureConversions[toUnit].factor;
 }
-
 function formatValue(value, decimals) {
     if (value === null || value === undefined) return '—';
     return value.toFixed(decimals);
 }
+function flowToBase(value, fromUnit) {
+    return value / flowConversions[fromUnit].factor;
+}
+function pressureToBase(value, fromUnit) {
+    return value / pressureConversions[fromUnit].factor;
+}
+
+function interpolate(arr, x) {
+    for (let i = 0; i < arr.length - 1; i++) {
+        const [x1, y1] = arr[i];
+        const [x2, y2] = arr[i+1];
+        if ((x >= x1 && x <= x2) || (x <= x1 && x >= x2)) {
+            const t = (x - x1) / (x2 - x1);
+            return y1 + t * (y2 - y1);
+        }
+    }
+    return null;
+}
+
+/* ═══════════════════════════════════════════
+   VIEW SWITCHING
+═══════════════════════════════════════════ */
+function switchView(viewName) {
+    const views = {
+        fanSelector:   { el: 'fanSelectorView',   btn: 'navFanSelector' },
+        fastSelection: { el: 'fastSelectionView', btn: 'navFastSelection' }
+    };
+    Object.entries(views).forEach(([name, cfg]) => {
+        const isActive = name === viewName;
+        document.getElementById(cfg.el).style.display = isActive ? 'block' : 'none';
+        const btn = document.getElementById(cfg.btn);
+        btn.classList.toggle('active', isActive);
+        btn.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+    });
+    // Show header model info only in Fan Selector
+    document.getElementById('headerModelInfo').style.display =
+        viewName === 'fanSelector' ? '' : 'none';
+    // Update browser URL without reload
+    const url = new URL(window.location);
+    if (viewName === 'fastSelection') {
+        url.searchParams.set('view', 'fast');
+        url.searchParams.delete('series');
+        url.searchParams.delete('model');
+    } else {
+        url.searchParams.delete('view');
+    }
+    history.replaceState(null, '', url.toString());
+}
+
+/* ═══════════════════════════════════════════
+   FAN SELECTOR — STATE
+═══════════════════════════════════════════ */
+let chart = null;
+let currentModel = null;
+let hasOperatingPoint = false;
+
+let rawValues = {
+    totalPressure: null,
+    staticPressure: null,
+    dynamicPressure: null,
+    flowRate: null,
+    flowMin: null,
+    flowMax: null,
+    pressureMin: null,
+    pressureMax: null
+};
 
 function getCurrentUnits() {
     return {
@@ -985,16 +1314,14 @@ function updateAllDisplays() {
 
         chart.options.scales.x.title.text = `Portata Q (${flowConv.symbol})`;
         chart.options.scales.y.title.text = `Pressione P (${pressConv.symbol})`;
-        
-        // Aggiorna limiti assi per il nuovo modello/unità
+
         if (currentModel.fMin !== null && currentModel.fMax !== null) {
             const fMinConv = convertFlow(currentModel.fMin, units.flow);
             const fMaxConv = convertFlow(currentModel.fMax, units.flow);
             chart.options.scales.x.min = fMinConv * 0.95;
             chart.options.scales.x.max = fMaxConv * 1.05;
         }
-        
-        // Calcola limiti Y da entrambe le curve (totale e statica)
+
         const allPressures = [
             ...totalConverted.map(p => p.y),
             ...staticConverted.map(p => p.y)
@@ -1005,7 +1332,7 @@ function updateAllDisplays() {
             chart.options.scales.y.min = Math.max(0, pMin * 0.9);
             chart.options.scales.y.max = pMax * 1.1;
         }
-        
+
         chart.update('none');
         chart.update();
     }
@@ -1053,7 +1380,6 @@ const crosshairPlugin = {
 
         chart.data.datasets.forEach((dataset, i) => {
             if (dataset.hidden || i === 2) return;
-
             const data = dataset.data;
             if (!data || data.length < 2) return;
 
@@ -1284,35 +1610,77 @@ async function loadData() {
         try {
             const resPE = await fetch('power_efficiency.json');
             POWER_EFF = await resPE.json();
-            console.log('Power/Efficiency data loaded:', Object.keys(POWER_EFF));
         } catch(e) {
-            console.log('Power/Efficiency data not available');
             POWER_EFF = {};
         }
 
         try {
             const resSpecs = await fetch('specs.json');
             SPECS = await resSpecs.json();
-            console.log('Specs data loaded:', Object.keys(SPECS));
         } catch(e) {
-            console.log('Specs data not available');
             SPECS = {};
         }
 
+        const totalModels = Object.values(CURVES).reduce((a, s) => a + Object.keys(s).length, 0);
+
+        // Fan Selector init
         populateSeries();
         initChart();
         setupCurveToggles();
-
-        const totalModels = Object.values(CURVES).reduce((a, s) => a + Object.keys(s).length, 0);
         document.getElementById('modelCount').textContent = totalModels;
-
         const chipsEl = document.getElementById('seriesChips');
         chipsEl.innerHTML = Object.keys(CURVES).sort().map(s => {
             const count = Object.keys(CURVES[s]).length;
             return `<span class="chip"><strong>${s}</strong> · ${count} mod</span>`;
         }).join('');
-
         setStepState(1, 'active');
+
+        // Fast Selection init
+        document.getElementById('fsModelCount').textContent = totalModels;
+        const fsSeriesFilters = document.getElementById('fsSeriesFilters');
+        const seriesList = Object.keys(CURVES).sort();
+        fsSeriesFilters.innerHTML = seriesList.map(s => `
+            <label class="filter-chip active" data-series="${s}">
+                <input type="checkbox" checked>
+                ${s}
+            </label>
+        `).join('');
+        document.querySelectorAll('#fsSeriesFilters .filter-chip').forEach(chip => {
+            chip.addEventListener('click', function(e) {
+                if (e.target.tagName !== 'INPUT') {
+                    const input = this.querySelector('input');
+                    if (input) input.checked = !input.checked;
+                }
+                this.classList.toggle('active');
+            });
+        });
+
+        // Fast Selection: Enter key on inputs
+        document.querySelectorAll('#fsTargetFlow, #fsTargetPressure').forEach(input => {
+            input.addEventListener('keypress', e => {
+                if (e.key === 'Enter') fsSearch();
+            });
+        });
+
+        // Handle URL params
+        const params = new URLSearchParams(window.location.search);
+        const view = params.get('view');
+        const series = params.get('series');
+        const model = params.get('model');
+
+        if (view === 'fast') {
+            switchView('fastSelection');
+        } else if (series && CURVES[series]) {
+            switchView('fanSelector');
+            document.getElementById('series').value = series;
+            document.getElementById('series').dispatchEvent(new Event('change'));
+            setTimeout(() => {
+                if (model && CURVES[series][model]) {
+                    document.getElementById('model').value = model;
+                    document.getElementById('model').dispatchEvent(new Event('change'));
+                }
+            }, 100);
+        }
 
     } catch(e) {
         console.error('Errore caricamento dati:', e);
@@ -1386,20 +1754,46 @@ function loadModel(seriesName, modelName) {
 
     updatePowerEfficiencyCurves(seriesName, modelName);
     updateSpecs(seriesName, modelName);
+
+    // Update chart data
+    const units = getCurrentUnits();
+    const totalConverted = currentModel.total.map(p => ({
+        x: convertFlow(p[0], units.flow),
+        y: convertPressure(p[1], units.pressure)
+    }));
+    const staticConverted = currentModel.static.map(p => ({
+        x: convertFlow(p[0], units.flow),
+        y: convertPressure(p[1], units.pressure)
+    }));
+    chart.data.datasets[0].data = totalConverted;
+    chart.data.datasets[1].data = staticConverted;
+    chart.data.datasets[2].data = [];
+
+    if (currentModel.fMin !== null && currentModel.fMax !== null) {
+        const fMinConv = convertFlow(currentModel.fMin, units.flow);
+        const fMaxConv = convertFlow(currentModel.fMax, units.flow);
+        chart.options.scales.x.min = fMinConv * 0.95;
+        chart.options.scales.x.max = fMaxConv * 1.05;
+    }
+    const allPressures = [...totalConverted.map(p => p.y), ...staticConverted.map(p => p.y)];
+    if (allPressures.length > 0) {
+        const pMin = Math.min(...allPressures);
+        const pMax = Math.max(...allPressures);
+        chart.options.scales.y.min = Math.max(0, pMin * 0.9);
+        chart.options.scales.y.max = pMax * 1.1;
+    }
+    chart.update();
 }
 
 /* ─── Update Specs ─── */
 function updateSpecs(seriesName, modelName) {
     const specsSection = document.getElementById('specsSection');
-    
     if (!SPECS[seriesName]?.modelli?.[modelName]) {
         specsSection.style.display = 'none';
         return;
     }
-    
     const spec = SPECS[seriesName].modelli[modelName];
     const tipoFluido = SPECS[seriesName].tipo_fluido || '—';
-    
     document.getElementById('specMotore').textContent = `${spec.grandezza_motore} (${spec.poli}P)`;
     document.getElementById('specPotenza').textContent = `${spec.kw} kW / ${spec.hp} Hp`;
     document.getElementById('specRPM').textContent = `${spec.rpm} rpm`;
@@ -1408,24 +1802,10 @@ function updateSpecs(seriesName, modelName) {
     document.getElementById('specFlangiaPrem').textContent = `${spec.flangia_premente_mm} mm`;
     document.getElementById('specPeso').textContent = `${spec.peso_kg} kg`;
     document.getElementById('specFluido').textContent = tipoFluido;
-    
     specsSection.style.display = 'block';
 }
 
-/* ─── Interpolate ─── */
-function interpolate(arr, x) {
-    for (let i = 0; i < arr.length - 1; i++) {
-        const [x1, y1] = arr[i];
-        const [x2, y2] = arr[i+1];
-        if ((x >= x1 && x <= x2) || (x <= x1 && x >= x2)) {
-            const t = (x - x1) / (x2 - x1);
-            return y1 + t * (y2 - y1);
-        }
-    }
-    return null;
-}
-
-/* ─── Event Listeners ─── */
+/* ─── Fan Selector Event Listeners ─── */
 document.getElementById('series').addEventListener('change', function() {
     const ms = document.getElementById('model');
     ms.innerHTML = '<option value="">Seleziona modello...</option>';
@@ -1474,10 +1854,6 @@ document.getElementById('model').addEventListener('change', function() {
     const series = document.getElementById('series').value;
     if (this.value && series) loadModel(series, this.value);
 });
-
-function flowToBase(value, fromUnit) {
-    return value / flowConversions[fromUnit].factor;
-}
 
 document.getElementById('flowRate').addEventListener('input', function() {
     const inputValue = parseFloat(this.value);
@@ -1679,23 +2055,6 @@ document.getElementById('curveChart').addEventListener('touchmove', function(e) 
 
 document.getElementById('curveChart').addEventListener('touchend', () => { isDragging = false; });
 
-/* ─── Bootstrap ─── */
-loadData().then(() => {
-    const params = new URLSearchParams(window.location.search);
-    const series = params.get('series');
-    const model = params.get('model');
-    if (series && CURVES[series]) {
-        document.getElementById('series').value = series;
-        document.getElementById('series').dispatchEvent(new Event('change'));
-        setTimeout(() => {
-            if (model && CURVES[series][model]) {
-                document.getElementById('model').value = model;
-                document.getElementById('model').dispatchEvent(new Event('change'));
-            }
-        }, 100);
-    }
-});
-
 /* ─── Curve Toggles ─── */
 function setupCurveToggles() {
     document.getElementById('showPower').addEventListener('change', function() {
@@ -1748,7 +2107,178 @@ function updatePowerEfficiencyCurves(series, model) {
     chart.update();
 }
 
-/* ─── PDF Datasheet Generator ─── */
+/* ═══════════════════════════════════════════
+   FAST SELECTION LOGIC
+═══════════════════════════════════════════ */
+
+function fsCheckModel(model, targetFlow, targetPressure) {
+    const flowMin = Math.min(model.total[0][0], model.total[model.total.length-1][0]);
+    const flowMax = Math.max(model.total[0][0], model.total[model.total.length-1][0]);
+
+    if (targetFlow < flowMin || targetFlow > flowMax) return null;
+
+    const totalP  = interpolate(model.total,  targetFlow);
+    const staticP = interpolate(model.static, targetFlow);
+
+    if (totalP === null) return null;
+    if (targetPressure > totalP) return null;
+
+    const margin        = totalP - targetPressure;
+    const marginPercent = (margin / totalP) * 100;
+
+    return {
+        totalPressure:  totalP,
+        staticPressure: staticP,
+        margin:         margin,
+        marginPercent:  marginPercent,
+        efficiency:     Math.max(0, 100 - marginPercent)
+    };
+}
+
+function fsSearch() {
+    const flowInput     = parseFloat(document.getElementById('fsTargetFlow').value);
+    const pressureInput = parseFloat(document.getElementById('fsTargetPressure').value);
+    const flowUnit      = document.getElementById('fsFlowUnit').value;
+    const pressureUnit  = document.getElementById('fsPressureUnit').value;
+
+    if (!flowInput || !pressureInput) {
+        alert('Inserisci portata e pressione');
+        return;
+    }
+
+    const targetFlow     = flowToBase(flowInput, flowUnit);
+    const targetPressure = pressureToBase(pressureInput, pressureUnit);
+
+    const activeSeriesEls = document.querySelectorAll('#fsSeriesFilters .filter-chip.active');
+    const activeSeries    = new Set();
+    activeSeriesEls.forEach(el => activeSeries.add(el.dataset.series));
+
+    const results = [];
+
+    for (const [seriesName, models] of Object.entries(CURVES)) {
+        if (activeSeries.size > 0 && !activeSeries.has(seriesName)) continue;
+
+        for (const [modelNum, model] of Object.entries(models)) {
+            const match = fsCheckModel(model, targetFlow, targetPressure);
+            if (match) {
+                const specData = SPECS[seriesName]?.modelli?.[modelNum];
+                const kW = specData?.kw ?? specData?.kW ?? '—';
+
+                results.push({
+                    series:   seriesName,
+                    model:    `${seriesName} ${modelNum}`,
+                    modelNum: modelNum,
+                    kW:       kW,
+                    ...match
+                });
+            }
+        }
+    }
+
+    results.sort((a, b) => b.efficiency - a.efficiency);
+    fsDisplayResults(results, pressureUnit);
+}
+
+function fsDisplayResults(results, pressureUnit) {
+    const resultsSection = document.getElementById('fsResultsSection');
+    const resultsGrid    = document.getElementById('fsResultsGrid');
+    const resultsCount   = document.getElementById('fsResultsCount');
+    const emptyState     = document.getElementById('fsEmptyState');
+
+    if (results.length === 0) {
+        resultsSection.style.display = 'none';
+        emptyState.innerHTML = `
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                <circle cx="12" cy="12" r="10"/>
+                <line x1="15" y1="9" x2="9" y2="15"/>
+                <line x1="9" y1="9" x2="15" y2="15"/>
+            </svg>
+            <p>Nessun ventilatore trovato per i parametri specificati</p>
+        `;
+        emptyState.style.display = 'block';
+        return;
+    }
+
+    emptyState.style.display     = 'none';
+    resultsSection.style.display = 'block';
+    resultsCount.textContent     = `${results.length} risultat${results.length === 1 ? 'o' : 'i'}`;
+
+    const conv = pressureConversions[pressureUnit];
+
+    resultsGrid.innerHTML = results.slice(0, 50).map(r => {
+        const modelData  = CURVES[r.series]?.[r.modelNum] || {};
+        const fMin = modelData.fMin || 0;
+        const fMax = modelData.fMax || 0;
+        const pMin = modelData.pMin || 0;
+        const pMax = modelData.pMax || 0;
+        const pMinDisplay = (pMin * conv.factor).toFixed(0);
+        const pMaxDisplay = (pMax * conv.factor).toFixed(0);
+        const isHighMatch = r.efficiency >= 80;
+
+        return `
+            <div class="result-card" onclick="fsSelectFan('${r.series}', '${r.modelNum}')" role="listitem" tabindex="0" aria-label="${r.model}">
+                <div>
+                    <div class="result-model">${r.model}</div>
+                    <div class="result-series">Serie ${r.series}</div>
+                </div>
+                <div class="result-stat">
+                    <div class="result-stat-value">${fMin}–${fMax}</div>
+                    <div class="result-stat-label">m³/h</div>
+                </div>
+                <div class="result-stat">
+                    <div class="result-stat-value">${pMinDisplay}–${pMaxDisplay}</div>
+                    <div class="result-stat-label">${conv.symbol}</div>
+                </div>
+                <div class="result-stat">
+                    <div class="result-stat-value">${r.kW}</div>
+                    <div class="result-stat-label">kW</div>
+                </div>
+                <div class="result-match${isHighMatch ? ' high' : ''}">${r.efficiency.toFixed(0)}% match</div>
+            </div>
+        `;
+    }).join('');
+
+    // Keyboard navigation for cards
+    resultsGrid.querySelectorAll('.result-card').forEach(card => {
+        card.addEventListener('keypress', e => {
+            if (e.key === 'Enter' || e.key === ' ') card.click();
+        });
+    });
+}
+
+/**
+ * Called when a Fast Selection result is clicked.
+ * Switches to Fan Selector view and selects the model directly (no page reload).
+ */
+function fsSelectFan(series, modelNum) {
+    // Switch to Fan Selector view
+    switchView('fanSelector');
+
+    // Update URL to reflect the selected model
+    const url = new URL(window.location);
+    url.searchParams.set('series', series);
+    url.searchParams.set('model', modelNum);
+    url.searchParams.delete('view');
+    history.replaceState(null, '', url.toString());
+
+    // Select series
+    const seriesEl = document.getElementById('series');
+    seriesEl.value = series;
+    seriesEl.dispatchEvent(new Event('change'));
+
+    // Select model after series options are populated
+    setTimeout(() => {
+        const modelEl = document.getElementById('model');
+        if (modelEl) {
+            modelEl.value = modelNum;
+            modelEl.dispatchEvent(new Event('change'));
+        }
+    }, 100);
+}
+
+/* ═══════════════════════════════════════════
+   PDF DATASHEET GENERATOR
+═══════════════════════════════════════════ */
 async function generateDatasheetPDF() {
     if (typeof window.jspdf === 'undefined') {
         alert('Errore: libreria PDF non caricata. Ricarica la pagina.');
@@ -1774,29 +2304,26 @@ async function generateDatasheetPDF() {
     btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="spin"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg> Generazione...';
 
     try {
-        // ── PDF setup ──────────────────────────────────────────────────────────
         const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
 
-        const PW = 210, PH = 297;   // page dimensions
-        const M  = 15, MR = 15;     // left / right margin
-        const CW = PW - M - MR;     // content width = 180 mm
+        const PW = 210, PH = 297;
+        const M  = 15, MR = 15;
+        const CW = PW - M - MR;
 
-        // ── Color palette (RGB, no alpha) ──────────────────────────────────────
         const C = {
-            blue:      [26,  54,  93],   // #1a365d  Utentra primary
-            blueMid:   [44,  88, 148],   // #2c5894  header accent
-            bluePale:  [197, 217, 241],  // #c5d9f1  pale blue text on dark bg
-            darkText:  [18,  24,  38],   // #121826  body text
-            bodyText:  [55,  65,  82],   // #374152  secondary text
-            muted:     [107, 122, 144],  // #6b7a90  labels / captions
-            border:    [214, 220, 230],  // #d6dce6  table/box borders
-            rowAlt:    [248, 250, 252],  // #f8fafc  zebra row bg
-            rowAlt2:   [240, 244, 250],  // #f0f4fa  slightly deeper alternate
-            bgBand:    [243, 246, 250],  // #f3f6fa  range box bg
+            blue:      [26,  54,  93],
+            blueMid:   [44,  88, 148],
+            bluePale:  [197, 217, 241],
+            darkText:  [18,  24,  38],
+            bodyText:  [55,  65,  82],
+            muted:     [107, 122, 144],
+            border:    [214, 220, 230],
+            rowAlt:    [248, 250, 252],
+            rowAlt2:   [240, 244, 250],
+            bgBand:    [243, 246, 250],
             white:     [255, 255, 255],
         };
 
-        // ── Tiny helpers ───────────────────────────────────────────────────────
         const sf  = (...c) => pdf.setFillColor(...c);
         const sd  = (...c) => pdf.setDrawColor(...c);
         const st  = (...c) => pdf.setTextColor(...c);
@@ -1808,32 +2335,23 @@ async function generateDatasheetPDF() {
         const italic = (sz) => { pdf.setFont('helvetica','italic'); pdf.setFontSize(sz); };
 
         const sectionHeader = (title, y) => {
-            // 3 mm blue accent pill
             sf(...C.blue); fr(M, y, 3, 5.5);
-            // Title
             st(...C.blue); bold(8.5);
             pdf.text(title, M + 5.5, y + 4);
-            // Thin rule to the right
             const tw = pdf.getTextWidth(title);
             sd(...C.border); lw(0.25);
             pdf.line(M + 5.5 + tw + 3, y + 2.5, PW - MR, y + 2.5);
         };
 
-        // ── LEFT ACCENT BARS ───────────────────────────────────────────────────
-        sf(...C.blue);    fr(0,  0, 4,   PH);   // primary bar
-        sf(...C.blueMid); fr(4,  0, 1.2, PH);   // highlight stripe
+        sf(...C.blue);    fr(0,  0, 4,   PH);
+        sf(...C.blueMid); fr(4,  0, 1.2, PH);
 
-        // ══════════════════════════════════════════════════════════════════════
-        // HEADER  (y 0 – 44 mm)
-        // ══════════════════════════════════════════════════════════════════════
         const HDR_H = 44;
         sf(...C.blue); fr(5.2, 0, PW - 5.2, HDR_H);
 
-        // Decorative diagonal block (top-right corner)
         sf(...C.blueMid);
         pdf.triangle(PW - 55, 0, PW, 0, PW, 32, 'F');
 
-        // ── Logo pill (white box) ──
         const LX = M + 1, LY = 9, LW = 44, LH = 24;
         sf(...C.white); rr(LX, LY, LW, LH, 2, 'F');
 
@@ -1852,12 +2370,10 @@ async function generateDatasheetPDF() {
                     tc.width  = TW;
                     tc.height = Math.round(img.naturalHeight * (TW / img.naturalWidth));
                     const ctx = tc.getContext('2d');
-                    // white background so logo renders correctly on JPEG
                     ctx.fillStyle = '#ffffff';
                     ctx.fillRect(0, 0, tc.width, tc.height);
                     ctx.drawImage(img, 0, 0, tc.width, tc.height);
                     const dataUrl = tc.toDataURL('image/jpeg', 0.93);
-                    // Fit inside logo pill with 3 mm padding
                     const pad = 3;
                     const bW  = LW - pad * 2, bH = LH - pad * 2;
                     const asp = tc.width / tc.height;
@@ -1872,16 +2388,13 @@ async function generateDatasheetPDF() {
             img.src = 'logo.png';
         });
 
-        // ── Model name ──
         const nameX = LX + LW + 7;
         st(...C.white); bold(22);
         pdf.text(fullModel, nameX, 23);
 
-        // ── Subtitle tag ──
         st(...C.bluePale); normal(7.5);
         pdf.text('VENTILATORE INDUSTRIALE  ·  SCHEDA TECNICA', nameX, 30);
 
-        // ── Date block (top-right) ──
         const today = new Date().toLocaleDateString('it-IT', { day:'2-digit', month:'2-digit', year:'numeric' });
         st(...C.bluePale); normal(6.5);
         pdf.text('DATA EMISSIONE', PW - MR - 2, 12, { align: 'right' });
@@ -1890,16 +2403,11 @@ async function generateDatasheetPDF() {
         st(...C.bluePale); normal(6.5);
         pdf.text('REV. 1.0', PW - MR - 2, 26, { align: 'right' });
 
-        // ── Header bottom stripe ──
         sf(...C.blueMid); fr(5.2, HDR_H,       PW - 5.2, 1.5);
         sf(...C.bluePale); fr(5.2, HDR_H + 1.5, PW - 5.2, 0.5);
 
-        // ══════════════════════════════════════════════════════════════════════
-        // CONTENT  (starts at y = HDR_H + 7)
-        // ══════════════════════════════════════════════════════════════════════
         let y = HDR_H + 8;
 
-        // ── RANGE OPERATIVO ────────────────────────────────────────────────────
         sectionHeader('RANGE OPERATIVO', y);
         y += 7;
 
@@ -1907,22 +2415,16 @@ async function generateDatasheetPDF() {
         const BOX_W  = (CW - 4) / 2;
 
         const drawRangeBox = (bx, label, valStr, unit) => {
-            // Background
             sf(...C.bgBand); sd(...C.border); lw(0.3);
             rr(bx, y, BOX_W, BOX_H, 1.5, 'FD');
-            // Left colored strip (blue, 5 mm wide)
             sf(...C.blue);
             rr(bx, y, 5, BOX_H, 1.5, 'F');
-            // cover right corners of the strip
             sf(...C.bgBand); fr(bx + 3, y, 2.5, BOX_H);
 
-            // Label + Unit on same line
             st(...C.muted); normal(6.5);
             pdf.text(label, bx + 7, y + 6);
-            // Unit in parentheses on label line
             normal(6);
             pdf.text(`(${unit})`, bx + 7 + pdf.getTextWidth(label) + 2, y + 6);
-            // Value alone on second line
             st(...C.darkText); bold(13);
             pdf.text(valStr, bx + 7, y + 15);
         };
@@ -1932,8 +2434,8 @@ async function generateDatasheetPDF() {
         const pMin = rawValues.pressureMin != null ? rawValues.pressureMin.toFixed(1) : '—';
         const pMax = rawValues.pressureMax != null ? rawValues.pressureMax.toFixed(1) : '—';
 
-        drawRangeBox(M,           'PORTATA',    `${fMin} – ${fMax}`, 'm³/h');
-        drawRangeBox(M + BOX_W + 4, 'PRESSIONE', `${pMin} – ${pMax}`, 'kg/m²');
+        drawRangeBox(M,           'PORTATA',    `${fMin} – ${fMax}`, 'm\u00b3/h');
+        drawRangeBox(M + BOX_W + 4, 'PRESSIONE', `${pMin} – ${pMax}`, 'kg/m\u00b2');
 
         y += BOX_H + 8;
 
@@ -1948,24 +2450,19 @@ async function generateDatasheetPDF() {
             if (chartCanvas && typeof chart !== 'undefined' && chart &&
                 chartCanvas.width > 0 && chartCanvas.height > 0) {
 
-                const SC  = 3;  // Higher scale for better quality
+                const SC  = 3;
                 const hrc = document.createElement('canvas');
                 hrc.width  = chartCanvas.width  * SC;
                 hrc.height = chartCanvas.height * SC;
                 const ctx2 = hrc.getContext('2d');
-                
-                // Fill with white background first
                 ctx2.fillStyle = '#ffffff';
                 ctx2.fillRect(0, 0, hrc.width, hrc.height);
-                
                 ctx2.scale(SC, SC);
                 ctx2.drawImage(chartCanvas, 0, 0);
-                const chartUrl = hrc.toDataURL('image/png');  // PNG for sharper quality
+                const chartUrl = hrc.toDataURL('image/png');
 
-                // Outer frame
                 sf(...C.white); sd(...C.border); lw(0.4);
                 rr(M, y, CW, CHART_H, 1.5, 'FD');
-                // Inset image with 2 mm padding
                 pdf.addImage(chartUrl, 'PNG', M + 2, y + 2, CW - 4, CHART_H - 4);
 
                 chartAdded = true;
@@ -1998,36 +2495,28 @@ async function generateDatasheetPDF() {
         ];
 
         const ROW_H  = 7.5;
-        const COL1   = 62;   // label column width
-        const TBL_H  = ROW_H + specs.length * ROW_H;  // header + rows
+        const COL1   = 62;
+        const TBL_H  = ROW_H + specs.length * ROW_H;
 
-        // Table header row (blue bg, white text)
         sf(...C.blue); fr(M, y, CW, ROW_H);
         st(...C.white); bold(7.5);
         pdf.text('PARAMETRO', M + 5,        y + ROW_H - 2.2);
         pdf.text('VALORE',     M + COL1 + 5, y + ROW_H - 2.2);
         y += ROW_H;
 
-        // Data rows
         specs.forEach((spec, i) => {
             const rowY = y + i * ROW_H;
-            // Zebra
             if (i % 2 === 0) { sf(...C.rowAlt);  } else { sf(...C.white); }
             fr(M, rowY, CW, ROW_H);
-            // Row bottom border
             sd(...C.border); lw(0.2);
             pdf.line(M, rowY + ROW_H, M + CW, rowY + ROW_H);
-            // Column divider
             pdf.line(M + COL1, rowY, M + COL1, rowY + ROW_H);
-            // Label
             st(...C.muted); normal(7.5);
             pdf.text(spec[0], M + 5, rowY + ROW_H - 2.3);
-            // Value
             st(...C.darkText); bold(7.5);
             pdf.text(spec[1], M + COL1 + 5, rowY + ROW_H - 2.3);
         });
 
-        // Table outer border
         sd(...C.border); lw(0.4);
         pdf.rect(M, y - ROW_H, CW, TBL_H, 'D');
 
@@ -2035,29 +2524,21 @@ async function generateDatasheetPDF() {
 
         // ── MADE IN ITALY BADGE ────────────────────────────────────────────────
         const BADGE_H = 13;
-        const FTR_Y   = PH - 20;          // footer always at 277 mm
-        const TOLS_H  = 3.5 + 4;          // two lines: ~7.5 mm total
-        const TOLS_Y  = FTR_Y - 2 - TOLS_H; // fixed position just above footer (~267.5 mm)
-
-        // Badge flows naturally after the table. y is already positioned past
-        // the last table row. No backward clamping — that caused the overlap.
-        if (y + BADGE_H + 4 > TOLS_Y) {
-            console.warn('PDF layout: badge overlaps tolerances. y=', y, 'TOLS_Y=', TOLS_Y);
-        }
+        const FTR_Y   = PH - 20;
+        const TOLS_H  = 3.5 + 4;
+        const TOLS_Y  = FTR_Y - 2 - TOLS_H;
 
         sf(...C.rowAlt); sd(...C.blue); lw(0.45);
         rr(M, y, CW, BADGE_H, 2, 'FD');
 
-        // Blue left strip
         sf(...C.blue); rr(M, y, 5, BADGE_H, 2, 'F');
         sf(...C.rowAlt); fr(M + 3, y, 2.5, BADGE_H);
 
-        // Mini Italian flag  (3 stripes × 3.5 mm × 6 mm)
         const FX = M + 8, FY = y + (BADGE_H - 6) / 2;
         const FS = 3.5;
-        sf(0,   140, 69);  fr(FX,          FY, FS, 6);   // green
-        sf(...C.white);    fr(FX + FS,     FY, FS, 6);   // white
-        sf(206, 43,  55);  fr(FX + FS * 2, FY, FS, 6);   // red
+        sf(0,   140, 69);  fr(FX,          FY, FS, 6);
+        sf(...C.white);    fr(FX + FS,     FY, FS, 6);
+        sf(206, 43,  55);  fr(FX + FS * 2, FY, FS, 6);
         sd(...C.border); lw(0.2); pdf.rect(FX, FY, FS * 3, 6, 'D');
 
         const badgeTxtX = FX + FS * 3 + 4;
@@ -2066,35 +2547,20 @@ async function generateDatasheetPDF() {
         st(...C.muted); normal(6.5);
         pdf.text('Ventilatori industriali di qualità superiore', badgeTxtX, y + 10.5);
 
-        // ══════════════════════════════════════════════════════════════════════
-        // TOLERANCE NOTES — fixed position above footer (always on page 1)
-        // ══════════════════════════════════════════════════════════════════════
+        // ── TOLERANCE NOTES ────────────────────────────────────────────────────
         st(...C.muted); normal(6);
         pdf.text('TOLLERANZA SULLA PORTATA ± 5%  |  TOLLERANZA SULLA RUMOROSITÀ + 3 dB(A)', M, TOLS_Y);
-        pdf.text('I dati indicati si riferiscono ad aria alla temperatura di 15°C ed alla pressione barometrica di 760 mmHg (peso specifico dell\'aria = 1,226 Kg/m³)', M, TOLS_Y + 3.5);
+        pdf.text("I dati indicati si riferiscono ad aria alla temperatura di 15°C ed alla pressione barometrica di 760 mmHg (peso specifico dell'aria = 1,226 Kg/m\u00b3)", M, TOLS_Y + 3.5);
 
-        // ══════════════════════════════════════════════════════════════════════
-        // FOOTER  (fixed at bottom)
-        // ══════════════════════════════════════════════════════════════════════
-        // FTR_Y already defined above
-
-        // Blue footer bar
+        // ── FOOTER ─────────────────────────────────────────────────────────────
         sf(...C.blue); fr(5.2, FTR_Y, PW - 5.2, 2);
 
-        // Company — left
         st(...C.blue); bold(9);
         pdf.text('UTENTRA S.R.L.', M, FTR_Y + 8);
-
         st(...C.muted); normal(7);
-        pdf.text(
-            'Via Francesco Albani 9, 20149 Milano  ·  P.IVA 07008380963',
-            M, FTR_Y + 13.5
-        );
-
-        // AirVision — right
+        pdf.text('Via Francesco Albani 9, 20149 Milano  ·  P.IVA 07008380963', M, FTR_Y + 13.5);
         st(...C.blue); bold(10);
-        pdf.text('AirVision™', PW - MR, FTR_Y + 8, { align: 'right' });
-
+        pdf.text('AirVision\u2122', PW - MR, FTR_Y + 8, { align: 'right' });
         st(...C.muted); normal(7);
         pdf.text('utentra-air-vision.vercel.app', PW - MR, FTR_Y + 13.5, { align: 'right' });
 
@@ -2112,11 +2578,9 @@ async function generateDatasheetPDF() {
         if (hasDimContent) {
             pdf.addPage();
 
-            // ── Left accent bars (same as page 1) ──
             sf(...C.blue);    fr(0,  0, 4,   PH);
             sf(...C.blueMid); fr(4,  0, 1.2, PH);
 
-            // ── Mini header bar ──
             const MH_H = 22;
             sf(...C.blue);    fr(5.2, 0,          PW - 5.2, MH_H);
             sf(...C.blueMid); fr(5.2, MH_H,        PW - 5.2, 1.5);
@@ -2131,7 +2595,6 @@ async function generateDatasheetPDF() {
 
             let y2 = MH_H + 10;
 
-            // ── DIMENSIONI ────────────────────────────────────────────────────
             sectionHeader('DIMENSIONI (mm)', y2);
             y2 += 8;
 
@@ -2143,7 +2606,6 @@ async function generateDatasheetPDF() {
                 const COL_W = CW / COLS;
                 const KV_H  = 7;
 
-                // Header
                 sf(...C.blue); fr(M, y2, CW, KV_H);
                 for (let c = 0; c < COLS; c++) {
                     const cx = M + c * COL_W;
@@ -2180,7 +2642,6 @@ async function generateDatasheetPDF() {
                         pdf.text(String(v), cx + COL_W / 2 + 2, rowY + KV_H - 2);
                     }
                 }
-                // Outer border
                 sd(...C.border); lw(0.4);
                 pdf.rect(M, y2 - KV_H, CW, KV_H + rowsNeeded * KV_H, 'D');
                 y2 += rowsNeeded * KV_H + 10;
@@ -2193,7 +2654,6 @@ async function generateDatasheetPDF() {
                 y2 += 20;
             }
 
-            // ── SCHEMI DIMENSIONALI ──────────────────────────────────────────
             sectionHeader('SCHEMA DIMENSIONALE', y2);
             y2 += 8;
 
@@ -2234,7 +2694,6 @@ async function generateDatasheetPDF() {
                         ctx.drawImage(img, 0, 0);
                         const dataUrl = tc.toDataURL('image/jpeg', 0.92);
 
-                        // Fit inside box with padding
                         const padH = 10, padV = 4;
                         const bW   = IMG_W - padH * 2;
                         const bH   = IMG_H - padV * 2 - 6;
@@ -2255,7 +2714,6 @@ async function generateDatasheetPDF() {
                     pdf.text('Schema non disponibile',
                              x + IMG_W / 2, y2 + IMG_H / 2, { align: 'center' });
                 }
-                // Caption label
                 st(...C.muted); normal(6);
                 pdf.text(label, x + IMG_W / 2, y2 + 5, { align: 'center' });
             };
@@ -2264,22 +2722,19 @@ async function generateDatasheetPDF() {
             addSchemaImage(imgFront, M + IMG_W + 5,     'VISTA FRONTALE');
             y2 += IMG_H + 10;
 
-            // ── Page 2 footer ────────────────────────────────────────────────
             const FTR2_Y = PH - 20;
             sf(...C.blue); fr(5.2, FTR2_Y, PW - 5.2, 2);
 
             st(...C.blue); bold(9);
             pdf.text('UTENTRA S.R.L.', M, FTR2_Y + 8);
             st(...C.muted); normal(7);
-            pdf.text('Via Francesco Albani 9, 20149 Milano  ·  P.IVA 07008380963',
-                     M, FTR2_Y + 13.5);
+            pdf.text('Via Francesco Albani 9, 20149 Milano  ·  P.IVA 07008380963', M, FTR2_Y + 13.5);
             st(...C.blue); bold(10);
-            pdf.text('AirVision™', PW - MR, FTR2_Y + 8, { align: 'right' });
+            pdf.text('AirVision\u2122', PW - MR, FTR2_Y + 8, { align: 'right' });
             st(...C.muted); normal(7);
             pdf.text('utentra-air-vision.vercel.app', PW - MR, FTR2_Y + 13.5, { align: 'right' });
         }
 
-        // ── Save ──
         const safeName = fullModel.replace(/[^a-zA-Z0-9 \-_]/g, '_');
         pdf.save(`${safeName}_Datasheet.pdf`);
 
@@ -2291,6 +2746,9 @@ async function generateDatasheetPDF() {
         btn.innerHTML   = originalText;
     }
 }
+
+/* ─── Bootstrap ─── */
+loadData();
 </script>
 </body>
 </html>
