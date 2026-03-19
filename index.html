@@ -1941,7 +1941,7 @@ async function generateDatasheetPDF() {
         sectionHeader('CURVE CARATTERISTICHE', y);
         y += 7;
 
-        const CHART_H = 76;
+        const CHART_H = 65;
         let chartAdded = false;
         try {
             const chartCanvas = document.getElementById('curveChart');
@@ -2039,8 +2039,11 @@ async function generateDatasheetPDF() {
         const TOLS_H  = 3.5 + 4;          // two lines: ~7.5 mm total
         const TOLS_Y  = FTR_Y - 2 - TOLS_H; // fixed position just above footer (~267.5 mm)
 
-        // Clamp badge start: ensure it always ends before the tolerance block
-        y = Math.min(y, TOLS_Y - BADGE_H - 4);
+        // Badge flows naturally after the table. y is already positioned past
+        // the last table row. No backward clamping — that caused the overlap.
+        if (y + BADGE_H + 4 > TOLS_Y) {
+            console.warn('PDF layout: badge overlaps tolerances. y=', y, 'TOLS_Y=', TOLS_Y);
+        }
 
         sf(...C.rowAlt); sd(...C.blue); lw(0.45);
         rr(M, y, CW, BADGE_H, 2, 'FD');
