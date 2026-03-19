@@ -1916,15 +1916,15 @@ async function generateDatasheetPDF() {
             // cover right corners of the strip
             sf(...C.bgBand); fr(bx + 3, y, 2.5, BOX_H);
 
-            // Label
+            // Label + Unit on same line
             st(...C.muted); normal(6.5);
             pdf.text(label, bx + 7, y + 6);
-            // Value
+            // Unit in parentheses on label line
+            normal(6);
+            pdf.text(`(${unit})`, bx + 7 + pdf.getTextWidth(label) + 2, y + 6);
+            // Value alone on second line
             st(...C.darkText); bold(13);
-            pdf.text(valStr, bx + 7, y + 14);
-            // Unit
-            st(...C.muted); normal(7);
-            pdf.text(unit, bx + 7 + pdf.getTextWidth(valStr) + 1.5, y + 14);
+            pdf.text(valStr, bx + 7, y + 15);
         };
 
         const fMin = rawValues.flowMin     != null ? rawValues.flowMin.toFixed(0)     : '—';
@@ -1948,7 +1948,7 @@ async function generateDatasheetPDF() {
             if (chartCanvas && typeof chart !== 'undefined' && chart &&
                 chartCanvas.width > 0 && chartCanvas.height > 0) {
 
-                const SC  = 2;
+                const SC  = 3;  // Higher scale for better quality
                 const hrc = document.createElement('canvas');
                 hrc.width  = chartCanvas.width  * SC;
                 hrc.height = chartCanvas.height * SC;
@@ -1960,13 +1960,13 @@ async function generateDatasheetPDF() {
                 
                 ctx2.scale(SC, SC);
                 ctx2.drawImage(chartCanvas, 0, 0);
-                const chartUrl = hrc.toDataURL('image/jpeg', 0.93);
+                const chartUrl = hrc.toDataURL('image/png');  // PNG for sharper quality
 
                 // Outer frame
                 sf(...C.white); sd(...C.border); lw(0.4);
                 rr(M, y, CW, CHART_H, 1.5, 'FD');
                 // Inset image with 2 mm padding
-                pdf.addImage(chartUrl, 'JPEG', M + 2, y + 2, CW - 4, CHART_H - 4);
+                pdf.addImage(chartUrl, 'PNG', M + 2, y + 2, CW - 4, CHART_H - 4);
 
                 chartAdded = true;
             }
@@ -2056,13 +2056,14 @@ async function generateDatasheetPDF() {
         st(...C.muted); normal(6.5);
         pdf.text('Ventilatori industriali di qualità superiore', badgeTxtX, y + 10.5);
 
+        y += BADGE_H + 6;  // Move y past badge
+
         // ══════════════════════════════════════════════════════════════════════
-        // TOLERANCE NOTES (above footer)
+        // TOLERANCE NOTES (after Made in Italy badge)
         // ══════════════════════════════════════════════════════════════════════
-        const NOTES_Y = PH - 32;
         st(...C.muted); normal(6);
-        pdf.text('TOLLERANZA SULLA PORTATA ± 5%  |  TOLLERANZA SULLA RUMOROSITÀ + 3 dB(A)', M, NOTES_Y);
-        pdf.text('I dati indicati si riferiscono ad aria alla temperatura di 15°C ed alla pressione barometrica di 760 mmHg (peso specifico dell\'aria = 1,226 Kg/m³)', M, NOTES_Y + 3.5);
+        pdf.text('TOLLERANZA SULLA PORTATA ± 5%  |  TOLLERANZA SULLA RUMOROSITÀ + 3 dB(A)', M, y);
+        pdf.text('I dati indicati si riferiscono ad aria alla temperatura di 15°C ed alla pressione barometrica di 760 mmHg (peso specifico dell\'aria = 1,226 Kg/m³)', M, y + 3.5);
 
         // ══════════════════════════════════════════════════════════════════════
         // FOOTER  (fixed at bottom)
