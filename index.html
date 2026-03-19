@@ -2664,13 +2664,13 @@ async function generateDatasheetPDF() {
         pdf.triangle(PW - 55, 0, PW, 0, PW, 32, 'F');
 
         const LX = M + 1, LY = 9, LW = 44, LH = 24;
-        sf(...C.white); rr(LX, LY, LW, LH, 2, 'F');
+        // No white background - logo will be white on blue header
 
         await new Promise((resolve) => {
             const img = new Image();
             img.crossOrigin = 'anonymous';
             const fallback = () => {
-                st(...C.blue); bold(10);
+                st(...C.white); bold(10);
                 pdf.text('UTENTRA', LX + LW / 2, LY + LH / 2 + 1.5, { align: 'center' });
                 resolve();
             };
@@ -2681,17 +2681,29 @@ async function generateDatasheetPDF() {
                     tc.width  = TW;
                     tc.height = Math.round(img.naturalHeight * (TW / img.naturalWidth));
                     const ctx = tc.getContext('2d');
-                    ctx.fillStyle = '#ffffff';
-                    ctx.fillRect(0, 0, tc.width, tc.height);
+                    
+                    // Draw original logo
                     ctx.drawImage(img, 0, 0, tc.width, tc.height);
-                    const dataUrl = tc.toDataURL('image/jpeg', 0.93);
+                    
+                    // Invert colors to make it white
+                    const imageData = ctx.getImageData(0, 0, tc.width, tc.height);
+                    const data = imageData.data;
+                    for (let i = 0; i < data.length; i += 4) {
+                        // Invert RGB, keep alpha
+                        data[i]     = 255 - data[i];     // R
+                        data[i + 1] = 255 - data[i + 1]; // G
+                        data[i + 2] = 255 - data[i + 2]; // B
+                    }
+                    ctx.putImageData(imageData, 0, 0);
+                    
+                    const dataUrl = tc.toDataURL('image/png');
                     const pad = 3;
                     const bW  = LW - pad * 2, bH = LH - pad * 2;
                     const asp = tc.width / tc.height;
                     let dW = bW, dH = dW / asp;
                     if (dH > bH) { dH = bH; dW = dH * asp; }
                     const oX = (bW - dW) / 2, oY = (bH - dH) / 2;
-                    pdf.addImage(dataUrl, 'JPEG', LX + pad + oX, LY + pad + oY, dW, dH);
+                    pdf.addImage(dataUrl, 'PNG', LX + pad + oX, LY + pad + oY, dW, dH);
                 } catch(e) { fallback(); return; }
                 resolve();
             };
