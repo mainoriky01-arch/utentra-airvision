@@ -1191,6 +1191,7 @@ const TRANSLATIONS = {
         specifications: 'Specifiche Tecniche',
         motor: 'Motore',
         power: 'Potenza',
+        efficiency: 'Rendimento',
         speed: 'Velocità',
         noise: 'Rumorosità',
         inletFlange: 'Flangia Asp.',
@@ -1281,6 +1282,7 @@ const TRANSLATIONS = {
         specifications: 'Technical Specifications',
         motor: 'Motor',
         power: 'Power',
+        efficiency: 'Efficiency',
         speed: 'Speed',
         noise: 'Noise Level',
         inletFlange: 'Inlet Flange',
@@ -1416,7 +1418,7 @@ function setLanguage(lang) {
         }
     }
 
-    // Update chart axis labels if chart is available
+    // Update chart axis labels and dataset labels if chart is available
     if (typeof chart !== 'undefined' && chart && typeof getCurrentUnits === 'function') {
         const units = getCurrentUnits();
         const flowConv = flowConversions[units.flow];
@@ -1425,6 +1427,14 @@ function setLanguage(lang) {
         chart.options.scales.y.title.text = `${t('pressure')} P (${pressConv.symbol})`;
         chart.options.scales.yPower.title.text = t('powerKW');
         chart.options.scales.yEfficiency.title.text = t('efficiencyPct');
+        
+        // Update dataset labels for tooltips
+        chart.data.datasets[0].label = t('totalPressure');
+        chart.data.datasets[1].label = t('staticPressure');
+        chart.data.datasets[2].label = t('operatingPoint');
+        chart.data.datasets[3].label = t('power');
+        chart.data.datasets[4].label = t('efficiency');
+        
         chart.update('none');
     }
 
@@ -1749,9 +1759,9 @@ const crosshairPlugin = {
 
                 ctx.fillStyle = '#1a365d';
                 let text = v.label + ': ';
-                if (v.label === 'Potenza') {
+                if (v.label === t('power') || v.label === 'Potenza') {
                     text += v.value.toFixed(3) + ' kW';
-                } else if (v.label === 'Rendimento') {
+                } else if (v.label === t('efficiency') || v.label === 'Rendimento') {
                     text += v.value.toFixed(1) + ' %';
                 } else {
                     text += v.value.toFixed(2) + ' kg/m²';
@@ -1773,7 +1783,7 @@ function initChart() {
         data: {
             datasets: [
                 {
-                    label: 'Pressione Totale',
+                    label: t('totalPressure'),
                     borderColor: '#2563EB',
                     backgroundColor: 'rgba(37,99,235,0.08)',
                     showLine: true,
@@ -1784,7 +1794,7 @@ function initChart() {
                     data: []
                 },
                 {
-                    label: 'Pressione Statica',
+                    label: t('staticPressure'),
                     borderColor: '#34D399',
                     backgroundColor: 'rgba(52,211,153,0.06)',
                     showLine: true,
@@ -1795,7 +1805,7 @@ function initChart() {
                     data: []
                 },
                 {
-                    label: 'Punto Operativo',
+                    label: t('operatingPoint'),
                     borderColor: '#F59E0B',
                     backgroundColor: '#F59E0B',
                     pointRadius: 10,
@@ -1807,7 +1817,7 @@ function initChart() {
                     data: []
                 },
                 {
-                    label: 'Potenza',
+                    label: t('power'),
                     borderColor: '#EF4444',
                     backgroundColor: 'rgba(239,68,68,0.08)',
                     showLine: true,
@@ -1821,7 +1831,7 @@ function initChart() {
                     data: []
                 },
                 {
-                    label: 'Rendimento',
+                    label: t('efficiency'),
                     borderColor: '#8B5CF6',
                     backgroundColor: 'rgba(139,92,246,0.08)',
                     showLine: true,
