@@ -813,6 +813,15 @@
         @media (max-width: 480px) {
             .result-card { grid-template-columns: 1fr; }
         }
+        /* Embed mode - hide elements via CSS for instant effect */
+        .embed-mode .header-inner > img,
+        .embed-mode .header-title,
+        .embed-mode .lang-switch {
+            display: none !important;
+        }
+        .embed-mode .header-inner {
+            padding: 8px 20px !important;
+        }
     </style>
 </head>
 <body>
@@ -3085,41 +3094,23 @@ function initEmbedMode() {
     const params = new URLSearchParams(window.location.search);
     const isEmbed = params.get('embed') === 'true';
     const langParam = params.get('lang');
-    const tabParam = params.get('tab');
 
     if (isEmbed) {
+        // Add class immediately for CSS to hide elements without flash
         document.body.classList.add('embed-mode');
-        
-        // Hide logo and lang switch (but keep tabs!)
-        const logo = document.querySelector('.header-inner img');
-        const langSwitch = document.querySelector('.lang-switch');
-        const headerTitle = document.querySelector('.header-title');
-        
-        if (logo) logo.style.display = 'none';
-        if (langSwitch) langSwitch.style.display = 'none';
-        if (headerTitle) headerTitle.style.display = 'none';
-        
-        // Reduce header padding
-        const header = document.querySelector('.header-inner');
-        if (header) header.style.padding = '8px 20px';
     }
 
-    // Sync language from parent
+    // Sync language from parent URL param
     if (langParam && (langParam === 'it' || langParam === 'en')) {
         currentLang = langParam;
-    }
-
-    // Switch tab if specified
-    if (tabParam === 'fast') {
-        setTimeout(() => {
-            switchView('fastSelection');
-        }, 100);
     }
 }
 
 /* ─── Bootstrap ─── */
+// Run embed mode check BEFORE data loads to prevent flash
+initEmbedMode();
+
 loadData().then(() => {
-    initEmbedMode();
     setLanguage(currentLang);
 });
 </script>
