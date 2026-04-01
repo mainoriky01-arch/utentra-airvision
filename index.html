@@ -1537,6 +1537,10 @@ function switchView(viewName) {
     // Show header model info only in Fan Selector
     document.getElementById('headerModelInfo').style.display =
         viewName === 'fanSelector' ? '' : 'none';
+    
+    // Save tab to localStorage for embed mode persistence across language changes
+    localStorage.setItem('airvision-tab', viewName);
+    
     // Update browser URL without reload
     const url = new URL(window.location);
     if (viewName === 'fastSelection') {
@@ -3116,6 +3120,14 @@ function initEmbedMode() {
     // Sync language from parent URL param
     if (langParam && (langParam === 'it' || langParam === 'en')) {
         currentLang = langParam;
+    }
+
+    // Restore tab from localStorage in embed mode (persists across language changes)
+    if (isEmbed) {
+        const savedTab = localStorage.getItem('airvision-tab');
+        if (savedTab === 'fastSelection') {
+            setTimeout(() => switchView('fastSelection'), 50);
+        }
     }
 }
 
