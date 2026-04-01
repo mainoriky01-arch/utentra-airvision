@@ -750,6 +750,12 @@
             color: var(--text-muted);
             margin-top: 2px;
         }
+        .result-fluid {
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-top: 4px;
+            opacity: 0.8;
+        }
         .result-stat { text-align: center; }
         .result-stat-value {
             font-family: 'Fira Code', monospace;
@@ -1138,6 +1144,23 @@ if (new URLSearchParams(window.location.search).get('embed') === 'true') {
                             <!-- Populated by JS -->
                         </div>
                     </div>
+                    <div class="filter-group">
+                        <h4 data-i18n="fluidType">Tipo Fluido</h4>
+                        <div class="filter-options" id="fsFluidFilters" role="group" aria-label="Filtro tipo fluido">
+                            <label class="filter-option">
+                                <input type="checkbox" value="aria-pulita" checked>
+                                <span data-i18n="fluidCleanAir">Aria pulita</span>
+                            </label>
+                            <label class="filter-option">
+                                <input type="checkbox" value="aria-polverosa" checked>
+                                <span data-i18n="fluidDustyAir">Aria polverosa</span>
+                            </label>
+                            <label class="filter-option">
+                                <input type="checkbox" value="trasporto-materiale">
+                                <span data-i18n="fluidMaterialTransport">Trasporto materiale</span>
+                            </label>
+                        </div>
+                    </div>
                 </div>
 
                 <button class="search-btn" id="fsSearchBtn" onclick="fsSearch()" aria-label="Cerca ventilatori compatibili" data-i18n-aria="ariaSearchFans">
@@ -1256,6 +1279,10 @@ const TRANSLATIONS = {
         industrialFans: 'Ventilatori industriali di qualità superiore',
         characteristicCurvesFooter: 'Curve caratteristiche',
         fastSelectionFooter: 'Ricerca rapida per portata e pressione',
+        fluidType: 'Tipo Fluido',
+        fluidCleanAir: 'Aria pulita',
+        fluidDustyAir: 'Aria polverosa',
+        fluidMaterialTransport: 'Trasporto materiale',
         modelsAvailable: 'modelli disponibili',
         // Aria labels
         ariaNavSections: 'Navigazione sezioni',
@@ -1347,6 +1374,10 @@ const TRANSLATIONS = {
         industrialFans: 'Superior quality industrial fans',
         characteristicCurvesFooter: 'Characteristic curves',
         fastSelectionFooter: 'Quick search by flow rate and pressure',
+        fluidType: 'Fluid Type',
+        fluidCleanAir: 'Clean air',
+        fluidDustyAir: 'Dusty air',
+        fluidMaterialTransport: 'Material transport',
         modelsAvailable: 'available models',
         // Aria labels
         ariaNavSections: 'Section navigation',
@@ -2493,22 +2524,38 @@ function fsSearch() {
     const activeSeries    = new Set();
     activeSeriesEls.forEach(el => activeSeries.add(el.dataset.series));
 
+    // Get selected fluid types
+    const fluidCheckboxes = document.querySelectorAll('#fsFluidFilters input[type="checkbox"]:checked');
+    const activeFluidTypes = new Set();
+    fluidCheckboxes.forEach(cb => activeFluidTypes.add(cb.value));
+
     const results = [];
 
     for (const [seriesName, models] of Object.entries(CURVES)) {
         if (activeSeries.size > 0 && !activeSeries.has(seriesName)) continue;
+
+        // Check fluid type filter
+        const seriesFluid = SPECS[seriesName]?.tipo_fluido || '';
+        const fluidMatches = activeFluidTypes.size === 0 || 
+            (activeFluidTypes.has('aria-pulita') && seriesFluid.includes('Aria pulita')) ||
+            (activeFluidTypes.has('aria-polverosa') && seriesFluid.includes('Aria polverosa')) ||
+            (activeFluidTypes.has('trasporto-materiale') && seriesFluid.includes('Trasporto materiale'));
+        
+        if (!fluidMatches) continue;
 
         for (const [modelNum, model] of Object.entries(models)) {
             const match = fsCheckModel(model, targetFlow, targetPressure);
             if (match) {
                 const specData = SPECS[seriesName]?.modelli?.[modelNum];
                 const kW = specData?.kw ?? specData?.kW ?? '—';
+                const tipoFluido = SPECS[seriesName]?.tipo_fluido || '—';
 
                 results.push({
                     series:   seriesName,
                     model:    `${seriesName} ${modelNum}`,
                     modelNum: modelNum,
                     kW:       kW,
+                    tipoFluido: tipoFluido,
                     ...match
                 });
             }
@@ -2560,6 +2607,7 @@ function fsDisplayResults(results, pressureUnit) {
                 <div>
                     <div class="result-model">${r.model}</div>
                     <div class="result-series">${t('series')} ${r.series}</div>
+                    <div class="result-fluid">${r.tipoFluido || '—'}</div>
                 </div>
                 <div class="result-stat">
                     <div class="result-stat-value">${fMin}–${fMax}</div>
