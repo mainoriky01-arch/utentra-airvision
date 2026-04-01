@@ -2051,7 +2051,7 @@
     }
   },
   "U/TM": {
-    "tipo_fluido": "Aria pulita, Aria polverosa",
+    "tipo_fluido": "Aria pulita, Aria polverosa, Trasporto materiale",
     "modelli": {
       "252": {
         "grandezza_motore": "71B2",
