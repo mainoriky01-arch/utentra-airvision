@@ -2142,6 +2142,18 @@ function loadModel(seriesName, modelName) {
         `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" style="color:var(--text-muted)"><circle cx="12" cy="12" r="3"/><path d="M19.071 4.929a10 10 0 1 0 0 14.142A10 10 0 0 0 19.071 4.929z" stroke-dasharray="2 3"/></svg>
         <strong style="color:var(--utentra)">${seriesName} ${modelName}</strong>`;
 
+    // Notify parent window (for embed mode)
+    if (window.parent !== window) {
+        window.parent.postMessage({
+            type: 'modelSelected',
+            model: {
+                series: seriesName,
+                model: modelName,
+                fullModel: `${seriesName} ${modelName}`
+            }
+        }, '*');
+    }
+
     setStepState(1, 'completed');
     setStepState(2, 'completed');
     setStepState(3, 'active');
@@ -3227,12 +3239,21 @@ function initEmbedMode() {
         // Add class immediately for CSS to hide elements without flash
         document.body.classList.add('embed-mode');
         
-        // Listen for language changes from parent
+        // Listen for messages from parent
         window.addEventListener('message', (event) => {
             if (event.data?.type === 'setLanguage' && event.data.lang) {
                 setLanguage(event.data.lang);
             }
+            if (event.data?.type === 'downloadPdf') {
+                generateDatasheetPDF();
+            }
         });
+        
+        // Hide action buttons in embed mode (they're in parent bar)
+        const pdfBtn = document.getElementById('downloadPdfBtn');
+        const quoteBtn = document.getElementById('requestQuoteBtn');
+        if (pdfBtn) pdfBtn.style.display = 'none';
+        if (quoteBtn) quoteBtn.style.display = 'none';
     }
 
     // Sync language from parent URL param
