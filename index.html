@@ -3090,14 +3090,14 @@ function initEmbedMode() {
     if (isEmbed) {
         document.body.classList.add('embed-mode');
         
-        // Hide logo and lang switch
+        // Hide logo and lang switch (but keep tabs!)
         const logo = document.querySelector('.header-inner img');
         const langSwitch = document.querySelector('.lang-switch');
-        const headerNav = document.querySelector('.header-nav');
+        const headerTitle = document.querySelector('.header-title');
         
         if (logo) logo.style.display = 'none';
         if (langSwitch) langSwitch.style.display = 'none';
-        if (headerNav) headerNav.style.display = 'none';
+        if (headerTitle) headerTitle.style.display = 'none';
         
         // Reduce header padding
         const header = document.querySelector('.header-inner');
