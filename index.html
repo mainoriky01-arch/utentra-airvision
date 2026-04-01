@@ -3112,23 +3112,9 @@ function initEmbedMode() {
     // Switch tab if specified
     if (tabParam === 'fast') {
         setTimeout(() => {
-            const fastTab = document.querySelector('[data-tab="fast-selection"]');
-            if (fastTab) fastTab.click();
+            switchView('fastSelection');
         }, 100);
     }
-
-    // Listen for messages from parent window (for tab changes)
-    window.addEventListener('message', (event) => {
-        if (event.data?.type === 'setTab') {
-            const tab = event.data.tab;
-            const selector = tab === 'fast' ? '[data-tab="fast-selection"]' : '[data-tab="fan-selector"]';
-            const tabBtn = document.querySelector(selector);
-            if (tabBtn) tabBtn.click();
-        }
-        if (event.data?.type === 'setLanguage') {
-            setLanguage(event.data.lang);
-        }
-    });
 }
 
 /* ─── Bootstrap ─── */
