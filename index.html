@@ -825,6 +825,12 @@
     </style>
 </head>
 <body>
+<script>
+// Immediate embed mode detection - before any content renders
+if (new URLSearchParams(window.location.search).get('embed') === 'true') {
+    document.body.classList.add('embed-mode');
+}
+</script>
 
     <!-- ─── Header ─── -->
     <header class="header" role="banner">
