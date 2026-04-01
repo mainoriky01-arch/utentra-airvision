@@ -3104,6 +3104,13 @@ function initEmbedMode() {
     if (isEmbed) {
         // Add class immediately for CSS to hide elements without flash
         document.body.classList.add('embed-mode');
+        
+        // Listen for language changes from parent
+        window.addEventListener('message', (event) => {
+            if (event.data?.type === 'setLanguage' && event.data.lang) {
+                setLanguage(event.data.lang);
+            }
+        });
     }
 
     // Sync language from parent URL param
