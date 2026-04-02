@@ -3212,6 +3212,25 @@ async function generateDatasheetPDF() {
                         ctx.fillRect(0, 0, tc.width, tc.height);
                         ctx.scale(sc, sc);
                         ctx.drawImage(img, 0, 0);
+                        
+                        // Increase contrast - make light gray lines darker/black
+                        ctx.setTransform(1, 0, 0, 1, 0, 0); // Reset transform for pixel manipulation
+                        const imageData = ctx.getImageData(0, 0, tc.width, tc.height);
+                        const data = imageData.data;
+                        for (let i = 0; i < data.length; i += 4) {
+                            const r = data[i], g = data[i + 1], b = data[i + 2];
+                            // If pixel is grayish (not pure white), make it darker
+                            const avg = (r + g + b) / 3;
+                            if (avg < 240 && avg > 20) {
+                                // Darken: reduce brightness significantly
+                                const factor = 0.3; // Lower = darker
+                                data[i]     = Math.floor(r * factor);
+                                data[i + 1] = Math.floor(g * factor);
+                                data[i + 2] = Math.floor(b * factor);
+                            }
+                        }
+                        ctx.putImageData(imageData, 0, 0);
+                        
                         const dataUrl = tc.toDataURL('image/jpeg', 0.92);
 
                         const padH = 10, padV = 4;
