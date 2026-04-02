@@ -2749,9 +2749,63 @@ function requestQuote() {
     }
 }
 
+// PDF Labels for i18n
+const PDF_LABELS = {
+    it: {
+        subtitle: 'VENTILATORE INDUSTRIALE  ·  SCHEDA TECNICA',
+        issueDate: 'DATA EMISSIONE',
+        operatingRange: 'RANGE OPERATIVO',
+        flow: 'PORTATA',
+        pressure: 'PRESSIONE',
+        characteristicCurves: 'CURVE CARATTERISTICHE',
+        technicalSpecs: 'SPECIFICHE TECNICHE',
+        dimensions: 'DIMENSIONI',
+        noModel: 'Seleziona un modello prima di scaricare il datasheet',
+        pdfError: 'Errore: libreria PDF non caricata. Ricarica la pagina.',
+        generating: 'Generazione...',
+        // Spec labels
+        series: 'Serie',
+        model: 'Modello',
+        fluidType: 'Tipo fluido',
+        maxTemp: 'Temp. max',
+        motorPower: 'Potenza motore',
+        poles: 'Poli',
+        rpm: 'Giri/min',
+        voltageFreq: 'Tensione / Freq.',
+        weight: 'Peso',
+        noData: 'N/D',
+    },
+    en: {
+        subtitle: 'INDUSTRIAL FAN  ·  DATASHEET',
+        issueDate: 'ISSUE DATE',
+        operatingRange: 'OPERATING RANGE',
+        flow: 'FLOW RATE',
+        pressure: 'PRESSURE',
+        characteristicCurves: 'CHARACTERISTIC CURVES',
+        technicalSpecs: 'TECHNICAL SPECIFICATIONS',
+        dimensions: 'DIMENSIONS',
+        noModel: 'Please select a model before downloading the datasheet',
+        pdfError: 'Error: PDF library not loaded. Please reload the page.',
+        generating: 'Generating...',
+        // Spec labels
+        series: 'Series',
+        model: 'Model',
+        fluidType: 'Fluid type',
+        maxTemp: 'Max temp.',
+        motorPower: 'Motor power',
+        poles: 'Poles',
+        rpm: 'RPM',
+        voltageFreq: 'Voltage / Freq.',
+        weight: 'Weight',
+        noData: 'N/A',
+    }
+};
+
 async function generateDatasheetPDF() {
+    const pdfLang = PDF_LABELS[currentLang] || PDF_LABELS.it;
+    
     if (typeof window.jspdf === 'undefined') {
-        alert('Errore: libreria PDF non caricata. Ricarica la pagina.');
+        alert(pdfLang.pdfError);
         return;
     }
 
@@ -2764,14 +2818,14 @@ async function generateDatasheetPDF() {
     const fullModel    = `${seriesName} ${modelShort}`;
 
     if (!seriesName || !modelShort) {
-        alert('Seleziona un modello prima di scaricare il datasheet');
+        alert(pdfLang.noModel);
         return;
     }
 
     const btn          = document.getElementById('downloadPdfBtn');
     const originalText = btn.innerHTML;
     btn.disabled = true;
-    btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="spin"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg> Generazione...';
+    btn.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="spin"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg> ${pdfLang.generating}`;
 
     try {
         const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
@@ -2881,11 +2935,12 @@ async function generateDatasheetPDF() {
         pdf.text(fullModel, nameX, 23);
 
         st(...C.bluePale); normal(7.5);
-        pdf.text('VENTILATORE INDUSTRIALE  ·  SCHEDA TECNICA', nameX, 30);
+        pdf.text(pdfLang.subtitle, nameX, 30);
 
-        const today = new Date().toLocaleDateString('it-IT', { day:'2-digit', month:'2-digit', year:'numeric' });
+        const dateLocale = currentLang === 'en' ? 'en-GB' : 'it-IT';
+        const today = new Date().toLocaleDateString(dateLocale, { day:'2-digit', month:'2-digit', year:'numeric' });
         st(...C.bluePale); normal(6.5);
-        pdf.text('DATA EMISSIONE', PW - MR - 2, 12, { align: 'right' });
+        pdf.text(pdfLang.issueDate, PW - MR - 2, 12, { align: 'right' });
         st(...C.white); bold(9);
         pdf.text(today, PW - MR - 2, 19, { align: 'right' });
         st(...C.bluePale); normal(6.5);
@@ -2896,7 +2951,7 @@ async function generateDatasheetPDF() {
 
         let y = HDR_H + 8;
 
-        sectionHeader('RANGE OPERATIVO', y);
+        sectionHeader(pdfLang.operatingRange, y);
         y += 7;
 
         const BOX_H  = 20;
@@ -2922,13 +2977,13 @@ async function generateDatasheetPDF() {
         const pMin = rawValues.pressureMin != null ? rawValues.pressureMin.toFixed(1) : '—';
         const pMax = rawValues.pressureMax != null ? rawValues.pressureMax.toFixed(1) : '—';
 
-        drawRangeBox(M,           'PORTATA',    `${fMin} – ${fMax}`, 'm\u00b3/h');
-        drawRangeBox(M + BOX_W + 4, 'PRESSIONE', `${pMin} – ${pMax}`, 'kg/m\u00b2');
+        drawRangeBox(M,           pdfLang.flow,    `${fMin} – ${fMax}`, 'm\u00b3/h');
+        drawRangeBox(M + BOX_W + 4, pdfLang.pressure, `${pMin} – ${pMax}`, 'kg/m\u00b2');
 
         y += BOX_H + 8;
 
         // ── CURVE CARATTERISTICHE ──────────────────────────────────────────────
-        sectionHeader('CURVE CARATTERISTICHE', y);
+        sectionHeader(pdfLang.characteristicCurves, y);
         y += 7;
 
         const CHART_H = 65;
@@ -2968,18 +3023,30 @@ async function generateDatasheetPDF() {
         y += CHART_H + 8;
 
         // ── SPECIFICHE TECNICHE ────────────────────────────────────────────────
-        sectionHeader('SPECIFICHE TECNICHE', y);
+        sectionHeader(pdfLang.technicalSpecs, y);
         y += 7;
 
+        const specLabels = currentLang === 'en' ? {
+            motor: 'Motor', power: 'Power', speed: 'Speed', noise: 'Noise level',
+            inletFlange: 'Inlet flange', outletFlange: 'Outlet flange', 
+            weight: 'Weight', fluidType: 'Fluid type',
+            parameter: 'PARAMETER', value: 'VALUE'
+        } : {
+            motor: 'Motore', power: 'Potenza', speed: 'Velocità', noise: 'Rumorosità',
+            inletFlange: 'Flangia Aspirante', outletFlange: 'Flangia Premente',
+            weight: 'Peso', fluidType: 'Tipo Fluido',
+            parameter: 'PARAMETRO', value: 'VALORE'
+        };
+
         const specs = [
-            ['Motore',            document.getElementById('specMotore')?.textContent    || '—'],
-            ['Potenza',           document.getElementById('specPotenza')?.textContent   || '—'],
-            ['Velocità',          document.getElementById('specRPM')?.textContent       || '—'],
-            ['Rumorosità',        document.getElementById('specDB')?.textContent        || '—'],
-            ['Flangia Aspirante', document.getElementById('specFlangiaAsp')?.textContent|| '—'],
-            ['Flangia Premente',  document.getElementById('specFlangiaPrem')?.textContent|| '—'],
-            ['Peso',              document.getElementById('specPeso')?.textContent      || '—'],
-            ['Tipo Fluido',       document.getElementById('specFluido')?.textContent    || '—'],
+            [specLabels.motor,        document.getElementById('specMotore')?.textContent    || '—'],
+            [specLabels.power,        document.getElementById('specPotenza')?.textContent   || '—'],
+            [specLabels.speed,        document.getElementById('specRPM')?.textContent       || '—'],
+            [specLabels.noise,        document.getElementById('specDB')?.textContent        || '—'],
+            [specLabels.inletFlange,  document.getElementById('specFlangiaAsp')?.textContent|| '—'],
+            [specLabels.outletFlange, document.getElementById('specFlangiaPrem')?.textContent|| '—'],
+            [specLabels.weight,       document.getElementById('specPeso')?.textContent      || '—'],
+            [specLabels.fluidType,    document.getElementById('specFluido')?.textContent    || '—'],
         ];
 
         const ROW_H  = 7.5;
@@ -2988,8 +3055,8 @@ async function generateDatasheetPDF() {
 
         sf(...C.blue); fr(M, y, CW, ROW_H);
         st(...C.white); bold(7.5);
-        pdf.text('PARAMETRO', M + 5,        y + ROW_H - 2.2);
-        pdf.text('VALORE',     M + COL1 + 5, y + ROW_H - 2.2);
+        pdf.text(specLabels.parameter, M + 5,        y + ROW_H - 2.2);
+        pdf.text(specLabels.value,     M + COL1 + 5, y + ROW_H - 2.2);
         y += ROW_H;
 
         specs.forEach((spec, i) => {
@@ -3083,7 +3150,7 @@ async function generateDatasheetPDF() {
 
             let y2 = MH_H + 10;
 
-            sectionHeader('DIMENSIONI (mm)', y2);
+            sectionHeader(`${pdfLang.dimensions} (mm)`, y2);
             y2 += 8;
 
             if (dimRow) {
