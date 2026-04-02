@@ -2833,7 +2833,13 @@ async function generateDatasheetPDF() {
                 pdf.text('UTENTRA', LX + LW / 2, LY + LH / 2 + 1.5, { align: 'center' });
                 resolve();
             };
+            // Timeout after 3 seconds
+            const timeout = setTimeout(() => {
+                console.warn('Logo load timeout, using fallback');
+                fallback();
+            }, 3000);
             img.onload = () => {
+                clearTimeout(timeout);
                 try {
                     const TW = 480;
                     const tc = document.createElement('canvas');
@@ -2866,7 +2872,7 @@ async function generateDatasheetPDF() {
                 } catch(e) { fallback(); return; }
                 resolve();
             };
-            img.onerror = fallback;
+            img.onerror = () => { clearTimeout(timeout); fallback(); };
             img.src = 'logo.png';
         });
 
