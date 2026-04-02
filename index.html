@@ -2879,56 +2879,21 @@ async function generateDatasheetPDF() {
         const LX = M + 1, LY = 9, LW = 44, LH = 24;
         // No white background - logo will be white on blue header
 
-        await new Promise((resolve) => {
-            const img = new Image();
-            img.crossOrigin = 'anonymous';
-            const fallback = () => {
-                st(...C.white); bold(10);
-                pdf.text('UTENTRA', LX + LW / 2, LY + LH / 2 + 1.5, { align: 'center' });
-                resolve();
-            };
-            // Timeout after 3 seconds
-            const timeout = setTimeout(() => {
-                console.warn('Logo load timeout, using fallback');
-                fallback();
-            }, 3000);
-            img.onload = () => {
-                clearTimeout(timeout);
-                try {
-                    const TW = 480;
-                    const tc = document.createElement('canvas');
-                    tc.width  = TW;
-                    tc.height = Math.round(img.naturalHeight * (TW / img.naturalWidth));
-                    const ctx = tc.getContext('2d');
-                    
-                    // Draw original logo
-                    ctx.drawImage(img, 0, 0, tc.width, tc.height);
-                    
-                    // Invert colors to make it white
-                    const imageData = ctx.getImageData(0, 0, tc.width, tc.height);
-                    const data = imageData.data;
-                    for (let i = 0; i < data.length; i += 4) {
-                        // Invert RGB, keep alpha
-                        data[i]     = 255 - data[i];     // R
-                        data[i + 1] = 255 - data[i + 1]; // G
-                        data[i + 2] = 255 - data[i + 2]; // B
-                    }
-                    ctx.putImageData(imageData, 0, 0);
-                    
-                    const dataUrl = tc.toDataURL('image/png');
-                    const pad = 3;
-                    const bW  = LW - pad * 2, bH = LH - pad * 2;
-                    const asp = tc.width / tc.height;
-                    let dW = bW, dH = dW / asp;
-                    if (dH > bH) { dH = bH; dW = dH * asp; }
-                    const oX = (bW - dW) / 2, oY = (bH - dH) / 2;
-                    pdf.addImage(dataUrl, 'PNG', LX + pad + oX, LY + pad + oY, dW, dH);
-                } catch(e) { fallback(); return; }
-                resolve();
-            };
-            img.onerror = () => { clearTimeout(timeout); fallback(); };
-            img.src = 'logo.png';
-        });
+        // Add embedded logo (base64, always available)
+        try {
+            const pad = 3;
+            const bW  = LW - pad * 2, bH = LH - pad * 2;
+            // Logo aspect ratio is roughly 2:1
+            const asp = 2;
+            let dW = bW, dH = dW / asp;
+            if (dH > bH) { dH = bH; dW = dH * asp; }
+            const oX = (bW - dW) / 2, oY = (bH - dH) / 2;
+            pdf.addImage(UTENTRA_LOGO_BASE64, 'JPEG', LX + pad + oX, LY + pad + oY, dW, dH);
+        } catch(e) {
+            // Fallback to text if logo fails
+            st(...C.white); bold(10);
+            pdf.text('UTENTRA', LX + LW / 2, LY + LH / 2 + 1.5, { align: 'center' });
+        }
 
         const nameX = LX + LW + 7;
         st(...C.white); bold(22);
